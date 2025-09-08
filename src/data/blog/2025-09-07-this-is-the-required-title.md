@@ -1,20 +1,21 @@
 ---
+title: This is the required title
+description: Description goes here
 author: Jonathon Myers
 pubDatetime: 2025-09-06
 modDatetime: 2025-09-06
-title: This is the required title
-ogImage: This is the title
 slug: this-is-slug
 featured: true
-draft: false
+draft: true
 tags:
   - new-tag
-description: Description goes here
+ogImage: This is the title
+timezone: America/New_York
+hideEditPost: false
 ---
 # Heading
 
 1.  List
-    
 
 > Quote
 
