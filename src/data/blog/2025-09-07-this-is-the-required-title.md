@@ -5,7 +5,7 @@ author: Jonathon Myers
 pubDatetime: 2025-09-06
 modDatetime: 2025-09-06
 slug: this-is-slug
-featured: true
+featured: false
 draft: true
 tags:
   - new-tag
