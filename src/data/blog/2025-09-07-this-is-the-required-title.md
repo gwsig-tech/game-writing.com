@@ -10,9 +10,7 @@ draft: false
 tags:
   - new-tag
 ogImage: This is the title
-canonicalURL: https://www.jonathonmyers.com
-timezone: America/New_York
-hideEditPost: false
+
 ---
 # Heading
 

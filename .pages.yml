@@ -9,6 +9,7 @@ content:
     view:
       fields: [title, draft, pubDatetime, featured]
       sort: pubDatetime DESC
+
     fields:
       - name: title
         label: Title
@@ -64,22 +65,6 @@ content:
         label: OG Image
         type: string
         hint: "URL or path to social media image"
-
-      - name: canonicalURL
-        label: Canonical URL
-        type: string
-        hint: "If this post was originally published elsewhere"
-
-      - name: timezone
-        label: Timezone
-        type: string
-        default: "America/New_York"
-        hint: "IANA timezone format"
-
-      - name: hideEditPost
-        label: Hide Edit Post Button
-        type: boolean
-        default: false
 
       - name: body
         label: Body
