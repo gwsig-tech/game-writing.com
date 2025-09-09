@@ -10,77 +10,96 @@ content:
       fields: [title, draft, pubDatetime, featured]
       sort: pubDatetime DESC
     fields:
-      - { name: title, label: Title, type: string, required: true }
-      - { name: description, label: Description, type: string }
-      - { name: author, label: Author, type: string, default: "Committee" }
-      - {
-          name: pubDatetime,
-          label: Publication Date,
-          type: date,
-          required: true,
-        }
-      - {
-          name: modDatetime,
-          label: Modified Date,
-          type: date,
-          hint: "Leave empty for new posts",
-        }
-      - {
-          name: slug,
-          label: Slug,
-          type: string,
-          hint: "Leave empty to auto-generate from filename",
-        }
-      - { name: featured, label: Featured, type: boolean, default: false }
-      - { name: draft, label: Draft, type: boolean }
-      - {
-          name: tags,
-          label: Tags,
-          type: string,
-          list: true,
-          hint: "Common tags: list goes here",
-        }
-      - {
-          name: ogImage,
-          label: OG Image,
-          type: string,
-          hint: "URL or path to social media image",
-        }
-      - {
-          name: canonicalURL,
-          label: Canonical URL,
-          type: string,
-          hint: "If this post was originally published elsewhere",
-        }
-      - {
-          name: timezone,
-          label: Timezone,
-          type: string,
-          default: "America/New_York",
-          hint: "IANA timezone format",
-        }
-      - {
-          name: hideEditPost,
-          label: Hide Edit Post Button,
-          type: boolean,
-          default: false,
-        }
-      - { name: body, label: Body, type: rich-text }
+      - name: title
+        label: Title
+        type: string
+        required: true
+
+      - name: description
+        label: Description
+        type: string
+
+      - name: author
+        label: Author
+        type: string
+        default: "Committee"
+
+      - name: pubDatetime
+        label: Publication Date
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ss"
+
+      - name: modDatetime
+        label: Modified Date
+        type: date
+        hint: "Leave empty for new posts"
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ss"
+
+      - name: slug
+        label: Slug
+        type: string
+        hint: "Leave empty to auto-generate from filename"
+
+      - name: featured
+        label: Featured
+        type: boolean
+        default: false
+
+      - name: draft
+        label: Draft
+        type: boolean
+
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+        hint: "Common tags: list goes here"
+
+      - name: ogImage
+        label: OG Image
+        type: string
+        hint: "URL or path to social media image"
+
+      - name: canonicalURL
+        label: Canonical URL
+        type: string
+        hint: "If this post was originally published elsewhere"
+
+      - name: timezone
+        label: Timezone
+        type: string
+        default: "America/New_York"
+        hint: "IANA timezone format"
+
+      - name: hideEditPost
+        label: Hide Edit Post Button
+        type: boolean
+        default: false
+
+      - name: body
+        label: Body
+        type: rich-text
+
   - name: about
     label: About page
     type: file
     path: src/pages/about.md
     fields:
-      - {
-          name: layout,
-          type: string,
-          hidden: true,
-          default: "../layouts/AboutLayout.astro",
-        }
-      - { name: title, label: Title, type: string }
-      - {
-          name: body,
-          label: Body,
-          type: rich-text,
-          options: { input: public/assets, output: /assets },
-        }
+      - name: layout
+        type: string
+        hidden: true
+        default: "../layouts/AboutLayout.astro"
+      - name: title
+        label: Title
+        type: string
+      - name: body
+        label: Body
+        type: rich-text
+        options:
+          input: public/assets
+          output: /assets
