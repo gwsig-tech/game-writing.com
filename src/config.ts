@@ -4,7 +4,7 @@ export const SITE = {
   profile: "https://jonathonmyers.com/",
   desc: "The official site of the Game Writing SIG.",
   title: "IGDA Game Writing SIG",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "game-writing-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 6,
   postPerPage: 6,
