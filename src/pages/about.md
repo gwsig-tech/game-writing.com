@@ -8,12 +8,15 @@ It was formed with the mission to bring video game writing away from being an in
 
 Over the years, the SIG has produced some remarkable achievements. In addition to fostering a sense of community and opportunities for professional networking, it also produced the first white paper outlining the roles, duties, and professional needs of game writing, with an eye toward standardizing the craft across the industry and getting respect for all those doing the work, regardless of their internal title. The SIG then built on that whitepaper by creating three seminal books on video game writing:
 
-- *Game Writing: Narrative Skills for Video Games* (edited by Chris Bateman)
-- *Professional Techniques for Video Game Writing* (edited by Wendy Despain)
-- *Writing For Video Game Genres: From FPS to RPG* (edited by Wendy Despain)
+*   _Game Writing: Narrative Skills for Video Games_ (edited by Chris Bateman)
+    
+*   _Professional Techniques for Video Game Writing_ (edited by Wendy Despain)
+    
+*   _Writing For Video Game Genres: From FPS to RPG_ (edited by Wendy Despain)
+    
 
 These books broke new ground, laying out industry best practices for writing for games, and featured a wide array of some of the top game writing talent in the industry. They have been used for decades as classroom texts, had multiple printings and second editions. Other initiatives included the long-running and popular Write Club event held every year at GDC, collating a library of game scripts for member reference, mentoring new writers, script workshopping and other benefits.
 
 The SIG remains vital to this day, sponsoring gatherings at major video game conferences and maintaining a robust online presence. From its earliest beginnings, it has served the needs of the broad game writer community. Story is now respected as a key differentiator in video games, and narrative possibilities are being explored in new ways every day. As game writing itself changes, the SIG will continue taking on challenges for the benefits of all its members and game writing as a whole.
 
-~*Richard Dansky*~
+_Richard Dansky_
