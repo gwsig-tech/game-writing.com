@@ -2,43 +2,21 @@
 layout: ../layouts/AboutLayout.astro
 title: About
 ---
-Game Writing SIG is a minimal, accessible and SEO-friendly blog theme built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
+The IGDA Game Writers SIG is the world’s first and oldest professional organization for video game writers. It was founded in 2002 and since then has served as both a welcoming community for game writers and an advocacy organization promoting the art and craft of game writing as well as the professional needs of those engaged in the field.
 
-![Astro Paper](/astropaper-og.jpg)
+It was formed with the mission to bring video game writing away from being an industry after-thought to making game narrative and story into something that could be the central selling point for games. This was an ambitious goal at the time, when graphics quality was the only thing featured in marketing and raved about in reviews. While games were using technological advances to improve their graphics, it took human creativity to elevate game stories, so the SIG focused on developing game writers.
 
-AstroPaper provides a solid foundation for blogs, or even portfolios\_ with full markdown support, built-in dark mode, and a clean layout that works out-of-the-box.
+Over the years, the SIG has produced some remarkable achievements. In addition to fostering a sense of community and opportunities for professional networking, it also produced the first white paper outlining the roles, duties, and professional needs of game writing, with an eye toward standardizing the craft across the industry and getting respect for all those doing the work, regardless of their internal title. The SIG then built on that whitepaper by creating three seminal books on video game writing:
 
-The blog posts in this theme also serve as guides, docs or example articles\_ making AstroPaper a flexible starting point for your next content-driven site.
-
-## Features
-
-AstroPaper comes with a set of useful features that make content publishing easy and effective:
-
-*   SEO-friendly
+*   _Game Writing: Narrative Skills for Video Games_ (edited by Chris Bateman)
     
-*   Fast performance
+*   _Professional Techniques for Video Game Writing_ (edited by Wendy Despain)
     
-*   Light & dark mode
-    
-*   Highly customizable
-    
-*   Organizable blog posts
-    
-*   Responsive & accessible
-    
-*   Static search with [PageFind](https://pagefind.app/)
-    
-*   Automatic social image generation
+*   _Writing For Video Game Genres: From FPS to RPG_ (edited by Wendy Despain)
     
 
-and so much more.
+These books broke new ground, laying out industry best practices for writing for games, and featured a wide array of some of the top game writing talent in the industry. They have been used for decades as classroom texts, had multiple printings and second editions. Other initiatives included the long-running and popular Write Club event held every year at GDC, collating a library of game scripts for member reference, mentoring new writers, script workshopping and other benefits.
 
-## Show your support
+The SIG remains vital to this day, sponsoring gatherings at major video game conferences and maintaining a robust online presence. From its earliest beginnings, it has served the needs of the broad game writer community. Story is now respected as a key differentiator in video games, and narrative possibilities are being explored in new ways every day. As game writing itself changes, the SIG will continue taking on challenges for the benefits of all its members and game writing as a whole.
 
-If you like [AstroPaper](https://github.com/satnaing/astro-paper), consider giving it a star ⭐️.
-
-Found a bug 🐛 or have an improvement ✨ in mind? Feel free to open an [issue](https://github.com/satnaing/astro-paper/issues), submit a [pull request](https://github.com/satnaing/astro-paper/pulls) or start a [discussion](https://github.com/satnaing/astro-paper/discussions).
-
-If you find this theme helpful, you can also [sponsor me on GitHub](https://github.com/sponsors/satnaing) or [buy me a coffee](https://buymeacoffee.com/satnaing) to show your support — every penny counts.
-
-Kyay zuu! 🙏🏼
+_Richard Dansky_

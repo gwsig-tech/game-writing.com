@@ -1,20 +1,20 @@
 ---
+title: This is now the required title
+description: Description goes here
 author: Jonathon Myers
-pubDatetime: 2025-09-06
-modDatetime: 2025-09-06
-title: This is the required title
-ogImage: This is the title
+pubDatetime: 2025-09-06T15:57:52
+modDatetime: 2025-09-08T15:57:52
 slug: this-is-slug
-featured: true
+featured: false
 draft: false
 tags:
   - new-tag
-description: Description goes here
+ogImage: This is the title
+
 ---
 # Heading
 
-1.  List
-    
+1. List
 
 > Quote
 

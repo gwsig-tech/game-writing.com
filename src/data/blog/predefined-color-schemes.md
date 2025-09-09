@@ -1,11 +1,11 @@
 ---
 author: Sat Naing
-pubDatetime: 2022-09-26T12:13:24Z
-modDatetime: 2024-01-04T09:09:06Z
+pubDatetime: 2022-09-26T12:13:24
+modDatetime: 2024-01-04T09:09:06
 title: Predefined color schemes
 slug: predefined-color-schemes
 featured: false
-draft: false
+draft: true
 tags:
   - color-schemes
 description:
