@@ -3,7 +3,7 @@ export const SITE = {
   author: "Jon Myers",
   profile: "https://jonathonmyers.com/",
   desc: "The official site of the Game Writing SIG.",
-  title: "Game Writing SIG",
+  title: "IGDA Game Writing SIG",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 6,
