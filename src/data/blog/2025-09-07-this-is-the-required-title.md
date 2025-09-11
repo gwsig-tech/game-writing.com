@@ -2,19 +2,18 @@
 title: This is now the required title
 description: Description goes here
 author: Jonathon Myers
-pubDatetime: 2025-09-06T15:57:52
-modDatetime: 2025-09-08T15:57:52
+pubDatetime: 2025-09-06T15:57:00
+modDatetime: 2025-09-08T15:57:00
 slug: this-is-slug
 featured: false
-draft: false
+draft: true
 tags:
   - new-tag
 ogImage: This is the title
-
 ---
 # Heading
 
-1. List
+1.  List
 
 > Quote
 
