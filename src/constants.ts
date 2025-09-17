@@ -1,6 +1,8 @@
 import type { Props } from "astro";
 import IconMail from "@/assets/icons/IconMail.svg";
-import IconGitHub from "@/assets/icons/IconGitHub.svg";
+//import IconGitHub from "@/assets/icons/IconGitHub.svg";
+import IconDiscord from "@/assets/icons/IconDiscord.svg";
+import IconBluesky from "@/assets/icons/IconBluesky.svg";
 import IconBrandX from "@/assets/icons/IconBrandX.svg";
 import IconLinkedin from "@/assets/icons/IconLinkedin.svg";
 import IconWhatsapp from "@/assets/icons/IconWhatsapp.svg";
@@ -18,26 +20,38 @@ interface Social {
 
 export const SOCIALS: Social[] = [
   {
-    name: "GitHub",
-    href: "https://github.com/satnaing/astro-paper",
-    linkTitle: `${SITE.title} on GitHub`,
-    icon: IconGitHub,
+    name: "Discord",
+    href: "hhttps://discord.gg/2uWGBsUgxT",
+    linkTitle: `${SITE.title} on Discord`,
+    icon: IconDiscord,
   },
   {
-    name: "X",
-    href: "https://x.com/username",
-    linkTitle: `${SITE.title} on X`,
-    icon: IconBrandX,
+    name: "Facebook",
+    href: "https://www.facebook.com/groups/gamewriting",
+    linkTitle: `${SITE.title} on Facebook`,
+    icon: IconFacebook,
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/username/",
+    href: "https://www.linkedin.com/company/gwsig/",
     linkTitle: `${SITE.title} on LinkedIn`,
     icon: IconLinkedin,
   },
   {
+    name: "Bluesky",
+    href: "https://bsky.app/profile/game-writing.com",
+    linkTitle: `${SITE.title} on Bluesky`,
+    icon: IconBluesky,
+  },
+  {
+    name: "X",
+    href: "https://x.com/IGDAWritingSIG",
+    linkTitle: `${SITE.title} on X`,
+    icon: IconBrandX,
+  },
+  {
     name: "Mail",
-    href: "mailto:yourmail@gmail.com",
+    href: "mailto:info@game-writing.com",
     linkTitle: `Send an email to ${SITE.title}`,
     icon: IconMail,
   },

@@ -104,7 +104,7 @@ Here is the sample frontmatter for a post.
 ---
 title: The title of the post
 author: your name
-pubDatetime: 2022-09-21T05:17:19Z
+pubDatetime: 2022-09-21T05:17:19
 slug: the-title-of-the-post
 featured: true
 draft: false
