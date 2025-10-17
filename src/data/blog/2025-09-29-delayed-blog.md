@@ -5,6 +5,6 @@ author: Committee
 pubDatetime: 2025-10-01T19:14:00
 slug: delayed-blog-here
 featured: true
-draft: false
+draft: true
 ---
 This is a delayed blog. Will it publish?

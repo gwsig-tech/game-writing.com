@@ -4,8 +4,8 @@ description: Example description
 author: Committee
 pubDatetime: 2025-09-10T09:00:00
 slug: example-process-post
-featured: true
-draft: false
+featured: false
+draft: true
 tags:
   - examples
 ---
