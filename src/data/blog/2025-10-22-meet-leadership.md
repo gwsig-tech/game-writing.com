@@ -18,9 +18,12 @@ Today, we're excited to introduce you to the committee members who are leading t
 
 The Game Writing SIG is now governed by a committee of volunteers who have stepped up to serve the community through various initiatives. Here's who's leading the charge:
 
-[**Justin Bortnick**](https://www.linkedin.com/in/justin-bortnick/) - Executive Panel, Chair, Treasurer Initiative: Handbook Justin leads our committee meetings and maintains financial oversight while spearheading the development of our organizational handbook.
+[**Justin Bortnick**](https://www.linkedin.com/in/justin-bortnick/) - Executive Panel, Chair, Treasurer  
+Initiative: Handbook  
+Justin leads our committee meetings and maintains financial oversight while spearheading the development of our organizational handbook.
 
 [**Tobias Heussner**](https://www.linkedin.com/in/theussner/) - Executive Panel Initiative: Moderation  
+Initiative: Moderation  
 Tobias provides executive oversight and works to ensure our digital spaces remain safe and productive for all members.
 
 [**Chride Lassheikki**](https://www.linkedin.com/in/christina-lassheikki/)  
@@ -86,7 +89,7 @@ The SIG operates on a model of open governance, which means **your participation
     
 *   **Fill Open Roles**: We have several open positions including additional moderators, a social media manager, and site technical assistants.
     
-*   **Participate in Discussions**: Speak up in our Discord to share your constructive ideas and thoughts. We have a #general-volunteers channel and feedback channels for topical disucssion and specific questions. We hope to begin regular Town Hall conversations in a new chat channel of our Discord server.
+*   **Participate in Discussions**: Speak up in our Discord to share your constructive ideas and thoughts. We have a #general-volunteers channel and feedback channels for topical discussion and specific questions. We hope to begin regular Town Hall conversations in a new chat channel of our Discord server.
     
 
 ## Looking Forward
