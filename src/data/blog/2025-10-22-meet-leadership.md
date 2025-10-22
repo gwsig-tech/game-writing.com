@@ -50,7 +50,7 @@ Since launching in September, we've made significant progress:
     
 *   **Community Spaces**: We've made initiative channels public where possible and established better workflows for community participation in our various projects.
     
-*   **Website Development**: We've launched a rudimentary calendar/events page and a prototype wiki for the resources initiative. Our itch.io page is now connected for an upcoming game jam to be announced this Friday.
+*   **Website Development**: We've launched a [rudimentary calendar/events page](https://www.game-writing.com/events) and a prototype wiki for the resources initiative. Our itch.io page is now connected for an upcoming game jam to be announced this Friday.
     
 *   **Records**: Committee meeting records are now being published regularly, and we've formalized our procedures for committee member appointments and decision-making.
     
