@@ -22,7 +22,7 @@ The Game Writing SIG is now governed by a committee of volunteers who have stepp
 Initiative: Handbook  
 Justin leads our committee meetings and maintains financial oversight while spearheading the development of our organizational handbook.
 
-[**Tobias Heussner**](https://www.linkedin.com/in/theussner/) - Executive Panel Initiative: Moderation  
+[**Tobias Heussner**](https://www.linkedin.com/in/theussner/) - Executive Panel  
 Initiative: Moderation  
 Tobias provides executive oversight and works to ensure our digital spaces remain safe and productive for all members.
 
