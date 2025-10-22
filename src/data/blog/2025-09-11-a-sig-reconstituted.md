@@ -9,7 +9,7 @@ draft: false
 tags:
   - announcements
 ---
-During the first week of September, the IGDA Game Writing Special Interest Group convened a Constitutional Convention that was attended by the organization's founding members and prior and leadership. The resulting document, the [Constitution of the IGDA Game Writing SIG](https://www.game-writing.com/constitution), is now available on this newly-launched website.
+During the first week of September, the IGDA Game Writing Special Interest Group convened a Constitutional Convention that was attended by the organization's founding members and prior leadership. The resulting document, the [Constitution of the IGDA Game Writing SIG](https://www.game-writing.com/constitution), is now available on this newly-launched website.
 
 The new constitution revives the SIG's original model of open governance, where a committee of volunteers identifies issues of interest to the field and then establishes initiatives to further serve those working in the medium today. Any member of this SIG community with an interest in volunteering may help with an initiative, or propose a new one. Future committee members will be selected from the active and engaged membership.
 
