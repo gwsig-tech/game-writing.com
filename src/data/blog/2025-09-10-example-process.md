@@ -10,3 +10,5 @@ tags:
   - examples
 ---
 Here is an example of how fast this publishes.
+
+What about this.
