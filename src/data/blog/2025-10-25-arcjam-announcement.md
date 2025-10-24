@@ -6,13 +6,13 @@ pubDatetime: 2025-10-24T09:00:00
 slug: arcjam-announcement-2025
 featured: true
 draft: false
-ogImage: ../../assets/LoadingJam.png
+ogImage: ../../assets/images/LoadingJam.png
 tags:
   - announcements
   - events
   - game-jam
 ---
-![](/assets/LoadingJam.png)
+![](@/assets/images/LoadingJam.png)
 
 We're thrilled to announce the [Game Writing SIG ArcJam](https://itch.io/jam/game-writing-sig-arcjam-2025) — our first narrative-focused game jam of the new SIG era, happening this November in partnership with [Arcweave](https://arcweave.com)!
 
