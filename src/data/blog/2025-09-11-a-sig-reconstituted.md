@@ -4,7 +4,7 @@ description: A long awaited update from the IGDA Game Writing SIG
 author: Committee
 pubDatetime: 2025-09-11T17:00:00
 slug: a-sig-reconstituted
-featured: true
+featured: false
 draft: false
 tags:
   - announcements

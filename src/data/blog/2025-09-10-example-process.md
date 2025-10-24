@@ -5,7 +5,7 @@ author: Committee
 pubDatetime: 2025-09-10T09:00:00
 slug: example-process-post
 featured: false
-draft: false
+draft: true
 tags:
   - examples
 ---
