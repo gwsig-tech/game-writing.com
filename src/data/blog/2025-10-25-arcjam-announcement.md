@@ -6,11 +6,14 @@ pubDatetime: 2025-10-24T09:00:00
 slug: arcjam-announcement-2025
 featured: true
 draft: false
+ogImage: ../../assets/LoadingJam.png
 tags:
   - announcements
   - events
   - game-jam
 ---
+![](/assets/LoadingJam.png)
+
 We're thrilled to announce the [Game Writing SIG ArcJam](https://itch.io/jam/game-writing-sig-arcjam-2025) — our first narrative-focused game jam of the new SIG era, happening this November in partnership with [Arcweave](https://arcweave.com)!
 
 This 72-hour online event is organized specifically for working game writers, narrative designers, and game industry members passionate about interactive storytelling. Whether you're a seasoned professional or just starting your journey in game writing, the Game Writing SIG Arcjam offers a unique opportunity to flex your creative muscles, build your portfolio, and connect with our community during a challenging time in the industry.
@@ -21,10 +24,10 @@ Let's be honest: these are difficult times for game writers. The industry has se
 
 The Game Writing SIG Arcjam is our answer to this moment. We're creating a space where writers can:
 
-*   **Build portfolio pieces** that showcase their narrative design skills
-*   **Experiment with new techniques** in a supportive, low-pressure environment
-*   **Connect with peers** who understand the challenges we're facing
-*   **Have fun** telling stories and playing with interactive narrative
+* **Build portfolio pieces** that showcase their narrative design skills
+* **Experiment with new techniques** in a supportive, low-pressure environment
+* **Connect with peers** who understand the challenges we're facing
+* **Have fun** telling stories and playing with interactive narrative
 
 Most importantly, we want to boost morale and remind everyone why we do this work in the first place — because interactive storytelling is powerful, meaningful, and worth fighting for.
 
@@ -34,10 +37,10 @@ We're partnering with [Arcweave](https://arcweave.com), a cutting-edge narrative
 
 Arcweave has generously provided:
 
-*   **Free Pro workspace access** for all jam participants
-*   **Priority support** throughout the event via their Discord server
-*   **Perpetual hosting** for submitted projects
-*   **Co-promotion** for standout entries
+* **Free Pro workspace access** for all jam participants
+* **Priority support** throughout the event via their Discord server
+* **Perpetual hosting** for submitted projects
+* **Co-promotion** for standout entries
 
 Even if you've never used Arcweave before, don't worry — the platform is intuitive to learn, with comprehensive tutorials and documentation to get you started. Plus, the Arcweave community is always ready to help.
 
@@ -53,31 +56,31 @@ Even if you've never used Arcweave before, don't worry — the platform is intui
 
 **How to Join:**
 
-1.  Join the [IGDA Game Writing SIG Discord](https://discord.gg/EStA2uKm4n) and get your free IGDA membership
-2.  Create a free [Arcweave account](https://arcweave.com/)
-3.  Create an [itch.io account](https://itch.io/) and [join our jam here](https://itch.io/jam/game-writing-sig-arcjam-2025)
-4.  Get your Pro workspace trial code from our Discord on November 21
+1. Join the [IGDA Game Writing SIG Discord](https://discord.gg/EStA2uKm4n) and get your free IGDA membership
+2. Create a free [Arcweave account](https://arcweave.com/)
+3. Create an [itch.io account](https://itch.io/) and [join our jam here](https://itch.io/jam/game-writing-sig-arcjam-2025)
+4. Get your Pro workspace trial code from our Discord on November 21
 
 ## What You'll Walk Away With
 
 At the end of the jam, you'll have:
 
-*   **A completed interactive story** that you created in just 72 hours
-*   **New skills** in Arcweave and narrative design
-*   **A portfolio piece** hosted permanently on Arcweave and itch.io
-*   **Community connections** with other game writers
-*   **Feedback from peers and judges** on your work
-*   **A chance to win prizes** and recognition across SIG and Arcweave channels
+* **A completed interactive story** that you created in just 72 hours
+* **New skills** in Arcweave and narrative design
+* **A portfolio piece** hosted permanently on Arcweave and itch.io
+* **Community connections** with other game writers
+* **Feedback from peers and judges** on your work
+* **A chance to win prizes** and recognition across SIG and Arcweave channels
 
 Plus, the satisfaction of having created something new during a weekend focused entirely on the craft we love.
 
 ## Important Guidelines
 
-*   All entries must be created in Arcweave and submitted via itch.io
-*   Games must be written in English (though additional languages are welcome)
-*   Original content only — no generative AI for narrative or assets
-*   Audiovisual assets are encouraged but optional
-*   The jam adheres to the [IGDA Code of Conduct](https://igda.org/about-us/code-of-conduct/)
+* All entries must be created in Arcweave and submitted via itch.io
+* Games must be written in English (though additional languages are welcome)
+* Original content only — no generative AI for narrative or assets
+* Audiovisual assets are encouraged but optional
+* The jam adheres to the [IGDA Code of Conduct](https://igda.org/about-us/code-of-conduct/)
 
 ## Looking Ahead
 
