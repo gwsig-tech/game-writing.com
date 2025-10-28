@@ -21,7 +21,7 @@ interface Social {
 export const SOCIALS: Social[] = [
   {
     name: "Discord",
-    href: "hhttps://discord.gg/2uWGBsUgxT",
+    href: "https://discord.gg/2uWGBsUgxT",
     linkTitle: `${SITE.title} on Discord`,
     icon: IconDiscord,
   },
