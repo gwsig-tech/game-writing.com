@@ -30,17 +30,17 @@ Before the jam begins, take some time to clarify what you want to achieve:
 
 Check out this fantastic Writer's Guild of Great Britain panel with industry experts discussing interative writing portfolios.
 
-<div style="text-align:center;">
-<iframe width="640" height="390" src="https://www.youtube.com/embed/NAudrdXPfKU" title="Interactive Writing Portfolios - creating interactive portfolios" frameborder="0" allowfullscreen></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 0 auto;">
+  <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/NAudrdXPfKU" title="Interactive Writing Portfolios - creating interactive portfolios" frameborder="0" allowfullscreen></iframe>
 </div>
 
 ## Learning the Tools
 
 If you're new to Arcweave, don't panic. It's designed with writers in mind, and you don't need to be a tech wizard to create compelling interactive stories. Just start here:
 
-![https://blog.arcweave.com/arcweave-cheat-sheet-for-game-writers](@/assets/images/arcweave-resources-for-game-writers.webp)
+[![](@/assets/images/arcweave-resources-for-game-writers.webp)](https://blog.arcweave.com/arcweave-cheat-sheet-for-game-writers)
 
-Our partners at Arcweave created that [comprehensive cheatsheet specifically for game writers preparing for the jam](https://blog.arcweave.com/arcweave-tips-for-game-writers). It breaks down everything from beginner basics to advanced logic, organized by skill level.
+Our partners at Arcweave created this [comprehensive cheatsheet specifically for game writers preparing for the jam](https://blog.arcweave.com/arcweave-cheat-sheet-for-game-writers). It breaks down everything from beginner basics to advanced logic, organized by skill level.
 
 **Key resources:**
 
@@ -48,8 +48,8 @@ Our partners at Arcweave created that [comprehensive cheatsheet specifically for
 - [Video Tutorial Playlist](https://www.youtube.com/playlist?list=PLP2s5PcDiBdbJUFiw8gu8gK1IyFboWxFH) - Comprehensive basics coverage
 - [Arcweave Documentation](https://docs.arcweave.com) - The complete reference guide
 
-<div style="text-align:center;">
-<iframe width="640" height="390" src="https://www.youtube.com/embed?listType=playlist&list=PLP2s5PcDiBdbJUFiw8gu8gK1IyFboWxFH" title="Arcweave Tutorial Videos" frameborder="0" allowfullscreen></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 0 auto;">
+  <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed?listType=playlist&list=PLP2s5PcDiBdbJUFiw8gu8gK1IyFboWxFH" title="Arcweave Tutorial Videos" frameborder="0" allowfullscreen></iframe>
 </div>
 
 Remember: you don't need to master every feature before the jam starts. Focus on the basics first: elements, connections, and playtesting. You can explore variables and advanced logic as you go.
@@ -84,18 +84,18 @@ Non-writer collaborators (artists, sound designers, UI designers) can take your 
 
 **Next two weeks:**
 
-1. Sign up for the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025) on Itch
+1. Sign up for the [Game Writing SIG Arcjam](https://itch.io/jam/game-writing-sig-arcjam-2025) on Itch
 2. [Join the Game Writing SIG Discord](https://discord.gg/EStA2uKm4n) if you're an interested game writer
 3. Create your free [Arcweave account](https://arcweave.com/)
-4. Work through the [QuickStart Guide](https://blog.arcweave.com/your-arcweave-quickstart-guide)
+4. Work through the [Arcweave QuickStart Guide](https://blog.arcweave.com/your-arcweave-quickstart-guide)
 5. Consider your goals for the jam
 6. Decide if you're going solo or looking for teammates
 
-**Join us for a Q&A:** We plan to host a voice chat next week in our Discord to answer questions and gather feedback. Watch the #game-jam-announcement channel for the announcement.
+**Join us for a Q&A:** We plan to host a voice chat next week in our [Discord](https://discord.gg/EStA2uKm4n) to answer questions and gather feedback. Watch the #game-jam-announcement channel for the announcement.
 
 **On jam day (November 21):**
 
-- Get your Pro workspace trial code from our Discord
+- Get your Pro workspace trial code from our [Discord](https://discord.gg/EStA2uKm4n)
 - Connect with teammates in your Pro workspace
 - Read the final announcement to learn the theme
 - Take a deep breath and start creating!
