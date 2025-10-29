@@ -6,6 +6,7 @@ pubDatetime: 2025-10-29T12:00:00
 slug: prepare-for-arcjam
 featured: true
 draft: false
+ogImage: ../../assets/images/LoadingJam.png
 tags:
   - events
   - game-jam
