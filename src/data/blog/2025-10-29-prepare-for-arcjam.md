@@ -30,23 +30,27 @@ Before the jam begins, take some time to clarify what you want to achieve:
 
 Check out this fantastic Writer's Guild of Great Britain panel with industry experts discussing interative writing portfolios.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/NAudrdXPfKU" title="Interactive Writing Portfolios - creating interactive portfolios" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div style="text-align:center;">
+<iframe width="640" height="390" src="https://www.youtube.com/embed/NAudrdXPfKU" title="Interactive Writing Portfolios - creating interactive portfolios" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Learning the Tools
 
-If you're new to Arcweave, don't panic. It's designed with writers in mind, and you don't need to be a tech wizard to create compelling interactive stories.
+If you're new to Arcweave, don't panic. It's designed with writers in mind, and you don't need to be a tech wizard to create compelling interactive stories. Just start here:
 
-> Our partners at Arcweave have created a comprehensive [cheatsheet specifically for game writers](https://blog.arcweave.com/arcweave-tips-for-game-writers) preparing for the jam. It breaks down everything from beginner basics to advanced logic, organized by skill level.
+![https://blog.arcweave.com/arcweave-cheat-sheet-for-game-writers](@/assets/images/arcweave-resources-for-game-writers.webp)
 
-Start here if you're brand new:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Dfm6dKQH3I0" title="Arcweave QuickStart Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+Our partners at Arcweave created that [comprehensive cheatsheet specifically for game writers preparing for the jam](https://blog.arcweave.com/arcweave-tips-for-game-writers). It breaks down everything from beginner basics to advanced logic, organized by skill level.
 
 **Key resources:**
 
 - [Arcweave QuickStart Guide](https://blog.arcweave.com/your-arcweave-quickstart-guide) - Get from zero to your first playable story
 - [Video Tutorial Playlist](https://www.youtube.com/playlist?list=PLP2s5PcDiBdbJUFiw8gu8gK1IyFboWxFH) - Comprehensive basics coverage
 - [Arcweave Documentation](https://docs.arcweave.com) - The complete reference guide
+
+<div style="text-align:center;">
+<iframe width="640" height="390" src="https://www.youtube.com/embed?listType=playlist&list=PLP2s5PcDiBdbJUFiw8gu8gK1IyFboWxFH" title="Arcweave Tutorial Videos" frameborder="0" allowfullscreen></iframe>
+</div>
 
 Remember: you don't need to master every feature before the jam starts. Focus on the basics first: elements, connections, and playtesting. You can explore variables and advanced logic as you go.
 
