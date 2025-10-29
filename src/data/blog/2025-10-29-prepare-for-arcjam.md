@@ -36,7 +36,7 @@ Check out this fantastic Writer's Guild of Great Britain panel with industry exp
 
 If you're new to Arcweave, don't panic. It's designed with writers in mind, and you don't need to be a tech wizard to create compelling interactive stories.
 
-Our partners at Arcweave have created a comprehensive [cheatsheet specifically for game writers](https://blog.arcweave.com/arcweave-tips-for-game-writers) preparing for the jam. It breaks down everything from beginner basics to advanced logic, organized by skill level.
+> Our partners at Arcweave have created a comprehensive [cheatsheet specifically for game writers](https://blog.arcweave.com/arcweave-tips-for-game-writers) preparing for the jam. It breaks down everything from beginner basics to advanced logic, organized by skill level.
 
 Start here if you're brand new:
 
