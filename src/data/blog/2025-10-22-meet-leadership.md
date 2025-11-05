@@ -4,7 +4,7 @@ description: An update from the new leadership of the Game Writing SIG
 author: Committee
 pubDatetime: 2025-10-22T17:00:00
 slug: new-sig-leadership
-featured: true
+featured: false
 draft: false
 tags:
   - announcements
@@ -46,16 +46,15 @@ Sam leads our Discord moderation team and works to establish formal guidelines a
 
 Since launching in September, we've made significant progress:
 
-*   **Digital Infrastructure**: We've centralized our accounts, set up shared email inboxes for committee coordination, and deployed a password management system for secure access to SIG resources.
-    
-*   **Community Spaces**: We've made initiative channels public where possible and established better workflows for community participation in our various projects.
-    
-*   **Website Development**: We've launched a [rudimentary calendar/events page](https://www.game-writing.com/events) and a prototype wiki for the resources initiative. Our itch.io page is now connected for an upcoming game jam to be announced this Friday.
-    
-*   **Records**: Committee meeting records are now being published regularly, and we've formalized our procedures for committee member appointments and decision-making.
-    
-*   **IGDA Partnership**: Besides attending monthly IGDA SIG leadership meetings, we've received edit access to the SIG's IGDA page and access to relevant documents in their Google Drive folder. SIG leadership and IGDA leadership regularly communicate in shared channels of our respective Discord servers.
-    
+* **Digital Infrastructure**: We've centralized our accounts, set up shared email inboxes for committee coordination, and deployed a password management system for secure access to SIG resources.
+
+* **Community Spaces**: We've made initiative channels public where possible and established better workflows for community participation in our various projects.
+
+* **Website Development**: We've launched a [rudimentary calendar/events page](https://www.game-writing.com/events) and a prototype wiki for the resources initiative. Our itch.io page is now connected for an upcoming game jam to be announced this Friday.
+
+* **Records**: Committee meeting records are now being published regularly, and we've formalized our procedures for committee member appointments and decision-making.
+
+* **IGDA Partnership**: Besides attending monthly IGDA SIG leadership meetings, we've received edit access to the SIG's IGDA page and access to relevant documents in their Google Drive folder. SIG leadership and IGDA leadership regularly communicate in shared channels of our respective Discord servers.
 
 ## What's Next
 
@@ -81,16 +80,15 @@ We are working with volunteers to help manage our social media presence and grow
 
 The SIG operates on a model of open governance, which means **your participation matters** and we're here to empower you. Here's how you can contribute:
 
-*   **Volunteer for Initiatives**: Each committee member leads an initiative that welcomes general member participation. Whether you're interested in events, resources, moderation, or technical work, there's a place for you.
-    
-*   **Attend Committee Meetings**: Our monthly committee meetings are now open for observation to all general members. Contact any committee member to receive an invite. Watch our Discord for announcements on meeting dates and times.
-    
-*   **Propose New Ideas**: Have an idea for an initiative or project? We want to hear it. Open governance means community members can propose new directions for the SIG.
-    
-*   **Fill Open Roles**: We have several open positions including additional moderators, a social media manager, and site technical assistants.
-    
-*   **Participate in Discussions**: Speak up in our Discord to share your constructive ideas and thoughts. We have a #general-volunteers channel and feedback channels for topical discussion and specific questions. We hope to begin regular Town Hall conversations in a new chat channel of our Discord server.
-    
+* **Volunteer for Initiatives**: Each committee member leads an initiative that welcomes general member participation. Whether you're interested in events, resources, moderation, or technical work, there's a place for you.
+
+* **Attend Committee Meetings**: Our monthly committee meetings are now open for observation to all general members. Contact any committee member to receive an invite. Watch our Discord for announcements on meeting dates and times.
+
+* **Propose New Ideas**: Have an idea for an initiative or project? We want to hear it. Open governance means community members can propose new directions for the SIG.
+
+* **Fill Open Roles**: We have several open positions including additional moderators, a social media manager, and site technical assistants.
+
+* **Participate in Discussions**: Speak up in our Discord to share your constructive ideas and thoughts. We have a #general-volunteers channel and feedback channels for topical discussion and specific questions. We hope to begin regular Town Hall conversations in a new chat channel of our Discord server.
 
 ## Looking Forward
 
