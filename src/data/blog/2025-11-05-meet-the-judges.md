@@ -15,7 +15,7 @@ tags:
 
 ![](@/assets/images/LoadingJam.png)
 
-We're thrilled to introduce the expert panel who will be judging the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025)! These six industry veterans bring decades of combined experience in game writing, narrative design, and game development. They'll evaluate the shortlisted games and provide personalized feedback to help the standout project leaders grow as game writers.
+We're thrilled to introduce the expert panel who will be judging the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025)! These seven industry veterans bring decades of combined experience in game writing, narrative design, and game development. They'll evaluate the shortlisted games and provide personalized feedback to help the standout project leaders grow as game writers.
 
 ## The Judges
 
