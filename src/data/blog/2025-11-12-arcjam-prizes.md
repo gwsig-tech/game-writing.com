@@ -2,7 +2,7 @@
 title: Game Writing SIG Arcjam Prizes Announced
 description: Discover the prizes awaiting our narrative game jam winners
 author: Committee
-pubDatetime: 2025-12-10T12:00:00
+pubDatetime: 2025-10-10T12:00:00
 slug: arcjam-prizes-announced
 featured: true
 draft: false
