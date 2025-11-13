@@ -2,18 +2,19 @@
 title: Game Writing SIG Arcjam Prizes Announced
 description: Discover the prizes awaiting our narrative game jam winners
 author: Committee
-pubDatetime: 2025-10-10T12:00:00
+pubDatetime: 2025-12-10T12:00:00
 slug: arcjam-prizes-announced
 featured: true
 draft: false
-ogImage: ../../assets/images/LoadingJam.png
+ogImage: ../../assets/images/jam-prizes.png
 tags:
   - announcements
   - events
   - game-jam
+  - partners
 ---
 
-![](@/assets/images/LoadingJam.png)
+![something](@/assets/images/jam-prizes-transparent.png)
 
 The [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025) is just over a week away, and we're excited to announce the exciting prize pool generously donated by our community partners! Whether you're competing for the top spot or just participating for the experience, every game submitted will earn rewards.
 
@@ -21,9 +22,9 @@ The [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announce
 
 **Every team** that successfully submits a game will receive:
 
-- **Arcweave Pro Discount**: All jam participants who aren't already Arcweave subscribers will receive a **??? discount** for a Pro workspace!
+- **Arcweave Discount**: Keep building your jam project! All jam participants get **20% off** their first Arcweave workspace upgrade!
 
-- **Game Design Skills Discount**: All jam participants will receive a **??? discount** for ???!
+- **Game Design Skills Discount**: All jam participants will receive a **20% discount** for any [Game Design Skills](https://gamedesignskills.com/) bootcamp during 2026!
 
 ## Prizes for Award-Winning Games
 
@@ -75,7 +76,7 @@ Games will be evaluated through community ratings and professional judge evaluat
 - **Gameplay**
 - **Theme Interpretation**
 
-Community ratings and peer feedback will take place on the Itch.io platform. Organizers and judges will review and shortlist games for final evaluation. The panel of professional judges will rate the shorlisted games and vote to determine the top games and award recipients.
+Community ratings and peer feedback will take place on the Itch.io platform. Organizers and judges will review and shortlist games for final evaluation. The panel of professional judges will rate the shortlisted games and vote to determine the top games and award recipients.
 
 ## Join the Jam
 
