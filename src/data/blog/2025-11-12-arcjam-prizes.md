@@ -14,7 +14,7 @@ tags:
   - partners
 ---
 
-![something](@/assets/images/jam-prizes-transparent.png)
+![arcjam logo](@/assets/images/jam-prizes-transparent.png)
 
 The [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025) is just over a week away, and we're excited to announce the exciting prize pool generously donated by our community partners! Whether you're competing for the top spot or just participating for the experience, every game submitted will earn rewards.
 
