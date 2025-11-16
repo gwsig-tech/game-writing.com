@@ -25,7 +25,10 @@ We asked C.J. some burning questions regarding his background in the game indust
 
 ## We've been going through incredibly tough times in the industry. What keeps you going?
 
-> "The games industry certainly feels like it’s in a difficult position these past few years, and it’s been hard to watch friends laid off en masse and beloved studios shuttered (all while the corporate overlords continue to report record-breaking profits). Two things keep me optimistic:<br/><br/>The knowledge that, while electronic interactive entertainment is still a relatively new medium, the storytelling and artistic traditions that underpin it go back to the Paleolithic era; we are just the latest iteration of the dreamers from the Stone Age and, provided we don’t destroy ourselves, there will be others who come after us.<br/><br/>Despite the challenges, we continue to create things we believe deserve to be in the world, in players’ hands, in peoples’ imaginations; modern devs, especially students, have access to tools and tech I could only have dreamed of when I started my career almost 30 years ago, and they continue to make incredible things with them."
+> "The games industry certainly feels like it’s in a difficult position these past few years, and it’s been hard to watch friends laid off en masse and beloved studios shuttered (all while the corporate overlords continue to report record-breaking profits). Two things keep me optimistic:
+
+  1. The knowledge that, while electronic interactive entertainment is still a relatively new medium, the storytelling and artistic traditions that underpin it go back to the Paleolithic era; we are just the latest iteration of the dreamers from the Stone Age and, provided we don’t destroy ourselves, there will be others who come after us.
+  2. Despite the challenges, we continue to create things we believe deserve to be in the world, in players’ hands, in peoples’ imaginations; modern devs, especially students, have access to tools and tech I could only have dreamed of when I started my career almost 30 years ago, and they continue to make incredible things with them."
 
 ## We shared some basic advice for our jammers [in this blog post](https://www.game-writing.com/posts/prepare-for-arcjam). What's your #1 tip for our game jammers?
 

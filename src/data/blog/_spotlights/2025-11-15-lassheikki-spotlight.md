@@ -42,10 +42,10 @@ For me, what fascinated me was the multidisciplinary collaboration of it all. I'
 
 Check out our other judge spotlights below:
 
-- [Kelly Bender](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-bender)
-- [Jarory de Jesus](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-de-jesus)
-- [Konstantinos Dimopoulos](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-dimopoulos)
-- [C.J. Kershner](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-kershner)
+- [Kelly Bender](@/posts/spotlights/arcjam-spotlight-bender)
+- [Jarory de Jesus](@/posts/spotlights/arcjam-spotlight-de-jesus)
+- [Konstantinos Dimopoulos](@/posts/spotlights/arcjam-spotlight-dimopoulos)
+- [C.J. Kershner](@/posts/spotlights/arcjam-spotlight-kershner)
 
 ---
 
