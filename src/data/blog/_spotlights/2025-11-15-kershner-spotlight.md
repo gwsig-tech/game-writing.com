@@ -44,7 +44,7 @@ Check out our other judge spotlights below:
 - [Kelly Bender](/posts/arcjam-spotlight-bender)
 - [Jarory de Jesus](/posts/arcjam-spotlight-dejesus)
 - [Konstantinos Dimopoulos](/posts/arcjam-spotlight-dimopoulos)
-- [Chride Lassheikki](/posts/arcjam-spotlight-lasskeikki)
+- [Chride Lassheikki](/posts/arcjam-spotlight-lassheikki)
 
 ---
 
