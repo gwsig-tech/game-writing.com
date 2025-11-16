@@ -44,7 +44,7 @@ Check out our other judge spotlights below:
 - [Jarory de Jesus](/posts/arcjam-spotlight-dejesus)
 - [Konstantinos Dimopoulos](/posts/arcjam-spotlight-dimopoulos)
 - [C.J. Kershner](/posts/arcjam-spotlight-kershner)
-- [Chride Lassheikki](/posts/arcjam-spotlight-lasskeikki)
+- [Chride Lassheikki](/posts/arcjam-spotlight-lassheikki)
 
 ---
 
