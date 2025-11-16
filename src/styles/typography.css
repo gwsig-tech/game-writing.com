@@ -80,6 +80,14 @@
       @apply border-s-accent/80 break-words opacity-80;
     }
 
+    blockquote p:first-of-type::before {
+      content: none;
+    }
+
+    blockquote p:last-of-type::after {
+      content: none;
+    }
+
     details {
       @apply !my-0;
     }
