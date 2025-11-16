@@ -42,10 +42,10 @@ For me, what fascinated me was the multidisciplinary collaboration of it all. I'
 
 Check out our other judge spotlights below:
 
-- [Kelly Bender](@/posts/spotlights/arcjam-spotlight-bender)
-- [Jarory de Jesus](@/posts/spotlights/arcjam-spotlight-de-jesus)
-- [Konstantinos Dimopoulos](@/posts/spotlights/arcjam-spotlight-dimopoulos)
-- [C.J. Kershner](@/posts/spotlights/arcjam-spotlight-kershner)
+- [Kelly Bender](/posts/arcjam-spotlight-bender)
+- [Jarory de Jesus](/posts/arcjam-spotlight-dejesus)
+- [Konstantinos Dimopoulos](/posts/arcjam-spotlight-dimopoulos)
+- [C.J. Kershner](/posts/arcjam-spotlight-kershner)
 
 ---
 

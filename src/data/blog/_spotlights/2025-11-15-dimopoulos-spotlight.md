@@ -42,10 +42,10 @@ We asked Konstantinos some burning questions regarding his background in the gam
 
 Check out our other judge spotlights below:
 
-- [Kelly Bender](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-bender)
-- [Jarory de Jesus](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-de-jesus)
-- [C.J. Kershner](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-kershner)
-- [Chride Lassheikki](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-lasskeikki)
+- [Kelly Bender](/posts/arcjam-spotlight-bender)
+- [Jarory de Jesus](/posts/arcjam-spotlight-dejesus)
+- [C.J. Kershner](/posts/arcjam-spotlight-kershner)
+- [Chride Lassheikki](/posts/arcjam-spotlight-lasskeikki)
 
 ---
 

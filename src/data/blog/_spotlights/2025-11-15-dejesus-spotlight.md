@@ -42,10 +42,10 @@ We asked Jarory some burning questions regarding his background in the game indu
 
 Check out our other judge spotlights below:
 
-- [Kelly Bender](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-bender)
-- [Konstantinos Dimopoulos](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-dimopoulos)
-- [C.J. Kershner](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-kershner)
-- [Chride Lassheikki](https://www.game-writing.com/posts/spotlights/arcjam-spotlight-lasskeikki)
+- [Kelly Bender](/posts/arcjam-spotlight-bender)
+- [Konstantinos Dimopoulos](/posts/arcjam-spotlight-dimopoulos)
+- [C.J. Kershner](/posts/arcjam-spotlight-kershner)
+- [Chride Lassheikki](/posts/arcjam-spotlight-lasskeikki)
 
 ---
 
