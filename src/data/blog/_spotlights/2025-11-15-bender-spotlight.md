@@ -41,9 +41,9 @@ Kelly Bender has worked in the video game industry for over 8 years as a Narrati
 
 Check out our other judge spotlights below:
 
-- [Jarory de Jesus](/postsarcjam-spotlight-dejesus)
-- [Konstantinos Dimopoulos](/postsarcjam-spotlight-dimopoulos)
-- [C.J. Kershner](/postsarcjam-spotlight-kershner)
+- [Jarory de Jesus](/posts/arcjam-spotlight-dejesus)
+- [Konstantinos Dimopoulos](/posts/arcjam-spotlight-dimopoulos)
+- [C.J. Kershner](/posts/arcjam-spotlight-kershner)
 - [Chride Lassheikki](/posts/arcjam-spotlight-lasskeikki)
 
 ---
