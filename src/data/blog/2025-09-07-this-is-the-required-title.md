@@ -19,3 +19,5 @@ ogImage: This is the title
 > Quote
 
 Regular text is regular text
+
+This is new text
