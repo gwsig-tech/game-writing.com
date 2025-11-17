@@ -12,7 +12,7 @@ tags:
   - events
   - game-jam
 ---
-![](@/assets/images/LoadingJam.png)
+![arcjam logo](@/assets/images/LoadingJam.png)
 
 We're thrilled to announce the [Game Writing SIG ArcJam](https://itch.io/jam/game-writing-sig-arcjam-2025) — our first narrative-focused game jam of the new SIG era, happening this November in partnership with [Arcweave](https://arcweave.com)!
 
