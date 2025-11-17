@@ -15,7 +15,7 @@ tags:
 
 ![arcjam logo](@/assets/images/jam-judges-transparent.png)
 
-We're thrilled to introduce the expert panel who will be judging the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025)\! These seven industry veterans bring decades of combined experience in game writing, narrative design, and game development. They'll evaluate the shortlisted games and provide personalized feedback to help the standout project leaders grow as game writers.
+We're thrilled to introduce the expert panel who will be judging the [Game Writing SIG Arcjam](/posts/arcjam-announcement-2025)\! These seven industry veterans bring decades of combined experience in game writing, narrative design, and game development. They'll evaluate the shortlisted games and provide personalized feedback to help the standout project leaders grow as game writers.
 
 ## The Judges
 
@@ -77,7 +77,7 @@ The jam starts **November 21** \- are you ready? If you haven't already:
 
 1. [Join the jam on itch.io](https://itch.io/jam/game-writing-sig-arcjam-2025)  
 2. [Join our Discord](https://discord.gg/EStA2uKm4n) for updates and community support  
-3. Review our [preparation guide](https://www.game-writing.com/posts/prepare-for-arcjam)  
+3. Review our [preparation guide](/posts/prepare-for-arcjam)  
 4. Create your free [Arcweave account](https://arcweave.com/)
 
 We can't wait to see what you create\!

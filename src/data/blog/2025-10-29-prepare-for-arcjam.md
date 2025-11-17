@@ -15,7 +15,7 @@ tags:
 
 ![arcjam logo](@/assets/images/LoadingJam.png)
 
-The [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025) is just around the corner! Whether you're a seasoned game writer or diving into your first jam, preparation is key to making the most of your 72 hours. Here's how to set yourself up for success.
+The [Game Writing SIG Arcjam](/posts/arcjam-announcement-2025) is just around the corner! Whether you're a seasoned game writer or diving into your first jam, preparation is key to making the most of your 72 hours. Here's how to set yourself up for success.
 
 ## Setting Your Goals
 

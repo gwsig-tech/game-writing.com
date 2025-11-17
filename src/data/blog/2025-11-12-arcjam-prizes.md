@@ -16,7 +16,7 @@ tags:
 
 ![arcjam logo](@/assets/images/jam-prizes-transparent.png)
 
-The [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025) is just over a week away, and we're excited to announce the exciting prize pool generously donated by our community partners! Whether you're competing for the top spot or just participating for the experience, every game submitted will earn rewards.
+The [Game Writing SIG Arcjam](/posts/arcjam-announcement-2025) is just over a week away, and we're excited to announce the exciting prize pool generously donated by our community partners! Whether you're competing for the top spot or just participating for the experience, every game submitted will earn rewards.
 
 ## Rewards for All Participants
 
@@ -85,7 +85,7 @@ Ready to compete for these prizes? Here's what you need to do:
 1. [Join the jam on itch.io](https://itch.io/jam/game-writing-sig-arcjam-2025)
 2. [Join our Discord](https://discord.gg/EStA2uKm4n)
 3. Create your free [Arcweave account](https://arcweave.com/)
-4. Review our [preparation guide](https://www.game-writing.com/posts/prepare-for-arcjam)
+4. Review our [preparation guide](/posts/prepare-for-arcjam)
 
 The jam starts **November 21 at 5:00 PM EST** and runs for 72 hours. We can't wait to see what you create!
 

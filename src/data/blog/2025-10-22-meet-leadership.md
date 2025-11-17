@@ -10,7 +10,7 @@ tags:
   - announcements
   - committee
 ---
-Just over a month ago, we shared the news about [A SIG Reconstituted](https://www.game-writing.com/posts/a-sig-reconstituted/)—the revival of the IGDA Game Writing SIG through a Constitutional Convention and the launch of this new website. Since then, we've been hard at work building momentum and establishing the foundations for our community's future.
+Just over a month ago, we shared the news about [A SIG Reconstituted](/posts/a-sig-reconstituted/)—the revival of the IGDA Game Writing SIG through a Constitutional Convention and the launch of this new website. Since then, we've been hard at work building momentum and establishing the foundations for our community's future.
 
 Today, we're excited to introduce you to the committee members who are leading this renewed organization and share what we've been working on.
 
@@ -50,7 +50,7 @@ Since launching in September, we've made significant progress:
 
 * **Community Spaces**: We've made initiative channels public where possible and established better workflows for community participation in our various projects.
 
-* **Website Development**: We've launched a [rudimentary calendar/events page](https://www.game-writing.com/events) and a prototype wiki for the resources initiative. Our itch.io page is now connected for an upcoming game jam to be announced this Friday.
+* **Website Development**: We've launched a [rudimentary calendar/events page](/events) and a prototype wiki for the resources initiative. Our itch.io page is now connected for an upcoming game jam to be announced this Friday.
 
 * **Records**: Committee meeting records are now being published regularly, and we've formalized our procedures for committee member appointments and decision-making.
 

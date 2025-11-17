@@ -9,7 +9,7 @@ draft: false
 tags:
   - announcements
 ---
-During the first week of September, the IGDA Game Writing Special Interest Group convened a Constitutional Convention that was attended by the organization's founding members and prior leadership. The resulting document, the [Constitution of the IGDA Game Writing SIG](https://www.game-writing.com/constitution), is now available on this newly-launched website.
+During the first week of September, the IGDA Game Writing Special Interest Group convened a Constitutional Convention that was attended by the organization's founding members and prior leadership. The resulting document, the [Constitution of the IGDA Game Writing SIG](/constitution), is now available on this newly-launched website.
 
 The new constitution revives the SIG's original model of open governance, where a committee of volunteers identifies issues of interest to the field and then establishes initiatives to further serve those working in the medium today. Any member of this SIG community with an interest in volunteering may help with an initiative, or propose a new one. Future committee members will be selected from the active and engaged membership.
 
@@ -19,4 +19,4 @@ The Game Writing SIG is excited to continue to support its long-running initiati
 
 > The IGDA Game Writers SIG is the world's first and oldest professional organization for video game writers. Founded in 2002, the SIG has served as both a welcoming community for game writers and an advocacy organization promoting the art and craft of game writing as well as the professional needs of those engaged in the field.
 
-From "[About the IGDA Game Writing SIG](https://www.game-writing.com/about)"
+From "[About the IGDA Game Writing SIG](/about)"
