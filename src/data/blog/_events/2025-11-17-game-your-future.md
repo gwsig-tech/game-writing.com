@@ -29,4 +29,4 @@ Many thanks to SIG Committee Member [Andrea Saravia Perez](https://www.linkedin.
 
 ---
 
-*Questions the Game Writing SIG? Email us at [info@game-writing.com](mailto:info@game-writing.com).*
+*Questions for the Game Writing SIG? Email us at [info@game-writing.com](mailto:info@game-writing.com).*
