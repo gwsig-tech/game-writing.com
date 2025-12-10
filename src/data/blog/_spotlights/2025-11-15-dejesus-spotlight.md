@@ -13,7 +13,7 @@ tags:
   - portfolio
 ---
 
-![arcjam logo](@/assets/images/jam-judges-transparent.png)
+![arcjam logo](@/assets/images/jam-judges.png)
 
 We're thrilled to introduce [Jarory de Jesus](<https://www.linkedin.com/in/jarory-de-jesus/>) who will be judging the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025)!
 

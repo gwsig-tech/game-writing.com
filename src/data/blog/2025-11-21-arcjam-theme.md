@@ -12,7 +12,7 @@ tags:
   - events
   - game-jam
 ---
-![arcjam logo](@/assets/images/jam-transparent.png)
+![arcjam logo](@/assets/images/jam-background.png)
 
 The wait is over! The theme for the [Game Writing SIG ArcJam](https://itch.io/jam/game-writing-sig-arcjam-2025) theme is:
 

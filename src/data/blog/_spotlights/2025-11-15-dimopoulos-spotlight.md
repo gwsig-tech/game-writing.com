@@ -13,7 +13,7 @@ tags:
   - portfolio
 ---
 
-![arcjam logo](@/assets/images/jam-judges-transparent.png)
+![arcjam logo](@/assets/images/jam-judges.png)
 
 We're thrilled to introduce [Konstantinos Dimopoulos]> (<https://www.linkedin.com/in/konstantinos-dimopoulos-42b62b4/>) who will be judging the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025)!
 
