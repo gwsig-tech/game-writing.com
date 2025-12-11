@@ -4,17 +4,18 @@ description: Discover the prizes awaiting our narrative game jam winners
 author: Committee
 pubDatetime: 2025-11-13T10:00:00
 slug: arcjam-prizes-announced
-featured: true
+featured: false
 draft: false
-ogImage: ../../assets/images/jam-prizes.png
+ogImage: ../../assets/images/arcjam/jam-prizes.png
 tags:
   - announcements
   - events
   - game-jam
   - partners
+  - 2025-arcjam
 ---
 
-![arcjam logo](@/assets/images/jam-prizes-transparent.png)
+![arcjam logo](@/assets/images/arcjam/jam-prizes.png)
 
 The [Game Writing SIG Arcjam](/posts/arcjam-announcement-2025) is just over a week away, and we're excited to announce the exciting prize pool generously donated by our community partners! Whether you're competing for the top spot or just participating for the experience, every game submitted will earn rewards.
 

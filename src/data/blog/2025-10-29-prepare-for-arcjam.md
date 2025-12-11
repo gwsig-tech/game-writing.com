@@ -4,16 +4,16 @@ description: Your guide to getting ready for 72 hours of narrative game creation
 author: Committee
 pubDatetime: 2025-10-29T12:00:00
 slug: prepare-for-arcjam
-featured: true
+featured: false
 draft: false
-ogImage: ../../assets/images/LoadingJam.png
+ogImage: ../../assets/images/arcjam/LoadingJam.png
 tags:
   - events
   - game-jam
-  - portfolio
+  - 2025-arcjam
 ---
 
-![arcjam logo](@/assets/images/LoadingJam.png)
+![arcjam logo](@/assets/images/arcjam/LoadingJam.png)
 
 The [Game Writing SIG Arcjam](/posts/arcjam-announcement-2025) is just around the corner! Whether you're a seasoned game writer or diving into your first jam, preparation is key to making the most of your 72 hours. Here's how to set yourself up for success.
 

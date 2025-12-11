@@ -6,14 +6,12 @@ pubDatetime: 2025-11-15T12:00:00
 slug: arcjam-spotlight-bender
 featured: false
 draft: false
-ogImage: ../../../assets/images/jam-judges.png
+ogImage: ../../../assets/images/arcjam/jam-judges.png
 tags:
-  - game-jam
   - spotlight
-  - portfolio
 ---
 
-![arcjam logo](@/assets/images/jam-judges.png)
+![arcjam logo](@/assets/images/arcjam/jam-judges.png)
 
 We're thrilled to introduce [Kelly Bender](<https://www.linkedin.com/in/kellybender17/>), who will be judging the [Game Writing SIG Arcjam](https://www.game-writing.com/posts/arcjam-announcement-2025)!
 

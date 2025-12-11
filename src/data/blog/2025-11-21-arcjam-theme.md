@@ -1,18 +1,19 @@
 ---
-title: RESILIENCE - Game Writing SIG Arcjam 
+title: "RESILIENCE: Game Writing SIG Arcjam" 
 description: Announcing the theme of the Game Writing SIG Arcjam
 author: Committee
 pubDatetime: 2025-11-21T09:00:00
 slug: arcjam-theme-2025
 featured: true
 draft: false
-ogImage: ../../assets/images/jam-background.png
+ogImage: ../../assets/images/arcjam/jam-background.png
 tags:
   - announcements
   - events
   - game-jam
+  - 2025-arcjam
 ---
-![arcjam logo](@/assets/images/jam-background.png)
+![arcjam logo](@/assets/images/arcjam/jam-background.png)
 
 The wait is over! The theme for the [Game Writing SIG ArcJam](https://itch.io/jam/game-writing-sig-arcjam-2025) theme is:
 

@@ -10,7 +10,7 @@ tags:
   - events
 ---
 
-![game your future writers cofffee meetup](@/assets/images/game-your-future-2025.jpg)
+![game your future writers cofffee meetup](@/assets/images/events/game-your-future-2025.jpg)
 
 This weekend, SIG Members attened the [Game Your Future Conference](https://www.game4good.gg/game-your-future-conference/) at the Baltimmore Convention Center.
 

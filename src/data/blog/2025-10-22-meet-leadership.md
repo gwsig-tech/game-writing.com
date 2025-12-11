@@ -4,7 +4,7 @@ description: An update from the new leadership of the Game Writing SIG
 author: Committee
 pubDatetime: 2025-10-22T17:00:00
 slug: new-sig-leadership
-featured: false
+featured: true
 draft: false
 tags:
   - announcements
@@ -100,4 +100,4 @@ Join us in our [Discord server](https://discord.gg/2uWGBsUgxT) to stay connected
 
 * * *
 
-_Have questions about the committee or want to get involved? Reach out to any committee member on Discord or email us at_ [_info@game-writing.com_](mailto:info@game-writing.com)_._
+_Have questions about the committee or want to get involved? Reach out to any committee member on Discord or email us at _[_info@game-writing.com_](mailto:info@game-writing.com)_._

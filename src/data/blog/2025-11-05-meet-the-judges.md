@@ -4,16 +4,17 @@ description: Introducing the industry experts who will evaluate the narrative ga
 author: Committee
 pubDatetime: 2025-11-05T12:00:00
 slug: meet-arcjam-judges
-featured: true
+featured: false
 draft: false
-ogImage: ../../assets/images/jam-judges.png
+ogImage: ../../assets/images/arcjam/jam-judges.png
 tags:
   - announcements
   - events
   - game-jam
+  - 2025-arcjam
 ---
 
-![arcjam logo](@/assets/images/jam-judges.png)
+![arcjam logo](@/assets/images/arcjam/jam-judges.png)
 
 We're thrilled to introduce the expert panel who will be judging the [Game Writing SIG Arcjam](/posts/arcjam-announcement-2025)\! These seven industry veterans bring decades of combined experience in game writing, narrative design, and game development. They'll evaluate the shortlisted games and provide personalized feedback to help the standout project leaders grow as game writers.
 

@@ -8,6 +8,7 @@ featured: true
 draft: false
 tags:
   - announcements
+  - committee
 ---
 During the first week of September, the IGDA Game Writing Special Interest Group convened a Constitutional Convention that was attended by the organization's founding members and prior leadership. The resulting document, the [Constitution of the IGDA Game Writing SIG](/constitution), is now available on this newly-launched website.
 
