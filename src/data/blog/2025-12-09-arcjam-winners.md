@@ -27,8 +27,6 @@ You can play the following winning games, as well as the remaining top ten games
 
 ## 🥇 1st Place + Community Choice: [Moments Away](/jams/2025-arcjam#moments-away)
 
-[Moments Away](https://deathbow.itch.io/moments-away)
-
 *Moments Away* earned both first place overall and the **Community Choice** special recognition.
 
 ![Moments Away](@/assets/images/arcjam/arcjam-first-place.jpg)
