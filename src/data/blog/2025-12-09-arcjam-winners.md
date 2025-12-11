@@ -25,7 +25,9 @@ You can play the following winning games, as well as the remaining top ten games
 
 # The Winners
 
-## 🥇 1st Place + Community Choice: [Moments Away](https://deathbow.itch.io/moments-away)
+## 🥇 1st Place + Community Choice: [Moments Away](/jams/2025-arcjam#moments-away)
+
+[Moments Away](https://deathbow.itch.io/moments-away)
 
 *Moments Away* earned both first place overall and the **Community Choice** special recognition.
 
@@ -35,7 +37,7 @@ You can play the following winning games, as well as the remaining top ten games
 
 ---
 
-## 🥈 2nd Place + Excellence in Writing: [Launch Day](https://purepolygon.itch.io/launch-day)
+## 🥈 2nd Place + Excellence in Writing: [Launch Day](/jams/2025-arcjam#launch-day)
 
 *Launch Day* earned both second place overall and the **Excellence in Writing** special recognition. Both Judge Jon Myers and Judge Frankie Wakefield-Harrey gave this game a perfect score.
 
@@ -45,7 +47,7 @@ You can play the following winning games, as well as the remaining top ten games
 
 ---
 
-## 🥉 3rd Place + Judges' Choice: [Piranha Pit](https://vanstral.itch.io/piranha-pit)
+## 🥉 3rd Place + Judges' Choice: [Piranha Pit](/jams/2025-arcjam#piranha-pit)
 
 *Piranha Pit* earned both third place and the **Judges' Choice** distinction, along with a perfect score from Judge Wakefield-Harrey.
 
@@ -53,13 +55,13 @@ You can play the following winning games, as well as the remaining top ten games
 
 ---
 
-## 4th Place: [Hold On, Valor](https://zylphiacarron.itch.io/hold-on-valor)
+## 4th Place: [Hold On, Valor](/jams/2025-arcjam#hold-on-valor)
 
 ![Hold On, Valor](@/assets/images/arcjam/arcjam-fourth-place.jpg)
 
 ---
 
-## 5th Place: [I AM AN OFFICE PLANT & I PUSH BUTTONS](https://straychickenproductions.itch.io/i-am-an-office-plant-and-i-push-buttons)
+## 5th Place: [I AM AN OFFICE PLANT & I PUSH BUTTONS](/jams/2025-arcjam#office-plant)
 
 ![I AM AN OFFICE PLANT & I PUSH BUTTONS](@/assets/images/arcjam/arcjam-fifth-place.jpg)
 
@@ -86,7 +88,7 @@ Play the top ten games on the [Game Writing SIG Arcjam Page](/jams/2025-arcjam).
 
 # Special Recognition Awards
 
-## 🏆 Excellence in Narrative Design: Chasing Ghosts
+## 🏆 Excellence in Narrative Design: [Chasing Ghosts](/jams/2025-arcjam#chasing-ghosts)
 
 Nominated alongside 13 other impressive games, *Chasing Ghosts* stood out for its masterful integration of story and mechanics.
 
@@ -96,7 +98,7 @@ Nominated alongside 13 other impressive games, *Chasing Ghosts* stood out for it
 
 ---
 
-## 🔧 Innovative Use of Technology: Trench Pigs
+## 🔧 Innovative Use of Technology: [Trench Pigs](/jams/2025-arcjam#trench-pigs)
 
 *Trench Pigs* demonstrated exceptional technical competency and imaginative use of Arcweave's capabilities.
 
@@ -108,13 +110,13 @@ Nominated alongside 13 other impressive games, *Chasing Ghosts* stood out for it
 
 Two judges awarded perfect 5/5 scores to these games that left a lasting impression:
 
-### **Tomorrow is a Place (and maybe that place is the DMV)**
+### [**Tomorrow is a Place (and maybe that place is the DMV)**](/jams/2025-arcjam#tomorrow)
 
 7th Place & Perfect Score from CJ Kershner
 
 ![Trench Pigs](@/assets/images/arcjam/arcjam-seventh-place.jpg)
 
-### **Dream Bound**
+### [**Dream Bound**](/jams/2025-arcjam#dream-bound)
 
 14th Place & Perfect Score from Natasha Skult
 
