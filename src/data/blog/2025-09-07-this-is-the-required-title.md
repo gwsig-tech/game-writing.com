@@ -6,7 +6,7 @@ author: Jonathon Myers
 pubDatetime: 2025-09-06T15:57:00.000Z
 modDatetime: 2025-09-08T15:57:00.000Z
 featured: false
-draft: true
+draft: false
 tags:
   - new-tag
 ---
