@@ -4,6 +4,7 @@ export default config({
   storage: {
     kind: "github",
     repo: "gwsig-tech/game-writing.com",
+    branchPrefix: "draft/",
   },
   collections: {
     posts: collection({
