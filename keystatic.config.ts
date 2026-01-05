@@ -3,7 +3,7 @@ import { config, fields, collection } from "@keystatic/core";
 export default config({
   storage: {
     kind: "github",
-    repo: "game-writing/game-writing.com",
+    repo: "gwsig-tech/game-writing.com",
   },
   collections: {
     posts: collection({
