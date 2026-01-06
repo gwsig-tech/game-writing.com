@@ -3,7 +3,8 @@
 backend:
   name: github
   repo: gwsig-tech/game-writing.com
-  branch: main
+  branch: draft
+  base_url: https://sveltia-cms-auth.tech-0b2.workers.dev
 
 # Default media storage for markdown body images
 # Uses @/ alias for Astro image imports
