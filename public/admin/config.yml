@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: gwsig-tech/game-writing.com
+  branch: main
+
+# Default media storage for markdown body images
+# Uses @/ alias for Astro image imports
+media_folder: src/assets/
+public_folder: "@/assets/"
+
+# Slug formatting
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+# Don't output empty optional fields (prevents empty string issues with dates)
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: posts
+    label: Blog Posts
+    label_singular: Blog Post
+    folder: src/data/blog
+    extension: mdx
+    create: true
+    delete: false
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields:
+      - pubDatetime
+      - title
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        required: true
+
+      - label: Description
+        name: description
+        widget: text
+        required: true
+
+      - label: Author
+        name: author
+        widget: string
+        default: Committee
+
+      - label: Publish Date
+        name: pubDatetime
+        widget: datetime
+        format: "YYYY-MM-DDTHH:mm:ss"
+        required: true
+        default: "{{now}}"
+
+      - label: Slug
+        name: slug
+        widget: string
+
+      - label: Featured
+        name: featured
+        widget: boolean
+        default: false
+
+      - label: Draft
+        name: draft
+        widget: boolean
+        default: true
+
+      - label: Tags
+        name: tags
+        widget: select
+        required: false
+        multiple: true
+        min: 0
+        options:
+          - announcements
+          - committee
+          - events
+          - game-jam
+          - partners
+          - recognitions
+          - spotlight
+          - 2025-arcjam
+          - release
+
+      - label: Body
+        name: body
+        widget: richtext
