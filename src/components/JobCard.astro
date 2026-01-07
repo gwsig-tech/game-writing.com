@@ -1,0 +1,102 @@
+---
+import cdProjektRedLogo from "@/assets/icon-repo/Screenshot 2026-01-06 175908.jpg";
+
+export interface Job {
+  title: string;
+  company: string;
+  companyUrl?: string;
+  location: string;
+  locationUrl?: string;
+  game?: string;
+  years?: string;
+  employmentType?: string;
+  url?: string;
+}
+
+export interface Props {
+  job: Job;
+}
+
+const { job } = Astro.props;
+const { title, company, companyUrl, location, locationUrl, game, years, employmentType, url } = job;
+
+// Map company names to their logo images
+const companyLogos: Record<string, any> = {
+  "CD Projekt Red": cdProjektRedLogo,
+};
+
+const companyLogo = companyLogos[company];
+---
+
+<li class="list-none my-6 rounded-lg border border-border bg-background p-3 transition-shadow hover:shadow-md">
+  <div class="flex gap-4">
+    {companyLogo && (
+      <div class="flex-shrink-0">
+        <img
+          src={companyLogo.src}
+          alt={`${company} logo`}
+          class="h-12 w-12 rounded object-contain"
+        />
+      </div>
+    )}
+    <div class="flex-1">
+      {url ? (
+        <h3 class="mb-2 text-xl font-bold">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-foreground hover:text-accent hover:underline"
+          >
+            {title}
+          </a>
+          {years && <span class="ml-2 text-base font-normal text-muted">({years})</span>}
+        </h3>
+      ) : (
+        <h3 class="mb-2 text-xl font-bold text-foreground">
+          {title}
+          {years && <span class="ml-2 text-base font-normal text-muted">({years})</span>}
+        </h3>
+      )}
+      <div class="flex flex-wrap items-center gap-2 text-sm text-muted">
+        {companyUrl ? (
+          <a
+            href={companyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-accent hover:underline"
+          >
+            {company}
+          </a>
+        ) : (
+          <span>{company}</span>
+        )}
+        <span aria-hidden="true">•</span>
+        {locationUrl ? (
+          <a
+            href={locationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-accent hover:underline"
+          >
+            {location}
+          </a>
+        ) : (
+          <span>{location}</span>
+        )}
+        {employmentType && (
+          <>
+            <span aria-hidden="true">•</span>
+            <span>{employmentType}</span>
+          </>
+        )}
+        {game && (
+          <>
+            <span aria-hidden="true">•</span>
+            <span>{game}</span>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+</li>

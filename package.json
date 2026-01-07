@@ -4,7 +4,7 @@
   "version": "5.5.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && pagefind --site dist && cpx \"dist/pagefind/**\" public/pagefind",
+    "build": "node scripts/clean-links.mjs && astro check && astro build && pagefind --site dist && cpx \"dist/pagefind/**\" public/pagefind",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",

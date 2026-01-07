@@ -1,0 +1,209 @@
+---
+import jobsData from "@/data/jobs.json";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import JobCard from "@/components/JobCard.astro";
+import Layout from "./Layout.astro";
+import { SITE } from "@/config";
+
+export interface Props {
+  frontmatter: {
+    title: string;
+    description?: string;
+  };
+}
+
+const { frontmatter } = Astro.props;
+
+// Get jobs from the JSON file
+const allJobs = jobsData.jobs || [];
+
+// Sort jobs by title (or you could add a date field and sort by that)
+const sortedJobs = allJobs.sort((a, b) => a.title.localeCompare(b.title));
+
+// Extract unique locations, companies, and employment types for filters
+const uniqueLocations = [...new Set(allJobs.map(job => job.location).filter(Boolean))].sort();
+const uniqueCompanies = [...new Set(allJobs.map(job => job.company).filter(Boolean))].sort();
+const uniqueEmploymentTypes = [...new Set(allJobs.map(job => job.employmentType).filter(Boolean))].sort();
+
+// Extract years values and find min/max for the filter
+const yearsValues = allJobs
+  .map(job => {
+    if (!job.years) return null;
+    const match = job.years.match(/(\d+)/);
+    return match ? parseInt(match[1]) : null;
+  })
+  .filter((years): years is number => years !== null);
+
+const minYears = yearsValues.length > 0 ? Math.min(...yearsValues) : 0;
+const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
+---
+
+<Layout title={`${frontmatter.title} | ${SITE.title}`}>
+  <Header />
+  <Breadcrumb />
+  <main id="main-content">
+    <section id="jobs" class="app-prose mb-28 max-w-app">
+      <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
+      {frontmatter.description && (
+        <p class="mt-4 text-muted">{frontmatter.description}</p>
+      )}
+      <slot />
+      
+      {sortedJobs.length > 0 ? (
+        <>
+          <!-- Filter Controls -->
+          <div class="mt-8 mb-6 w-fit p-2">
+            <h2 class="mb-2 text-sm font-semibold">Filter Jobs</h2>
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-4">
+              <div>
+                <label for="filter-location" class="block mb-0.5 text-xs font-medium">
+                  Location
+                </label>
+                <select
+                  id="filter-location"
+                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                >
+                  <option value="">All Locations</option>
+                  {uniqueLocations.map(location => (
+                    <option value={location}>{location}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label for="filter-company" class="block mb-0.5 text-xs font-medium">
+                  Company
+                </label>
+                <select
+                  id="filter-company"
+                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                >
+                  <option value="">All Companies</option>
+                  {uniqueCompanies.map(company => (
+                    <option value={company}>{company}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label for="filter-employment-type" class="block mb-0.5 text-xs font-medium">
+                  Employment Type
+                </label>
+                <select
+                  id="filter-employment-type"
+                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                >
+                  <option value="">All Types</option>
+                  {uniqueEmploymentTypes.map(type => (
+                    <option value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label for="filter-years" class="block mb-0.5 text-xs font-medium">
+                  Min Experience
+                </label>
+                <select
+                  id="filter-years"
+                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                >
+                  <option value="">Any Experience</option>
+                  {Array.from({ length: maxYears - minYears + 1 }, (_, i) => minYears + i).map(years => (
+                    <option value={years}>{years} {years === 1 ? 'year' : 'years'}+</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Jobs List -->
+          <ul id="jobs-list" class="list-none">
+            {sortedJobs.map(job => (
+              <li
+                class="job-item"
+                data-location={job.location || ''}
+                data-company={job.company || ''}
+                data-employment-type={job.employmentType || ''}
+                data-years={(() => {
+                  if (!job.years) return '';
+                  const match = job.years.match(/(\d+)/);
+                  return match ? match[1] : '';
+                })()}
+              >
+                <JobCard job={job} />
+              </li>
+            ))}
+          </ul>
+          
+          <!-- No Results Message -->
+          <p id="no-results" class="mt-8 text-muted hidden">No jobs match your filters.</p>
+        </>
+      ) : (
+        <p class="mt-8 text-muted">Check back soon for new listings!</p>
+      )}
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  function filterJobs() {
+    const locationFilter = (document.getElementById('filter-location') as HTMLSelectElement)?.value || '';
+    const companyFilter = (document.getElementById('filter-company') as HTMLSelectElement)?.value || '';
+    const employmentTypeFilter = (document.getElementById('filter-employment-type') as HTMLSelectElement)?.value || '';
+    const yearsFilter = (document.getElementById('filter-years') as HTMLSelectElement)?.value || '';
+    
+    const jobItems = document.querySelectorAll('.job-item');
+    const noResults = document.getElementById('no-results');
+    let visibleCount = 0;
+    
+    jobItems.forEach(item => {
+      const location = item.getAttribute('data-location') || '';
+      const company = item.getAttribute('data-company') || '';
+      const employmentType = item.getAttribute('data-employment-type') || '';
+      const years = item.getAttribute('data-years') || '';
+      
+      const matchesLocation = !locationFilter || location === locationFilter;
+      const matchesCompany = !companyFilter || company === companyFilter;
+      const matchesEmploymentType = !employmentTypeFilter || employmentType === employmentTypeFilter;
+      const matchesYears = !yearsFilter || (years && parseInt(years) >= parseInt(yearsFilter));
+      
+      if (matchesLocation && matchesCompany && matchesEmploymentType && matchesYears) {
+        (item as HTMLElement).style.display = '';
+        visibleCount++;
+      } else {
+        (item as HTMLElement).style.display = 'none';
+      }
+    });
+    
+    if (noResults) {
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+    }
+  }
+  
+  // Add event listeners to filter controls
+  document.addEventListener('astro:page-load', () => {
+    const locationSelect = document.getElementById('filter-location');
+    const companySelect = document.getElementById('filter-company');
+    const employmentTypeSelect = document.getElementById('filter-employment-type');
+    const yearsSelect = document.getElementById('filter-years');
+    
+    locationSelect?.addEventListener('change', filterJobs);
+    companySelect?.addEventListener('change', filterJobs);
+    employmentTypeSelect?.addEventListener('change', filterJobs);
+    yearsSelect?.addEventListener('change', filterJobs);
+    
+    // Initial filter on page load
+    filterJobs();
+  });
+  
+  // Also run on initial load
+  filterJobs();
+</script>
