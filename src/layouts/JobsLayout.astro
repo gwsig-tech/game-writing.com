@@ -56,14 +56,14 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
           <!-- Filter Controls -->
           <div class="mt-8 mb-6 w-fit p-2">
             <h2 class="mb-2 text-sm font-semibold">Filter Jobs</h2>
-            <div class="grid grid-cols-1 gap-2 sm:grid-cols-4">
+            <div class="flex flex-col flex-wrap gap-4 sm:flex-row sm:gap-6">
               <div>
                 <label for="filter-location" class="block mb-0.5 text-xs font-medium">
                   Location
                 </label>
                 <select
                   id="filter-location"
-                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                  class="min-w-[18ch] w-auto rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
                 >
                   <option value="">All Locations</option>
                   {uniqueLocations.map(location => (
@@ -78,7 +78,7 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
                 </label>
                 <select
                   id="filter-company"
-                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                  class="min-w-[18ch] w-auto rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
                 >
                   <option value="">All Companies</option>
                   {uniqueCompanies.map(company => (
@@ -93,7 +93,7 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
                 </label>
                 <select
                   id="filter-employment-type"
-                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                  class="min-w-[18ch] w-auto rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
                 >
                   <option value="">All Types</option>
                   {uniqueEmploymentTypes.map(type => (
@@ -104,16 +104,16 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
               
               <div>
                 <label for="filter-years" class="block mb-0.5 text-xs font-medium">
-                  Min Experience
+                  Experience Level
                 </label>
                 <select
                   id="filter-years"
-                  class="w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
+                  class="min-w-[18ch] w-auto rounded border border-border bg-background px-2 py-1 text-xs text-foreground focus:outline focus:outline-2 focus:outline-accent"
                 >
-                  <option value="">Any Experience</option>
-                  {Array.from({ length: maxYears - minYears + 1 }, (_, i) => minYears + i).map(years => (
-                    <option value={years}>{years} {years === 1 ? 'year' : 'years'}+</option>
-                  ))}
+                  <option value="">Any Level</option>
+                  <option value="entry">Entry (0-2 years)</option>
+                  <option value="senior">Senior (3-5 years)</option>
+                  <option value="lead">Lead (5+ years)</option>
                 </select>
               </div>
             </div>
@@ -130,7 +130,12 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
                 data-years={(() => {
                   if (!job.years) return '';
                   const match = job.years.match(/(\d+)/);
-                  return match ? match[1] : '';
+                  const years = match ? parseInt(match[1]) : null;
+                  if (years === null) return '';
+                  if (years <= 2) return 'entry';
+                  if (years >= 3 && years <= 5) return 'senior';
+                  if (years > 5) return 'lead';
+                  return '';
                 })()}
               >
                 <JobCard job={job} />
@@ -149,12 +154,12 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
   <Footer />
 </Layout>
 
-<script>
+<script is:inline>
   function filterJobs() {
-    const locationFilter = (document.getElementById('filter-location') as HTMLSelectElement)?.value || '';
-    const companyFilter = (document.getElementById('filter-company') as HTMLSelectElement)?.value || '';
-    const employmentTypeFilter = (document.getElementById('filter-employment-type') as HTMLSelectElement)?.value || '';
-    const yearsFilter = (document.getElementById('filter-years') as HTMLSelectElement)?.value || '';
+    const locationFilter = document.getElementById('filter-location')?.value || '';
+    const companyFilter = document.getElementById('filter-company')?.value || '';
+    const employmentTypeFilter = document.getElementById('filter-employment-type')?.value || '';
+    const yearsFilter = document.getElementById('filter-years')?.value || '';
     
     const jobItems = document.querySelectorAll('.job-item');
     const noResults = document.getElementById('no-results');
@@ -166,16 +171,32 @@ const maxYears = yearsValues.length > 0 ? Math.max(...yearsValues) : 0;
       const employmentType = item.getAttribute('data-employment-type') || '';
       const years = item.getAttribute('data-years') || '';
       
-      const matchesLocation = !locationFilter || location === locationFilter;
-      const matchesCompany = !companyFilter || company === companyFilter;
-      const matchesEmploymentType = !employmentTypeFilter || employmentType === employmentTypeFilter;
-      const matchesYears = !yearsFilter || (years && parseInt(years) >= parseInt(yearsFilter));
+      // Normalize/trim/compare ignoring whitespace/case for reliability
+      const norm = str => (str || '').trim().toLowerCase();
+      const matchesLocation = !locationFilter || norm(location) === norm(locationFilter);
+      const matchesCompany = !companyFilter || norm(company) === norm(companyFilter);
+      const matchesEmploymentType = !employmentTypeFilter || norm(employmentType) === norm(employmentTypeFilter);
+      // Experience Level filter is inactive for now
+      const matchesYears = true;
+      
+      // Debug: log the comparison values and result
+      console.log('[FILTER DEBUG]', {
+        location_raw: location,
+        locationFilter_raw: locationFilter,
+        location_matched: matchesLocation,
+        company_raw: company,
+        companyFilter_raw: companyFilter,
+        company_matched: matchesCompany,
+        employmentType_raw: employmentType,
+        employmentTypeFilter_raw: employmentTypeFilter,
+        employmentType_matched: matchesEmploymentType
+      });
       
       if (matchesLocation && matchesCompany && matchesEmploymentType && matchesYears) {
-        (item as HTMLElement).style.display = '';
+        item.style.display = '';
         visibleCount++;
       } else {
-        (item as HTMLElement).style.display = 'none';
+        item.style.display = 'none';
       }
     });
     

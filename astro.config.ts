@@ -15,6 +15,8 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
 
+import mcp from "astro-mcp";
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
@@ -22,14 +24,9 @@ export default defineConfig({
   redirects: {
     "/jams": "/events",
   },
-  integrations: [
-    mdx(),
-    sitemap({
-      filter: page => SITE.showArchives || !page.endsWith("/archives"),
-    }),
-    react(),
-    keystatic(),
-  ],
+  integrations: [mdx(), sitemap({
+    filter: page => SITE.showArchives || !page.endsWith("/archives"),
+  }), react(), keystatic(), mcp()],
   markdown: {
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
     shikiConfig: {
