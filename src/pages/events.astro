@@ -1,0 +1,313 @@
+---
+import { google } from "googleapis";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Layout from "@/layouts/Layout.astro";
+import { SITE } from "@/config";
+
+const CALENDAR_ID = "writing.sig@gmail.com";
+const API_KEY = import.meta.env.GOOGLE_CALENDAR_API_KEY;
+
+interface CalendarEvent {
+  summary?: string;
+  location?: string;
+  htmlLink?: string;
+  start?: {
+    dateTime?: string;
+    date?: string;
+  };
+  end?: {
+    dateTime?: string;
+    date?: string;
+  };
+}
+
+let events: CalendarEvent[] = [];
+let error: string | null = null;
+
+if (API_KEY) {
+  try {
+    const calendar = google.calendar({ version: "v3", auth: API_KEY });
+    const response = await calendar.events.list({
+      calendarId: CALENDAR_ID,
+      timeMin: new Date().toISOString(),
+      maxResults: 50,
+      singleEvents: true,
+      orderBy: "startTime",
+    });
+    events = (response.data.items as CalendarEvent[]) || [];
+    console.log("Calendar API response:", JSON.stringify(response.data, null, 2));
+    console.log("Events count:", events.length);
+  } catch (e) {
+    console.error("Failed to fetch calendar events:", e);
+    error = "Unable to load calendar events.";
+  }
+} else {
+  error = "Calendar API key not configured.";
+}
+
+function formatEventDate(event: CalendarEvent): string {
+  const start = event.start?.dateTime || event.start?.date;
+  const end = event.end?.dateTime || event.end?.date;
+  if (!start) return "TBD";
+
+  const startDate = new Date(start);
+  const isAllDay = !event.start?.dateTime;
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "America/New_York",
+  };
+
+  const timeOnlyOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+    timeZone: "America/New_York",
+  };
+
+  // For all-day events, check if it spans multiple days
+  if (isAllDay && end) {
+    // All-day event end dates are exclusive (next day), so subtract 1 day
+    const endDate = new Date(end);
+    endDate.setDate(endDate.getDate() - 1);
+
+    // Check if start and end are different days
+    const startStr = startDate.toLocaleDateString("en-US", dateOptions);
+    const endStr = endDate.toLocaleDateString("en-US", dateOptions);
+
+    if (startStr !== endStr) {
+      return `${startStr} - ${endStr}`;
+    }
+  }
+
+  // Single day all-day event
+  if (isAllDay) {
+    return startDate.toLocaleDateString("en-US", dateOptions);
+  }
+
+  // Timed event - show date on line 1, time range on line 2
+  const dateStr = startDate.toLocaleDateString("en-US", dateOptions);
+  const startTimeStr = startDate.toLocaleTimeString("en-US", timeOnlyOptions);
+
+  if (end && event.end?.dateTime) {
+    const endDate = new Date(end);
+    const endTimeStr = endDate.toLocaleTimeString("en-US", timeOnlyOptions);
+    return `${dateStr}\n${startTimeStr} - ${endTimeStr}`;
+  }
+
+  return `${dateStr}\n${startTimeStr}`;
+}
+
+const title = "Game Writing SIG Events";
+---
+
+<Layout title={`${title} | ${SITE.title}`}>
+  <Header />
+  <Breadcrumb />
+  <main id="main-content">
+    <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
+      <h1 class="text-2xl tracking-wider sm:text-3xl">{title}</h1>
+
+      <p>Check in here to learn about events relevant to industry writers</p>
+
+      <hr />
+
+      <h2>Calendar</h2>
+
+      <!-- Debug: error={error}, events.length={events.length} -->
+
+      {error && <p class="text-red-500">{error}</p>}
+
+      {!error && events.length === 0 && <p>No upcoming events scheduled.</p>}
+
+      {!error && events.length > 0 && (
+        <div class="overflow-x-auto">
+          <table>
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Event</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map(event => (
+                  <tr>
+                    <td class="whitespace-pre-line">{formatEventDate(event)}</td>
+                    <td>
+                      {event.htmlLink ? (
+                        <a href={event.htmlLink} target="_blank" rel="noopener">
+                          {event.summary || "Untitled Event"}
+                        </a>
+                      ) : (
+                        event.summary || "Untitled Event"
+                      )}
+                    </td>
+                    <td>{event.location || "TBD"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+      )}
+
+      <hr />
+
+      <h2>In-person Events Throughout the Year</h2>
+
+      <div class="overflow-x-auto">
+        <table>
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>What</th>
+              <th>Where</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Various</td>
+              <td>Day of the Devs</td>
+              <td>San Francisco, CA, USA</td>
+              <td><a href="https://www.dayofthedevs.org/">dayofthedevs.org</a></td>
+            </tr>
+            <tr>
+              <td>Various</td>
+              <td>PAX</td>
+              <td>Boston, MA, USA + others</td>
+              <td><a href="https://www.paxsite.com/">paxsite.com</a></td>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td>GDC</td>
+              <td>San Francisco, CA, USA</td>
+              <td><a href="https://gdconf.com/">gdconf.com</a></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td>Reboot Develop Blue</td>
+              <td>Dubrovnik, Croatia</td>
+              <td><a href="https://rebootdevelopblue.com/">rebootdevelopblue.com</a></td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td>Future Fest Connect</td>
+              <td>Raleigh, NC</td>
+              <td><a href="https://www.futurefestconnect.com/">futurefestconnect.com</a></td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td>Boston GameLoop</td>
+              <td>Boston, MA</td>
+              <td
+                ><a href="https://www.bostonfig.com/gameloop-2025/"
+                  >bostonfig.com/gameloop-2025</a
+                ></td
+              >
+            </tr>
+            <tr>
+              <td>May</td>
+              <td>Nordic Game</td>
+              <td>Malmö, Sweden + Hybrid</td>
+              <td><a href="https://nordicgame.com/">nordicgame.com</a></td>
+            </tr>
+            <tr>
+              <td>Late spring - Summer</td>
+              <td>NarraScope</td>
+              <td>Hybrid + East Coast, USA</td>
+              <td><a href="https://narrascope.org/">narrascope.org</a></td>
+            </tr>
+            <tr>
+              <td>August</td>
+              <td>Gamescom</td>
+              <td>Cologne, Germany</td>
+              <td><a href="https://www.gamescom.global/en">gamescom.global</a></td>
+            </tr>
+            <tr>
+              <td>Early fall</td>
+              <td>Worldcon - The World Science Fiction Convention</td>
+              <td>Varies</td>
+              <td><a href="https://www.worldcon.org/">worldcon.org</a></td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td>Tokyo Game Show</td>
+              <td>Tokyo, Japan</td>
+              <td><a href="https://tgs.cesa.or.jp/en">tgs.cesa.or.jp</a></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td>GIC - Games Industry Conference</td>
+              <td>Poznań, Poland</td>
+              <td><a href="https://gic.gd/">gic.gd</a></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td>W Love Games</td>
+              <td>Helsinki, Finland + Hybrid</td>
+              <td><a href="https://www.wlovegames.org/">wlovegames.org</a></td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td>BGS – Brasil Game Show</td>
+              <td>São Paulo, Brazil</td>
+              <td><a href="https://www.brasilgameshow.com.br/">brasilgameshow.com.br</a></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td>AdventureX</td>
+              <td>London, UK</td>
+              <td><a href="https://www.adventurexpo.org/">adventurexpo.org</a></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td>Game Your Future</td>
+              <td>Baltimore, MD, USA</td>
+              <td
+                ><a href="https://www.game4good.gg/game-your-future-conference/"
+                  >game4good.gg</a
+                ></td
+              >
+            </tr>
+            <tr>
+              <td>November</td>
+              <td>M+DEV</td>
+              <td>Madison, WI, USA</td>
+              <td><a href="https://www.mdevconf.com/">mdevconf.com</a></td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td>Konsoll</td>
+              <td>Bergen, Norway</td>
+              <td><a href="https://konsoll.org/">konsoll.org</a></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td>ICIDS - International Conference on Interactive Digital Storytelling</td>
+              <td>Varies</td>
+              <td><a href="https://www.facebook.com/ICIDS/">facebook.com/ICIDS</a></td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td>Boston Festival of Indie Games</td>
+              <td>Boston, MA, USA</td>
+              <td><a href="https://www.bostonfig.com/">bostonfig.com</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+
+      <h2>Jams</h2>
+
+      <h3><a href="/jams/2025-arcjam">2025 Game Writing SIG Arcjam</a> (Nov 21-24)</h3>
+    </section>
+  </main>
+  <Footer />
+</Layout>
