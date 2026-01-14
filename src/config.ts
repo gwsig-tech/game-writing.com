@@ -7,7 +7,7 @@ export const SITE = {
   ogImage: "game-writing-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 6,
-  postPerPage: 6,
+  postPerPage: 12,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   showArchives: true,
   showBackButton: true, // show back button in post detail
