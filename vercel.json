@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/resources/:path*",
+            "destination": "https://resources.game-writing.com/share/a98056nl20/p/:path*"
+        }
+    ]
+}
