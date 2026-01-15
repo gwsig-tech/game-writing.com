@@ -11,6 +11,14 @@
         {
             "source": "/assets/:path*",
             "destination": "https://resources.game-writing.com/assets/:path*"
+        },
+        {
+            "source": "/locales/:path*",
+            "destination": "https://resources.game-writing.com/locales/:path*"
+        },
+        {
+            "source": "/icons/:path*",
+            "destination": "https://resources.game-writing.com/icons/:path*"
         }
     ]
 }
