@@ -2,6 +2,7 @@ import type { Props } from "astro";
 import IconMail from "@/assets/icons/IconMail.svg";
 //import IconGitHub from "@/assets/icons/IconGitHub.svg";
 import IconDiscord from "@/assets/icons/IconDiscord.svg";
+import IconRss from "@/assets/icons/IconRss.svg";
 import IconBluesky from "@/assets/icons/IconBluesky.svg";
 import IconBrandX from "@/assets/icons/IconBrandX.svg";
 import IconLinkedin from "@/assets/icons/IconLinkedin.svg";
@@ -54,6 +55,12 @@ export const SOCIALS: Social[] = [
     href: "mailto:info@game-writing.com",
     linkTitle: `Send an email to ${SITE.title}`,
     icon: IconMail,
+  },
+  {
+    name: "RSS",
+    href: "/rss.xml",
+    linkTitle: `RSS Feed for ${SITE.title}`,
+    icon: IconRss,
   },
 ] as const;
 

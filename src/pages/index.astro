@@ -8,7 +8,7 @@ import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
 import Hr from "@/components/Hr.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-//import IconRss from "@/assets/icons/IconRss.svg";
+import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
@@ -27,7 +27,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
         Welcome Game Writers!
       </h1>
-      <!--<a
+      <a
         target="_blank"
         href="/rss.xml"
         class="inline-block"
@@ -40,7 +40,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
           class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
         />
         <span class="sr-only">RSS Feed</span>
-      </a>-->
+      </a>
 
       <p>We are the Game Writing SIG. More here soon.</p>
       <p class="mt-2">
