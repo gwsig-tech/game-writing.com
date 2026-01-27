@@ -1,5 +1,4 @@
 ---
-import Hr from "./Hr.astro";
 import IconX from "@/assets/icons/IconX.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
@@ -58,7 +57,7 @@ const isActive = (path: string) => {
                   "active-nav [&>svg]:stroke-accent": isActive("/archives"),
                 },
               ]}
-              ariaLabel="archives"
+              aria-label="archives"
               title="Archives"
             >
               <IconArchive class="inline-block" />
@@ -72,7 +71,7 @@ const isActive = (path: string) => {
             "focus-outline flex p-1",
             { "[&>svg]:stroke-accent": isActive("/search") },
           ]}
-          ariaLabel="search"
+          aria-label="search"
           title="Search"
         >
           <IconSearch />
@@ -113,8 +112,7 @@ const isActive = (path: string) => {
         <li>
           <a
             href="/about"
-            class="font-medium hover:text-accent"
-            class:list={{ "active-nav": isActive("/about") }}
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/about") }]}
           >
             About
           </a>
@@ -122,8 +120,7 @@ const isActive = (path: string) => {
         <li>
           <a
             href="/events"
-            class="font-medium hover:text-accent"
-            class:list={{ "active-nav": isActive("/events") }}
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/events") }]}
           >
             Events
           </a>
@@ -131,8 +128,7 @@ const isActive = (path: string) => {
         <li>
           <a
             href="/constitution"
-            class="font-medium hover:text-accent"
-            class:list={{ "active-nav": isActive("/constitution") }}
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/constitution") }]}
           >
             Constitution
           </a>
@@ -140,8 +136,7 @@ const isActive = (path: string) => {
         <li>
           <a
             href="/posts"
-            class="font-medium hover:text-accent"
-            class:list={{ "active-nav": isActive("/posts") }}
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/posts") }]}
           >
             Posts
           </a>
@@ -149,8 +144,7 @@ const isActive = (path: string) => {
         <li>
           <a
             href="/tags"
-            class="font-medium hover:text-accent"
-            class:list={{ "active-nav": isActive("/tags") }}
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/tags") }]}
           >
             Tags
           </a>
@@ -211,11 +205,11 @@ const isActive = (path: string) => {
                     "active-nav [&>svg]:stroke-accent": isActive("/archives"),
                   },
                 ]}
-                ariaLabel="archives"
+                aria-label="archives"
                 title="Archives"
               >
-                <IconArchive class="sm: inline-block" />
-                <span class="sm:sr-only" />
+                <IconArchive class="inline-block" />
+                <span>Archives</span>
               </LinkButton>
             </li>
           )
@@ -227,7 +221,7 @@ const isActive = (path: string) => {
               "focus-outline flex p-3",
               { "[&>svg]:stroke-accent": isActive("/search") },
             ]}
-            ariaLabel="search"
+            aria-label="search"
             title="Search"
           >
             <IconSearch />
@@ -253,7 +247,7 @@ const isActive = (path: string) => {
       </ul>
     </nav>
   </div>
-  <Hr />
+  <div class="mx-auto max-w-app border-b border-border"></div>
 </header>
 
 <script>

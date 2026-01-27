@@ -1,180 +1,249 @@
-# AstroPaper 📄
+# IGDA Game Writing SIG Website
 
-![AstroPaper](public/astropaper-og.jpg)
-[![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/community/file/1356898632249991861)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
+Website for the [IGDA Game Writing Special Interest Group](https://game-writing.com).
 
-AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro blog theme. This theme is designed and crafted based on [my personal blog](https://satnaing.dev/blog).
+Built with [Astro](https://astro.build/) using the [AstroPaper](https://github.com/satnaing/astro-paper) theme (v5.5.1), styled with [Tailwind CSS](https://tailwindcss.com/), and managed via [Sveltia CMS](https://github.com/sveltia/sveltia-cms).
 
-Read [the blog posts](https://astro-paper.pages.dev/posts/) or check [the README Documentation Section](#-documentation) for more info.
+## Features
 
-## 🔥 Features
+Inherited from [AstroPaper](https://github.com/satnaing/astro-paper):
 
-- [x] type-safe markdown
-- [x] super fast performance
-- [x] accessible (Keyboard/VoiceOver)
-- [x] responsive (mobile ~ desktops)
+- [x] Type-safe markdown with Zod validation
+- [x] Super fast performance
+- [x] Accessible (Keyboard/VoiceOver)
+- [x] Responsive (mobile ~ desktop)
 - [x] SEO-friendly
-- [x] light & dark mode
-- [x] fuzzy search
-- [x] draft posts & pagination
-- [x] sitemap & rss feed
-- [x] followed best practices
-- [x] highly customizable
-- [x] dynamic OG image generation for blog posts [#15](https://github.com/satnaing/astro-paper/pull/15) ([Blog Post](https://astro-paper.pages.dev/posts/dynamic-og-image-generation-in-astropaper-blog-posts/))
+- [x] Light & dark mode
+- [x] Full-text search via [Pagefind](https://pagefind.app/)
+- [x] Draft posts & pagination
+- [x] Sitemap & RSS feed
+- [x] Dynamic OG image generation
 
-_Note: I've tested screen-reader accessibility of AstroPaper using **VoiceOver** on Mac and **TalkBack** on Android. I couldn't test all other screen-readers out there. However, accessibility enhancements in AstroPaper should be working fine on others as well._
+Custom features for this site:
 
-## ✅ Lighthouse Score
+- [x] [Sveltia CMS](https://github.com/sveltia/sveltia-cms) integration with draft workflow
+- [x] GameEmbed component for embedding Arcweave interactive games
+- [x] Google Calendar API integration for live events
+- [x] Game jam showcase pages
 
-<p align="center">
-  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
-    <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
-  <a>
-</p>
-
-## 🚀 Project Structure
-
-Inside of AstroPaper, you'll see the following folders and files:
+## Quick Start
 
 ```bash
+pnpm install          # Install dependencies
+pnpm dev              # Start dev server at localhost:4321
+pnpm build            # Build for production (includes search index)
+pnpm preview          # Preview production build
+```
+
+## Project Structure
+
+```text
 /
 ├── public/
-│   ├── assets/
-|   ├── pagefind/ # auto-generated when build
-│   └── favicon.svg
-│   └── astropaper-og.jpg
-│   └── favicon.svg
-│   └── toggle-theme.js
+│   ├── admin/                 # Sveltia CMS configuration
+│   │   ├── config.yml         # CMS fields, collections, workflow
+│   │   └── index.html         # Custom editor components (GameEmbed)
+│   └── pagefind/              # Search index (auto-generated on build)
 ├── src/
 │   ├── assets/
-│   │   └── icons/
-│   │   └── images/
+│   │   ├── icons/             # SVG icons (Tabler)
+│   │   └── images/            # Site images (also CMS media folder)
 │   ├── components/
+│   │   ├── GameEmbed.astro    # [Custom] Arcweave game embedding
+│   │   ├── Header.astro       # [Modified] Custom navigation
+│   │   ├── Card.astro         # Blog post cards
+│   │   ├── Datetime.astro     # Date/time display
+│   │   ├── Tag.astro          # Tag links
+│   │   └── ...                # Other AstroPaper components
 │   ├── data/
 │   │   └── blog/
-│   │       └── some-blog-posts.md
+│   │       ├── YYYY-MM-DD-slug.mdx  # Blog posts
+│   │       ├── examples/      # AstroPaper documentation (drafts)
+│   │       ├── _releases/     # AstroPaper release notes (drafts)
+│   │       ├── _events/       # Event announcements
+│   │       └── _spotlights/   # Member spotlights
 │   ├── layouts/
-│   └── pages/
-│   └── styles/
-│   └── utils/
-│   └── config.ts
-│   └── constants.ts
-│   └── content.config.ts
-└── astro.config.ts
+│   │   ├── Layout.astro       # Base HTML layout
+│   │   ├── PostDetails.astro  # [Modified] Blog post layout + GameEmbed
+│   │   ├── AboutLayout.astro  # [Custom] Static page layout
+│   │   └── Main.astro         # Main content wrapper
+│   ├── pages/
+│   │   ├── index.astro        # Homepage
+│   │   ├── about.md           # About page
+│   │   ├── constitution.md    # SIG constitution
+│   │   ├── events.astro       # [Custom] Google Calendar integration
+│   │   ├── search.astro       # Pagefind search
+│   │   ├── jams/              # [Custom] Game jam pages
+│   │   ├── posts/             # Blog post routes
+│   │   ├── tags/              # Tag archive routes
+│   │   └── archives/          # Date-based archives
+│   ├── styles/
+│   │   ├── global.css         # Tailwind config + CSS variables
+│   │   └── typography.css     # Prose/markdown styling
+│   ├── utils/                 # Helper functions
+│   ├── config.ts              # Site configuration (URL, title, etc.)
+│   ├── constants.ts           # Social links, sharing options
+│   └── content.config.ts      # Content collection schema
+└── astro.config.ts            # Astro configuration
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Content Management
 
-Any static assets, like images, can be placed in the `public/` directory.
+### Adding Blog Posts
 
-All blog posts are stored in `src/data/blog` directory.
+Blog posts are MDX files in `src/data/blog/` using the naming convention `YYYY-MM-DD-slug.mdx`.
 
-## 📖 Documentation
+**Required frontmatter:**
 
-Documentation can be read in two formats\_ _markdown_ & _blog post_.
+```yaml
+---
+title: "Post Title"
+description: "Brief description for SEO and cards"
+author: "Author Name"
+pubDatetime: 2025-01-15T00:00:00Z
+slug: post-slug
+tags: [tag1, tag2]
+featured: false
+draft: false
+---
+```
 
-- Configuration - [markdown](src/data/blog/how-to-configure-astropaper-theme.md) | [blog post](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
-- Add Posts - [markdown](src/data/blog/adding-new-post.md) | [blog post](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
-- Customize Color Schemes - [markdown](src/data/blog/customizing-astropaper-theme-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
-- Predefined Color Schemes - [markdown](src/data/blog/predefined-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
+For detailed instructions, see [Adding New Posts](src/data/blog/examples/adding-new-post.md).
 
-## 💻 Tech Stack
+### Using the CMS
 
-**Main Framework** - [Astro](https://astro.build/)  
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)  
-**Styling** - [TailwindCSS](https://tailwindcss.com/)  
-**UI/UX** - [Figma Design File](https://www.figma.com/community/file/1356898632249991861)  
-**Static Search** - [FuseJS](https://pagefind.app/)  
-**Icons** - [Tablers](https://tabler-icons.io/)  
-**Code Formatting** - [Prettier](https://prettier.io/)  
-**Deployment** - [Cloudflare Pages](https://pages.cloudflare.com/)  
-**Illustration in About Page** - [https://freesvgillustration.com](https://freesvgillustration.com/)  
-**Linting** - [ESLint](https://eslint.org)
+Access the CMS at `/admin/`. The CMS uses a draft workflow:
 
-## 👨🏻‍💻 Running Locally
+- Changes are committed to the `draft` branch
+- Merge to `main` for production deployment
 
-You can start using this project locally by running the following command in your desired directory:
+### Custom Components
+
+**GameEmbed**: Embed Arcweave interactive games in posts:
+
+```mdx
+<GameEmbed
+  src="https://arcweave.com/play/abc123"
+  poster="/assets/game-poster.webp"
+/>
+```
+
+## Commands
+
+| Command             | Action                                                                                                                |
+| :------------------ | :-------------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`          | Start dev server at `localhost:4321`                                                                                  |
+| `pnpm build`        | Type check, build site, generate search index                                                                         |
+| `pnpm preview`      | Preview production build locally                                                                                      |
+| `pnpm format`       | Format code with Prettier                                                                                             |
+| `pnpm format:check` | Check code formatting                                                                                                 |
+| `pnpm lint`         | Run ESLint                                                                                                            |
+| `pnpm sync`         | Generate TypeScript types for Astro modules ([docs](https://docs.astro.build/en/reference/cli-reference/#astro-sync)) |
+
+## Updating Dependencies
+
+### Update npm Packages
 
 ```bash
-# pnpm
-pnpm create astro@latest --template satnaing/astro-paper
+# Check for outdated packages
+pnpm outdated
 
-# npm
-npm create astro@latest -- --template satnaing/astro-paper
+# Update all dependencies
+pnpm update
 
-# yarn
-yarn create astro --template satnaing/astro-paper
-
-# bun
-bun create astro@latest -- --template satnaing/astro-paper
+# Or use npm-check-updates for more control
+npx npm-check-updates -i
 ```
 
-Then start the project by running the following commands:
+For detailed guidance, see [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md).
+
+### Update AstroPaper Theme
+
+This site is based on [AstroPaper](https://github.com/satnaing/astro-paper) with an `upstream` remote configured:
 
 ```bash
-# install dependencies if you haven't done so in the previous step.
-pnpm install
+# Verify remotes
+git remote -v
+# origin    https://github.com/gwsig-tech/game-writing.com.git
+# upstream  https://github.com/satnaing/astro-paper.git
 
-# start running the project
-pnpm run dev
+# If upstream is missing, add it:
+git remote add upstream https://github.com/satnaing/astro-paper.git
 ```
 
-As an alternative approach, if you have Docker installed, you can use Docker to run this project locally. Here's how:
+**To update from upstream:**
 
 ```bash
-# Build the Docker image
-docker build -t astropaper .
+# Fetch latest changes
+git fetch upstream
 
-# Run the Docker container
-docker run -p 4321:80 astropaper
+# Check what's new
+git log upstream/main --oneline -10
+
+# Create update branch
+git checkout -b update/astropaper-vX.X.X
+
+# Merge (expect conflicts with customized files)
+git pull upstream main
+
+# Resolve conflicts, test thoroughly, then merge to main
 ```
 
-## Google Site Verification (optional)
+**Resources:**
 
-You can easily add your [Google Site Verification HTML tag](https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag) in AstroPaper using an environment variable. This step is optional. If you don't add the following environment variable, the google-site-verification tag won't appear in the HTML `<head>` section.
+- [AstroPaper Releases](https://github.com/satnaing/astro-paper/releases)
+- [Compare versions](https://github.com/satnaing/astro-paper/compare/v5.5.1...main) (current base: v5.5.1)
+- [Release Notes](src/data/blog/_releases/) (local copies)
 
-```bash
-# in your environment variable file (.env)
-PUBLIC_GOOGLE_SITE_VERIFICATION=your-google-site-verification-value
-```
+**Files likely to have conflicts** (customized for this site):
 
-> See [this discussion](https://github.com/satnaing/astro-paper/discussions/334#discussioncomment-10139247) for adding AstroPaper to the Google Search Console.
+- `src/components/Header.astro` - Custom navigation
+- `src/layouts/PostDetails.astro` - GameEmbed integration
+- `src/config.ts` - Site-specific settings
+- `src/constants.ts` - Social links
 
-## 🧞 Commands
+**Files safe to update** (minimal or no customization):
 
-All commands are run from the root of the project, from a terminal:
+- `src/utils/` - Helper functions
+- `src/styles/` - Global styles (minor customizations to section/footer)
+- Most components in `src/components/`
 
-> **_Note!_** For `Docker` commands we must have it [installed](https://docs.docker.com/engine/install/) in your machine.
+## Tech Stack
 
-| Command                              | Action                                                                                                                           |
-| :----------------------------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`                       | Installs dependencies                                                                                                            |
-| `pnpm run dev`                       | Starts local dev server at `localhost:4321`                                                                                      |
-| `pnpm run build`                     | Build your production site to `./dist/`                                                                                          |
-| `pnpm run preview`                   | Preview your build locally, before deploying                                                                                     |
-| `pnpm run format:check`              | Check code format with Prettier                                                                                                  |
-| `pnpm run format`                    | Format codes with Prettier                                                                                                       |
-| `pnpm run sync`                      | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
-| `pnpm run lint`                      | Lint with ESLint                                                                                                                 |
-| `docker compose up -d`               | Run AstroPaper on docker, You can access with the same hostname and port informed on `dev` command.                              |
-| `docker compose run app npm install` | You can run any command above into the docker container.                                                                         |
-| `docker build -t astropaper .`       | Build Docker image for AstroPaper.                                                                                               |
-| `docker run -p 4321:80 astropaper`   | Run AstroPaper on Docker. The website will be accessible at `http://localhost:4321`.                                             |
+| Category   | Technology                                                   |
+| :--------- | :----------------------------------------------------------- |
+| Framework  | [Astro](https://astro.build/) v5.16.6                        |
+| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.1 |
+| Styling    | [Tailwind CSS](https://tailwindcss.com/) v4                  |
+| CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms)        |
+| Search     | [Pagefind](https://pagefind.app/)                            |
+| Icons      | [Tabler Icons](https://tabler-icons.io/)                     |
+| OG Images  | [Satori](https://github.com/vercel/satori) + Resvg           |
+| Deployment | [Vercel](https://vercel.com/)                                |
 
-> **_Warning!_** Windows PowerShell users may need to install the [concurrently package](https://www.npmjs.com/package/concurrently) if they want to [run diagnostics](https://docs.astro.build/en/reference/cli-reference/#astro-check) during development (`astro check --watch & astro dev`). For more info, see [this issue](https://github.com/satnaing/astro-paper/issues/113).
+## Documentation
 
-## ✨ Feedback & Suggestions
+### Internal (in this repo)
 
-If you have any suggestions/feedback, you can contact me via [my email](mailto:contact@satnaing.dev). Alternatively, feel free to open an issue if you find bugs or want to request new features.
+- [Adding New Posts](src/data/blog/examples/adding-new-post.md)
+- [How to Configure AstroPaper](src/data/blog/examples/how-to-configure-astropaper-theme.md)
+- [Customizing Color Schemes](src/data/blog/examples/customizing-astropaper-theme-color-schemes.md)
+- [Predefined Color Schemes](src/data/blog/examples/predefined-color-schemes.md)
+- [Dynamic OG Images](src/data/blog/examples/dynamic-og-images.md)
+- [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md)
+- [AstroPaper v5 Release Notes](src/data/blog/_releases/astro-paper-5.md)
 
-## 📜 License
+### External
 
-Licensed under the MIT License, Copyright © 2025
+- [Astro Documentation](https://docs.astro.build/)
+- [AstroPaper Demo & Blog](https://astro-paper.pages.dev/)
+- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
+- [Sveltia CMS Documentation](https://github.com/sveltia/sveltia-cms)
+
+## License
+
+Licensed under the MIT License.
 
 ---
 
-Made with 🤍 by [Sat Naing](https://satnaing.dev) 👨🏻‍💻 and [contributors](https://github.com/satnaing/astro-paper/graphs/contributors).
+Based on [AstroPaper](https://github.com/satnaing/astro-paper) by [Sat Naing](https://satnaing.dev/).

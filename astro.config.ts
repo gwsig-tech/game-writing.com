@@ -60,6 +60,11 @@ export default defineConfig({
         context: "client",
         optional: true,
       }),
+      GOOGLE_CALENDAR_API_KEY: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
     },
   },
   experimental: {
