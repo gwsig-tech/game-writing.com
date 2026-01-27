@@ -22,36 +22,78 @@ const isActive = (path: string) => {
 };
 ---
 
-<a
-  id="skip-to-content"
-  href="#main-content"
-  class="absolute start-16 -top-full z-50 bg-background px-3 py-2 text-accent backdrop-blur-lg transition-all focus:top-4"
->
-  Skip to content
-</a>
-
-<header
-  class="app-layout flex flex-col items-center justify-between sm:flex-row"
->
-  <div
-    id="top-nav-wrap"
-    class:list={[
-      "py-4 sm:py-6",
-      "border-b border-border",
-      "relative w-full bg-background",
-      "flex items-baseline justify-between sm:items-center",
-    ]}
+<header>
+  <a
+    id="skip-to-content"
+    href="#main-content"
+    class="absolute start-16 -top-full z-50 bg-background px-3 py-2 text-accent backdrop-blur-lg transition-all focus:top-4"
   >
-    <a
-      href="/"
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+    Skip to content
+  </a>
+  <div
+    id="nav-container"
+    class="mx-auto flex max-w-app flex-col items-center justify-between"
+  >
+    <div
+      id="top-nav-wrap"
+      class="relative flex w-full items-baseline justify-between bg-background p-4 sm:items-center sm:py-6"
     >
-      {SITE.title}
-    </a>
-    <nav
-      id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
-    >
+      <a
+        href="/"
+        class="py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:my-auto sm:text-2xl sm:leading-none"
+      >
+        {SITE.title}
+      </a>
+
+      <!-- Desktop Icons (right side) -->
+      <div class="hidden items-center space-x-4 sm:flex">
+        {
+          SITE.showArchives && (
+            <LinkButton
+              href="/archives"
+              class:list={[
+                "focus-outline flex p-1",
+                {
+                  "active-nav [&>svg]:stroke-accent": isActive("/archives"),
+                },
+              ]}
+              aria-label="archives"
+              title="Archives"
+            >
+              <IconArchive class="inline-block" />
+              <span class="sr-only">Archives</span>
+            </LinkButton>
+          )
+        }
+        <LinkButton
+          href="/search"
+          class:list={[
+            "focus-outline flex p-1",
+            { "[&>svg]:stroke-accent": isActive("/search") },
+          ]}
+          aria-label="search"
+          title="Search"
+        >
+          <IconSearch />
+          <span class="sr-only">Search</span>
+        </LinkButton>
+        {
+          SITE.lightAndDarkMode && (
+            <button
+              id="theme-btn"
+              class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
+              title="Toggles light & dark"
+              aria-label="auto"
+              aria-live="polite"
+            >
+              <IconMoon class="absolute top-[50%] left-[50%] -translate-[50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <IconSunHigh class="absolute top-[50%] left-[50%] -translate-[50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            </button>
+          )
+        }
+      </div>
+
+      <!-- Mobile menu button -->
       <button
         id="menu-btn"
         class="focus-outline self-end p-2 sm:hidden"
@@ -62,13 +104,66 @@ const isActive = (path: string) => {
         <IconX id="close-icon" class="hidden" />
         <IconMenuDeep id="menu-icon" />
       </button>
+    </div>
+
+    <!-- Desktop Navigation Row (Page Links Only) -->
+    <nav class="hidden w-full bg-background px-4 pb-4 sm:block">
+      <ul class="flex items-center space-x-6">
+        <li>
+          <a
+            href="/about"
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/about") }]}
+          >
+            About
+          </a>
+        </li>
+        <li>
+          <a
+            href="/events"
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/events") }]}
+          >
+            Events
+          </a>
+        </li>
+        <li>
+          <a
+            href="/constitution"
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/constitution") }]}
+          >
+            Constitution
+          </a>
+        </li>
+        <li>
+          <a
+            href="/posts"
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/posts") }]}
+          >
+            Posts
+          </a>
+        </li>
+        <li>
+          <a
+            href="/tags"
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/tags") }]}
+          >
+            Tags
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Mobile Navigation (Original Menu) -->
+    <nav
+      id="nav-menu"
+      class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
+    >
       <ul
         id="menu-items"
         class:list={[
           "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
-          "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-2 sm:[&>li>a]:py-1",
+          "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent",
           "hidden",
-          "sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0",
+          "sm:hidden",
         ]}
       >
         <li class="col-span-2">
@@ -105,16 +200,16 @@ const isActive = (path: string) => {
               <LinkButton
                 href="/archives"
                 class:list={[
-                  "focus-outline flex justify-center p-3 sm:p-1",
+                  "focus-outline flex justify-center p-3",
                   {
                     "active-nav [&>svg]:stroke-accent": isActive("/archives"),
                   },
                 ]}
-                title="Archives"
                 aria-label="archives"
+                title="Archives"
               >
-                <IconArchive class="hidden sm:inline-block" />
-                <span class="sm:sr-only">Archives</span>
+                <IconArchive class="inline-block" />
+                <span>Archives</span>
               </LinkButton>
             </li>
           )
@@ -123,11 +218,11 @@ const isActive = (path: string) => {
           <LinkButton
             href="/search"
             class:list={[
-              "focus-outline flex p-3 sm:p-1",
+              "focus-outline flex p-3",
               { "[&>svg]:stroke-accent": isActive("/search") },
             ]}
-            title="Search"
             aria-label="search"
+            title="Search"
           >
             <IconSearch />
             <span class="sr-only">Search</span>
@@ -137,8 +232,8 @@ const isActive = (path: string) => {
           SITE.lightAndDarkMode && (
             <li class="col-span-1 flex items-center justify-center">
               <button
-                id="theme-btn"
-                class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
+                id="theme-btn-mobile"
+                class="focus-outline relative size-12 p-4 hover:[&>svg]:stroke-accent"
                 title="Toggles light & dark"
                 aria-label="auto"
                 aria-live="polite"
@@ -152,9 +247,21 @@ const isActive = (path: string) => {
       </ul>
     </nav>
   </div>
+  <div class="mx-auto max-w-app border-b border-border"></div>
 </header>
 
 <script>
+  function setupThemeSync() {
+    const themeBtnMobile = document.querySelector("#theme-btn-mobile");
+    const themeBtnDesktop = document.querySelector("#theme-btn");
+
+    if (themeBtnMobile && themeBtnDesktop) {
+      themeBtnMobile.addEventListener("click", () => {
+        themeBtnDesktop.dispatchEvent(new Event("click"));
+      });
+    }
+  }
+
   function toggleNav() {
     const menuBtn = document.querySelector("#menu-btn");
     const menuItems = document.querySelector("#menu-items");
@@ -177,7 +284,11 @@ const isActive = (path: string) => {
 
   // Run on initial page load
   toggleNav();
+  setupThemeSync();
 
   // Runs on view transitions navigation
-  document.addEventListener("astro:after-swap", toggleNav);
+  document.addEventListener("astro:after-swap", () => {
+    toggleNav();
+    setupThemeSync();
+  });
 </script>

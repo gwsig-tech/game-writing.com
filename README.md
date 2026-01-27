@@ -2,7 +2,7 @@
 
 Website for the [IGDA Game Writing Special Interest Group](https://game-writing.com).
 
-Built with [Astro](https://astro.build/) using the [AstroPaper](https://github.com/satnaing/astro-paper) theme (v5.5.0), styled with [Tailwind CSS](https://tailwindcss.com/), and managed via [Sveltia CMS](https://github.com/sveltia/sveltia-cms).
+Built with [Astro](https://astro.build/) using the [AstroPaper](https://github.com/satnaing/astro-paper) theme (v5.5.1), styled with [Tailwind CSS](https://tailwindcss.com/), and managed via [Sveltia CMS](https://github.com/sveltia/sveltia-cms).
 
 ## Features
 
@@ -192,7 +192,7 @@ git pull upstream main
 **Resources:**
 
 - [AstroPaper Releases](https://github.com/satnaing/astro-paper/releases)
-- [Compare versions](https://github.com/satnaing/astro-paper/compare/v5.5.0...main) (current base: v5.5.0)
+- [Compare versions](https://github.com/satnaing/astro-paper/compare/v5.5.1...main) (current base: v5.5.1)
 - [Release Notes](src/data/blog/_releases/) (local copies)
 
 **Files likely to have conflicts** (customized for this site):
@@ -202,10 +202,10 @@ git pull upstream main
 - `src/config.ts` - Site-specific settings
 - `src/constants.ts` - Social links
 
-**Files safe to update** (not customized):
+**Files safe to update** (minimal or no customization):
 
 - `src/utils/` - Helper functions
-- `src/styles/` - Global styles
+- `src/styles/` - Global styles (minor customizations to section/footer)
 - Most components in `src/components/`
 
 ## Tech Stack
@@ -213,7 +213,7 @@ git pull upstream main
 | Category   | Technology                                                   |
 | :--------- | :----------------------------------------------------------- |
 | Framework  | [Astro](https://astro.build/) v5.16.6                        |
-| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.0 |
+| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.1 |
 | Styling    | [Tailwind CSS](https://tailwindcss.com/) v4                  |
 | CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms)        |
 | Search     | [Pagefind](https://pagefind.app/)                            |
