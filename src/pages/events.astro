@@ -16,10 +16,12 @@ interface CalendarEvent {
   start?: {
     dateTime?: string;
     date?: string;
+    timeZone?: string;
   };
   end?: {
     dateTime?: string;
     date?: string;
+    timeZone?: string;
   };
 }
 
@@ -32,6 +34,7 @@ if (API_KEY) {
     const response = await calendar.events.list({
       calendarId: CALENDAR_ID,
       timeMin: new Date().toISOString(),
+      timeMax: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
       maxResults: 50,
       singleEvents: true,
       orderBy: "startTime",
@@ -55,18 +58,21 @@ function formatEventDate(event: CalendarEvent): string {
   const startDate = new Date(start);
   const isAllDay = !event.start?.dateTime;
 
+  // Use the event's timezone, or fall back to America/New_York
+  const eventTimeZone = event.start?.timeZone || "America/New_York";
+
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
     year: "numeric",
-    timeZone: "America/New_York",
+    timeZone: eventTimeZone,
   };
 
   const timeOnlyOptions: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "2-digit",
     timeZoneName: "short",
-    timeZone: "America/New_York",
+    timeZone: eventTimeZone,
   };
 
   // For all-day events, check if it spans multiple days
