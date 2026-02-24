@@ -4,9 +4,14 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Layout from "@/layouts/Layout.astro";
+import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
 
 const CALENDAR_ID = "writing.sig@gmail.com";
+const encodedCalendarId = encodeURIComponent(CALENDAR_ID);
+const calendarViewUrl = `https://calendar.google.com/calendar/embed?src=${encodedCalendarId}`;
+const calendarSubscribeUrl = `https://calendar.google.com/calendar/r?cid=${encodedCalendarId}`;
+const calendarIcalUrl = `https://calendar.google.com/calendar/ical/${encodedCalendarId}/public/basic.ics`;
 const API_KEY = import.meta.env.GOOGLE_CALENDAR_API_KEY;
 
 interface CalendarEvent {
@@ -123,6 +128,18 @@ const title = "Game Writing SIG Events";
       <hr />
 
       <h2>Calendar</h2>
+
+      <p class="flex flex-wrap gap-x-6 gap-y-2">
+        <LinkButton href={calendarViewUrl} target="_blank" rel="noopener noreferrer">
+          View full calendar
+        </LinkButton>
+        <LinkButton href={calendarSubscribeUrl} target="_blank" rel="noopener noreferrer">
+          Add to Google Calendar
+        </LinkButton>
+        <LinkButton href={calendarIcalUrl}>
+          Subscribe (iCal)
+        </LinkButton>
+      </p>
 
       <!-- Debug: error={error}, events.length={events.length} -->
 
