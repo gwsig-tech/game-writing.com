@@ -1,19 +1,26 @@
 ---
 export const prerender = true;
-const target = "/job-postings";
+import Layout from "@/layouts/Main.astro";
+import { SITE } from "@/config";
+
+let incomingText = "";
+try {
+  const mod = await import("@/data/incoming-url.txt?raw");
+  incomingText = (mod as any).default ?? "";
+} catch (e) {
+  incomingText = "";
+}
+
+const pageTitle = "Job Postings (Debug)";
+const pageDesc = "Displaying raw contents of incoming-url.txt";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
-    <link rel="canonical" href={target} />
-    <title>Redirecting…</title>
-  </head>
-  <body>
-    <p>
-      Redirecting to
-      <a href={target}>{target}</a>
-    </p>
-  </body>
-</html>
+<Layout title={`${pageTitle} | ${SITE.title}`} description={pageDesc}>
+  <section class="mx-auto max-w-app px-4 py-8">
+    <h1 class="text-3xl font-semibold">Job Postings</h1>
+    <p class="mt-2 text-muted-foreground">{pageDesc}</p>
+    <pre class="mt-6 whitespace-pre-wrap rounded-md border border-border bg-muted p-4 text-sm">
+{incomingText || "(incoming-url.txt is empty)"}
+    </pre>
+  </section>
+</Layout>
