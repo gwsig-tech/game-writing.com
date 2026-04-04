@@ -149,6 +149,14 @@ const isActive = (path: string) => {
             Tags
           </a>
         </li>
+        <li>
+          <a
+            href="/jobs"
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/jobs") }]}
+          >
+            Job Postings
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -192,6 +200,11 @@ const isActive = (path: string) => {
         <li class="col-span-2">
           <a href="/tags" class:list={{ "active-nav": isActive("/tags") }}>
             Tags
+          </a>
+        </li>
+        <li class="col-span-2">
+          <a href="/jobs" class:list={{ "active-nav": isActive("/jobs") }}>
+            Job Postings
           </a>
         </li>
         {
