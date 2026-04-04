@@ -1,0 +1,67 @@
+---
+import Layout from "@/layouts/Main.astro";
+import { SITE } from "@/config";
+
+// Load scraped postings JSON; tolerate missing/invalid file
+let entries: Array<any> = [];
+try {
+  const data = await import("@/data/scraped-postings.json");
+  entries = Array.isArray(data.default) ? data.default : [];
+} catch (e) {
+  entries = [];
+}
+
+// Newest first
+entries = entries
+  .slice()
+  .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+const pageTitle = "Job Postings";
+const pageDesc = "Curated job links shared by the IGDA Game Writing community.";
+---
+
+<Layout title={`${pageTitle} | ${SITE.title}`} description={pageDesc}>
+  <section class="mx-auto max-w-app px-4 py-8">
+    <h1 class="text-3xl font-semibold">Job Postings</h1>
+    <p class="mt-2 text-muted-foreground">{pageDesc}</p>
+
+    {entries.length === 0 ? (
+      <p class="mt-8">No job postings yet.</p>
+    ) : (
+      <ul class="mt-8 space-y-6">
+        {entries.map((e) => {
+          const p = e.posting ?? {};
+          const link = p.link as string | undefined;
+          const poc = p.point_of_contact as string | undefined;
+          const original = p.original_post as string | undefined;
+          const ts = e.timestamp as string | undefined;
+          const excerpt =
+            (original ?? "")
+              .replace(/\s+/g, " ")
+              .slice(0, 220)
+              .trim() + (original && original.length > 220 ? "…" : "");
+
+          return (
+            <li class="rounded-md border border-border p-4">
+              <div class="flex flex-col gap-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  {link ? (
+                    <a href={link} target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">
+                      {link}
+                    </a>
+                  ) : (
+                    <span class="text-muted-foreground">(no link)</span>
+                  )}
+                  {poc && <span class="text-sm text-muted-foreground">• {poc}</span>}
+                  {ts && <time datetime={ts} class="text-sm text-muted-foreground">• {new Date(ts).toLocaleString()}</time>}
+                </div>
+                {excerpt && <p class="mt-2 text-sm leading-6">{excerpt}</p>}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+</Layout>
+
