@@ -1,6 +1,19 @@
 ---
-// Redirect legacy /jobs route to new /job-postings page
 export const prerender = true;
-throw Astro.redirect('/job-postings');
+const target = "/job-postings";
 ---
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>
+      Redirecting to
+      <a href={target}>{target}</a>
+    </p>
+  </body>
+</html>
