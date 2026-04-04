@@ -1,0 +1,6 @@
+---
+// Redirect legacy /jobs route to new /job-postings page
+export const prerender = true;
+throw Astro.redirect('/job-postings');
+---
+
