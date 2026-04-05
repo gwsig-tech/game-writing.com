@@ -1,14 +1,64 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro"; // Double check this path matches your project
-import Footer from "../components/Footer.astro"; // And this one
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 
-<Layout title="Jobs | IGDA Game Writing SIG">
+<Layout title="Principal UX Writer - Riftbound | Jobs">
   <Header />
-  <main id="main-content" class="mx-auto max-w-app px-4 py-8">
-    <h1 class="text-4xl font-bold">Jobs</h1>
-    <p class="mt-4 text-lg">The Game Writing Job Board is under construction.</p>
+  <main id="main-content" class="mx-auto max-w-app px-4 py-12">
+    
+    <div class="border-b border-border pb-8">
+      <div class="flex items-center gap-2 text-accent font-medium uppercase tracking-wider text-sm">
+        <span>Design</span> • <span>Riot Games</span>
+      </div>
+      <h1 class="mt-2 text-4xl font-bold sm:text-5xl">Principal UX Writer - Riftbound</h1>
+      <p class="mt-4 text-xl opacity-80">Mercer Island, USA (Hybrid)</p>
+      
+      <a href="https://www.riotgames.com/en/work-with-us/job/7522039/principal-ux-writer-riftbound-mercer-island-usa" 
+         target="_blank"
+         class="mt-6 inline-block bg-accent text-white px-8 py-3 font-semibold rounded hover:opacity-90 transition-opacity">
+        Apply on Riot Games
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
+      
+      <div class="md:col-span-2 space-y-8 prose prose-invert">
+        <section>
+          <h2 class="text-2xl font-bold">About the Role</h2>
+          <p>As a Principal UX Writer on the Riftbound team, you'll craft the words that guide players through complex systems. You aren't just "filling in the boxes"—you're designing the conversation between the game and the player.</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold">Key Responsibilities</h2>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>Develop cohesive narrative strings across UI/UX surfaces.</li>
+            <li>Collaborate with Narrative Leads to ensure UX copy matches the world-building tone.</li>
+            <li>Mentor mid-level writers and establish style guides for the project.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="bg-surface p-6 rounded-lg border border-border h-fit">
+        <h3 class="font-bold uppercase text-xs tracking-widest opacity-60">Job Details</h3>
+        <dl class="mt-4 space-y-4">
+          <div>
+            <dt class="text-sm font-semibold">Experience</dt>
+            <dd class="opacity-80">8+ Years</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-semibold">Work Type</dt>
+            <dd class="opacity-80">Full-Time</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-semibold">Date Posted</dt>
+            <dd class="opacity-80">April 5, 2026</dd>
+          </div>
+        </dl>
+      </div>
+
+    </div>
   </main>
   <Footer />
 </Layout>
