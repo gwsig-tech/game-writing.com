@@ -12,8 +12,8 @@ import Footer from "../components/Footer.astro";
       <div class="flex items-center gap-2 text-accent font-medium uppercase tracking-wider text-sm">
         <span>Design</span> • <span>Riot Games</span>
       </div>
-      <h1 class="mt-2 text-4xl font-bold sm:text-5xl">Principal UX Writer - Riftbound</h1>
-      <p class="mt-4 text-xl opacity-80">Mercer Island, USA (Hybrid)</p>
+      <h1 class="mt-2 text-4xl font-bold sm:text-5xl text-slate-900">Principal UX Writer - Riftbound</h1>
+      <p class="mt-4 text-xl text-slate-800">Mercer Island, USA (Hybrid)</p>
       
       <a href="https://www.riotgames.com/en/work-with-us/job/7522039/principal-ux-writer-riftbound-mercer-island-usa" 
          target="_blank"
@@ -24,14 +24,14 @@ import Footer from "../components/Footer.astro";
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
       
-      <div class="md:col-span-2 space-y-8 prose prose-invert">
+      <div class="md:col-span-2 space-y-8 prose job-content">
         <section>
-          <h2 class="text-2xl font-bold">About the Role</h2>
+          <h2 class="text-2xl font-bold text-slate-900">About the Role</h2>
           <p>As a Principal UX Writer on the Riftbound team, you'll craft the words that guide players through complex systems. You aren't just "filling in the boxes"—you're designing the conversation between the game and the player.</p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-bold">Key Responsibilities</h2>
+          <h2 class="text-2xl font-bold text-slate-900">Key Responsibilities</h2>
           <ul class="list-disc pl-5 space-y-2">
             <li>Develop cohesive narrative strings across UI/UX surfaces.</li>
             <li>Collaborate with Narrative Leads to ensure UX copy matches the world-building tone.</li>
@@ -40,20 +40,20 @@ import Footer from "../components/Footer.astro";
         </section>
       </div>
 
-      <div class="bg-surface p-6 rounded-lg border border-border h-fit">
+      <div class="bg-background border border-border p-6 rounded-lg h-fit shadow-sm">
         <h3 class="font-bold uppercase text-xs tracking-widest opacity-60">Job Details</h3>
         <dl class="mt-4 space-y-4">
           <div>
-            <dt class="text-sm font-semibold">Experience</dt>
-            <dd class="opacity-80">8+ Years</dd>
+            <dt class="text-sm font-bold text-slate-900">Experience</dt>
+            <dd class="text-slate-800">8+ Years</dd>
           </div>
           <div>
-            <dt class="text-sm font-semibold">Work Type</dt>
-            <dd class="opacity-80">Full-Time</dd>
+            <dt class="text-sm font-bold text-slate-900">Work Type</dt>
+            <dd class="text-slate-800">Full-Time</dd>
           </div>
           <div>
-            <dt class="text-sm font-semibold">Date Posted</dt>
-            <dd class="opacity-80">April 5, 2026</dd>
+            <dt class="text-sm font-bold text-slate-900">Date Posted</dt>
+            <dd class="text-slate-800">April 5, 2026</dd>
           </div>
         </dl>
       </div>
@@ -62,3 +62,23 @@ import Footer from "../components/Footer.astro";
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .job-content {
+    max-width: 65ch; /* Keeps lines from getting too long */
+    line-height: 1.8; /* More breathing room between lines */
+    color: #1a1a1a; /* Very dark charcoal for readability on beige */
+  }
+  .job-content h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+  .job-content p {
+    margin-bottom: 1.5rem;
+  }
+  /* Optional: make the beige sidebar slightly darker than the page for depth */
+  .bg-surface {
+    background-color: rgba(0, 0, 0, 0.03); 
+  }
+</style>
