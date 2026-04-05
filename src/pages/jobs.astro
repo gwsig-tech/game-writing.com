@@ -2,83 +2,34 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import JobCard from "../components/JobCard.astro";
+
+// Example: Fetching from a collection named 'jobs'
+// const allJobs = await getCollection("jobs");
 ---
 
-<Layout title="Principal UX Writer - Riftbound | Jobs">
+<Layout title="Jobs | IGDA Game Writing SIG">
   <Header />
-  <main id="main-content" class="mx-auto max-w-app px-4 py-12">
-    
-    <div class="border-b border-border pb-8">
-      <div class="flex items-center gap-2 text-accent font-medium uppercase tracking-wider text-sm">
-        <span>Design</span> • <span>Riot Games</span>
-      </div>
-      <h1 class="mt-2 text-4xl font-bold sm:text-5xl text-slate-900">Principal UX Writer - Riftbound</h1>
-      <p class="mt-4 text-xl text-slate-800">Mercer Island, USA (Hybrid)</p>
+  <main class="mx-auto max-w-app px-4 py-12">
+    <header class="mb-12 border-b border-border pb-8">
+      <h1 class="text-4xl font-bold text-slate-900">Open Roles</h1>
+      <p class="mt-2 text-lg text-slate-600">Opportunities within the narrative and game writing space.</p>
+    </header>
+
+    <ul class="space-y-2">
+      <JobCard 
+        id="principal-ux-writer-riftbound"
+        title="Principal UX Writer - Riftbound"
+        company="Riot Games"
+        location="Mercer Island, USA (Hybrid)"
+        category="Design"
+        workType="Full-Time"
+        experience="8+ Years"
+        date="April 5, 2026"
+        description="Craft the words that guide players through complex systems. You aren't just 'filling in the boxes'—you're designing the conversation between the game and the player."
+      />
       
-      <a href="https://www.riotgames.com/en/work-with-us/job/7522039/principal-ux-writer-riftbound-mercer-island-usa" 
-         target="_blank"
-         class="mt-6 inline-block bg-accent text-white px-8 py-3 font-semibold rounded hover:opacity-90 transition-opacity">
-        Apply on Riot Games
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
-      
-      <div class="md:col-span-2 space-y-8 prose job-content">
-        <section>
-          <h2 class="text-2xl font-bold text-slate-900">About the Role</h2>
-          <p>As a Principal UX Writer on the Riftbound team, you'll craft the words that guide players through complex systems. You aren't just "filling in the boxes"—you're designing the conversation between the game and the player.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-bold text-slate-900">Key Responsibilities</h2>
-          <ul class="list-disc pl-5 space-y-2">
-            <li>Develop cohesive narrative strings across UI/UX surfaces.</li>
-            <li>Collaborate with Narrative Leads to ensure UX copy matches the world-building tone.</li>
-            <li>Mentor mid-level writers and establish style guides for the project.</li>
-          </ul>
-        </section>
-      </div>
-
-      <div class="bg-background border border-border p-6 rounded-lg h-fit shadow-sm">
-        <h3 class="font-bold uppercase text-xs tracking-widest opacity-60">Job Details</h3>
-        <dl class="mt-4 space-y-4">
-          <div>
-            <dt class="text-sm font-bold text-slate-900">Experience</dt>
-            <dd class="text-slate-800">8+ Years</dd>
-          </div>
-          <div>
-            <dt class="text-sm font-bold text-slate-900">Work Type</dt>
-            <dd class="text-slate-800">Full-Time</dd>
-          </div>
-          <div>
-            <dt class="text-sm font-bold text-slate-900">Date Posted</dt>
-            <dd class="text-slate-800">April 5, 2026</dd>
-          </div>
-        </dl>
-      </div>
-
-    </div>
+      </ul>
   </main>
   <Footer />
 </Layout>
-
-<style>
-  .job-content {
-    max-width: 65ch; /* Keeps lines from getting too long */
-    line-height: 1.8; /* More breathing room between lines */
-    color: #1a1a1a; /* Very dark charcoal for readability on beige */
-  }
-  .job-content h2 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    color: #0f172a;
-  }
-  .job-content p {
-    margin-bottom: 1.5rem;
-  }
-  /* Optional: make the beige sidebar slightly darker than the page for depth */
-  .bg-surface {
-    background-color: rgba(0, 0, 0, 0.03); 
-  }
-</style>
