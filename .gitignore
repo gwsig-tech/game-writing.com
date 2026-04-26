@@ -26,6 +26,5 @@ pnpm-debug.log*
 # pagefind
 public/pagefind
 
-# memory
-.claude
-CLAUDE.md
+# Claude Code per-user local settings (shared settings.json is committed)
+.claude/settings.local.json
