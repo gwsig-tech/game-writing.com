@@ -39,6 +39,9 @@ pnpm preview          # Preview production build
 
 ```text
 /
+├── .claude/                   # Claude Code project settings (settings.local.json is per-user, gitignored)
+├── docs/
+│   └── plans/                 # Maintenance and feature plans
 ├── public/
 │   ├── admin/                 # Sveltia CMS configuration
 │   │   ├── config.yml         # CMS fields, collections, workflow
@@ -63,7 +66,7 @@ pnpm preview          # Preview production build
 │   │       ├── _events/       # Event announcements
 │   │       └── _spotlights/   # Member spotlights
 │   ├── layouts/
-│   │   ├── Layout.astro       # Base HTML layout
+│   │   ├── Layout.astro       # [Modified] Base HTML layout + Vercel analytics + theme script
 │   │   ├── PostDetails.astro  # [Modified] Blog post layout + GameEmbed
 │   │   ├── AboutLayout.astro  # [Custom] Static page layout
 │   │   └── Main.astro         # Main content wrapper
@@ -77,13 +80,17 @@ pnpm preview          # Preview production build
 │   │   ├── posts/             # Blog post routes
 │   │   ├── tags/              # Tag archive routes
 │   │   └── archives/          # Date-based archives
+│   ├── scripts/
+│   │   └── theme.ts           # Light/dark theme toggle logic (loaded non-blocking)
 │   ├── styles/
 │   │   ├── global.css         # Tailwind config + CSS variables
 │   │   └── typography.css     # Prose/markdown styling
 │   ├── utils/                 # Helper functions
 │   ├── config.ts              # Site configuration (URL, title, etc.)
 │   ├── constants.ts           # Social links, sharing options
-│   └── content.config.ts      # Content collection schema
+│   ├── content.config.ts      # Content collection schema
+│   └── env.d.ts               # Ambient type declarations (window.theme)
+├── CLAUDE.md                  # Guidance for Claude Code agents
 └── astro.config.ts            # Astro configuration
 ```
 
@@ -148,14 +155,21 @@ Access the CMS at `/admin/`. The CMS uses a draft workflow:
 # Check for outdated packages
 pnpm outdated
 
-# Update all dependencies
-pnpm update
+# Bump explicit packages (preferred — avoids accidental majors)
+pnpm update --latest <pkg-1> <pkg-2> ...
 
-# Or use npm-check-updates for more control
-npx npm-check-updates -i
+# Update within current semver ranges (safest)
+pnpm update
 ```
 
-For detailed guidance, see [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md).
+**Pinned packages — do not bump without verification:**
+
+- `cpx2` is pinned to exact `8.0.0`. Versions 8.0.1 / 8.0.2 trigger
+  `ERR_REQUIRE_ESM` during `pnpm build` because they `require()` `debounce@3`
+  which is now ESM-only. Unpin when 8.0.3+ ships with the require fixed.
+
+For detailed guidance, see [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md)
+and the latest [maintenance plan](docs/plans/) for held items and revisit triggers.
 
 ### Update AstroPaper Theme
 
@@ -198,6 +212,7 @@ git pull upstream main
 **Files likely to have conflicts** (customized for this site):
 
 - `src/components/Header.astro` - Custom navigation
+- `src/layouts/Layout.astro` - Vercel analytics/speed-insights injection
 - `src/layouts/PostDetails.astro` - GameEmbed integration
 - `src/config.ts` - Site-specific settings
 - `src/constants.ts` - Social links
@@ -207,6 +222,10 @@ git pull upstream main
 - `src/utils/` - Helper functions
 - `src/styles/` - Global styles (minor customizations to section/footer)
 - Most components in `src/components/`
+
+> **Recommendation:** the fork has heavily diverged from upstream. Prefer
+> cherry-picking specific upstream commits over a full merge. See
+> [docs/plans/](docs/plans/) for prior maintenance notes and decisions.
 
 ## Tech Stack
 
