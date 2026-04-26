@@ -149,6 +149,14 @@ const isActive = (path: string) => {
             Tags
           </a>
         </li>
+        <li>
+          <a 
+            href="/jobs" 
+            class:list={["font-medium hover:text-accent", { "active-nav": isActive("/jobs") }]}
+          >
+            Jobs
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -194,26 +202,11 @@ const isActive = (path: string) => {
             Tags
           </a>
         </li>
-        {
-          SITE.showArchives && (
-            <li class="col-span-2">
-              <LinkButton
-                href="/archives"
-                class:list={[
-                  "focus-outline flex justify-center p-3",
-                  {
-                    "active-nav [&>svg]:stroke-accent": isActive("/archives"),
-                  },
-                ]}
-                aria-label="archives"
-                title="Archives"
-              >
-                <IconArchive class="inline-block" />
-                <span>Archives</span>
-              </LinkButton>
-            </li>
-          )
-        }
+        <li class="col-span-2">
+          <a href="/jobs" class:list={{ "active-nav": isActive("/jobs") }}>
+            Jobs
+          </a>
+        </li>
         <li class="col-span-1 flex items-center justify-center">
           <LinkButton
             href="/search"
