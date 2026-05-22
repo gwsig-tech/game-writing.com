@@ -1,11 +1,15 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
 
-// Example: Fetching from a collection named 'jobs'
-// const allJobs = await getCollection("jobs");
+const jobs = (await getCollection("jobs")).sort(
+  (a, b) =>
+    new Date(b.data.datePosted).valueOf() -
+    new Date(a.data.datePosted).valueOf()
+);
 ---
 
 <Layout title="Jobs | IGDA Game Writing SIG">
@@ -17,19 +21,22 @@ import JobCard from "../components/JobCard.astro";
     </header>
 
     <ul class="space-y-2">
-      <JobCard 
-        id="principal-ux-writer-riftbound"
-        title="Principal UX Writer - Riftbound"
-        company="Riot Games"
-        location="Mercer Island, USA (Hybrid)"
-        category="Design"
-        workType="Full-Time"
-        experience="8+ Years"
-        date="April 5, 2026"
-        description="Craft the words that guide players through complex systems. You aren't just 'filling in the boxes'—you're designing the conversation between the game and the player."
-      />
-      
-      </ul>
+      {
+        jobs.map(job => (
+          <JobCard
+            id={job.id}
+            title={job.data.title}
+            company={job.data.company}
+            location={job.data.location}
+            category={job.data.category}
+            workType={job.data.workType}
+            experience={job.data.experience}
+            date={job.data.datePosted}
+            description={job.data.description}
+          />
+        ))
+      }
+    </ul>
   </main>
   <Footer />
 </Layout>

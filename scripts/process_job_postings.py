@@ -6,8 +6,8 @@ from datetime import datetime
 
 # Path Setup
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INPUT_FILE = os.path.join(REPO_ROOT, 'src', 'content', 'raw_job_postings.txt')
-OUTPUT_DIR = os.path.join(REPO_ROOT, 'src', 'content', 'jobs')
+INPUT_FILE = os.path.join(REPO_ROOT, 'src', 'data', 'jobs', '_raw_postings.txt')
+OUTPUT_DIR = os.path.join(REPO_ROOT, 'src', 'data', 'jobs')
 
 def slugify(text):
     # Limit to first 6 words to keep filenames sane

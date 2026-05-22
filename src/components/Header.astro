@@ -202,6 +202,18 @@ const isActive = (path: string) => {
             Tags
           </a>
         </li>
+        {
+          SITE.showArchives && (
+            <li class="col-span-2">
+              <a
+                href="/archives"
+                class:list={{ "active-nav": isActive("/archives") }}
+              >
+                Archives
+              </a>
+            </li>
+          )
+        }
         <li class="col-span-2">
           <a href="/jobs" class:list={{ "active-nav": isActive("/jobs") }}>
             Jobs
