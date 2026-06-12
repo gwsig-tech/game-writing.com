@@ -1,24 +1,25 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { slugifyStr } from "../../utils/slugify";
 
-
 export async function getStaticPaths() {
-  // Use "any" temporarily if the build is blocking you, 
-  // but "jobs" is correct once config.ts is pushed.
-  const jobEntries = await getCollection("jobs" as any);
-  
-  return jobEntries.map((entry: any) => ({
-    params: { slug: entry.slug },
+  const jobEntries = await getCollection("jobs");
+
+  return jobEntries.map(entry => ({
+    params: { slug: entry.id },
     props: { entry },
   }));
 }
 
+interface Props {
+  entry: CollectionEntry<"jobs">;
+}
+
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 const { title, company, location, category, workType, experience, datePosted, applyLink } = entry.data;
 ---
 
