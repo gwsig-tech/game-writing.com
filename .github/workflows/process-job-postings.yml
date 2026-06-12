@@ -2,7 +2,7 @@ name: Process Raw Job Postings
 on:
   push:
     paths:
-      - 'src/content/raw_job_postings.txt' # Updated path
+      - 'src/data/jobs/_raw_postings.txt'
 
 jobs:
   scrape-and-commit:
@@ -21,9 +21,9 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add src/content/jobs/*.md
-          # Clear the text file in its new location
-          echo "" > src/content/raw_job_postings.txt 
-          git add src/content/raw_job_postings.txt
+          git add src/data/jobs/*.md
+          # Clear the input file so processed links aren't re-scraped
+          echo -n "" > src/data/jobs/_raw_postings.txt
+          git add src/data/jobs/_raw_postings.txt
           git commit -m "auto: generate job postings from links" || echo "No changes to commit"
           git push
