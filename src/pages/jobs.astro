@@ -7,7 +7,8 @@ import JobCard from "../components/JobCard.astro";
 
 const jobs = (await getCollection("jobs")).sort(
   (a, b) =>
-    new Date(b.data.datePosted).valueOf() - new Date(a.data.datePosted).valueOf()
+    new Date(b.data.datePosted).valueOf() -
+    new Date(a.data.datePosted).valueOf()
 );
 ---
 
@@ -16,7 +17,9 @@ const jobs = (await getCollection("jobs")).sort(
   <main class="mx-auto max-w-app px-4 py-12">
     <header class="mb-12 border-b border-border pb-8">
       <h1 class="text-4xl font-bold text-slate-900">Open Roles</h1>
-      <p class="mt-2 text-lg text-slate-600">Opportunities within the narrative and game writing space.</p>
+      <p class="mt-2 text-lg text-slate-600">
+        Opportunities within the narrative and game writing space.
+      </p>
     </header>
 
     <ul class="space-y-2">
@@ -36,9 +39,13 @@ const jobs = (await getCollection("jobs")).sort(
         ))
       }
     </ul>
-    {jobs.length === 0 && (
-      <p class="text-lg text-slate-600">No open roles right now — check back soon.</p>
-    )}
+    {
+      jobs.length === 0 && (
+        <p class="text-lg text-slate-600">
+          No open roles right now — check back soon.
+        </p>
+      )
+    }
   </main>
   <Footer />
 </Layout>

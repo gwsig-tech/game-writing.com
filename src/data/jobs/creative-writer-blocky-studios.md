@@ -11,17 +11,21 @@ description: "Join a blocky game studio in Stockholm and craft compelling conten
 ---
 
 ## About the Role
+
 Blocky Studios is looking for a Creative Writer to join our team in Stockholm. You will be responsible for crafting the narrative strings, character dialogue, and environmental storytelling that defines our blocky universe.
 
 ### Key Responsibilities
-* Write compelling dialogue and in-game text.
-* Collaborate with Level Designers to integrate narrative into gameplay.
-* Maintain the "voice" of the studio across all player-facing content.
+
+- Write compelling dialogue and in-game text.
+- Collaborate with Level Designers to integrate narrative into gameplay.
+- Maintain the "voice" of the studio across all player-facing content.
 
 ### Requirements
-* 3+ years of professional writing experience in games.
-* Proficiency in English (Swedish is a plus but not required).
-* A passion for sandbox and voxel-based gaming.
+
+- 3+ years of professional writing experience in games.
+- Proficiency in English (Swedish is a plus but not required).
+- A passion for sandbox and voxel-based gaming.
 
 ---
-*Manual Test Entry*
+
+_Manual Test Entry_
