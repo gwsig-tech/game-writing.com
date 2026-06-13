@@ -1,6 +1,6 @@
 # Jobs Feature — Completion Plan
 
-**Status:** in progress, ~70% complete
+**Status:** core build + theming + dates done; automated scrape still untested — see the [2026-06-13 update](#update--2026-06-13) at the bottom
 **Original author:** Shen (commits a754d61..396538f, 2026-04-05)
 **Plan author:** Jon, 2026-04-26
 **Branch:** `jobs-tab`
@@ -194,3 +194,54 @@ Each step is independently buildable, so it's easy to bisect if something regres
 | 8 | `2a8c989` | Reworked scraper, added test LinkedIn URL |
 | 9 | `8bd2068` | Simplified scraper |
 | 10| `396538f` | Added hand-written sample (`creative-writer-blocky-studios.md`) |
+
+## Update — 2026-06-13
+
+Progress since the 2026-04-26 plan, recorded after the theming + dates pass (commits `c9a7fd2`…`e7390ef` on `jobs-tab`).
+
+### Done
+
+**Structural — every item from the original "What's broken or missing" list is resolved:**
+
+- `jobs` collection registered in [src/content.config.ts](../../src/content.config.ts); legacy `src/content/config.ts` deleted (#1)
+- Content standardized under `src/data/jobs/`; raw input lives at `_raw_postings.txt` (#2)
+- Route collision removed — empty `src/pages/jobs/index.astro` deleted (#3)
+- [jobs.astro](../../src/pages/jobs.astro) reads from the collection and renders a `JobCard` per entry, sorted by date desc (#4)
+- [\[...slug\].astro](../../src/pages/jobs/[...slug].astro) migrated to the Astro v5 content API (`render(entry)`, `entry.id`); `as any` casts dropped (#5)
+- Sample job conforms to the new conventions (#6)
+- Unused `JOBS` config export removed (open question #2)
+
+**CI / automation:**
+
+- [process-job-postings.yml](../../.github/workflows/process-job-postings.yml) granted `permissions: contents: write` — fixed the 403 the Action hit on `git push`
+- Bumped `actions/checkout` and `actions/setup-python` v4 → v5 (clears the Node 20 deprecation)
+
+**Theme + component consistency** (matches the site's AstroPaper/Tailwind v4 token system):
+
+- Replaced hardcoded `slate-*` / `text-white` / hex and dead AstroPaper v3 `skin-*` classes with the semantic theme tokens (`foreground`, `accent`, `border`, opacity steps) — jobs now render correctly in both light and dark
+- Job detail markdown renders through the shared `.app-prose` class instead of a bespoke `<style>` block with hardcoded colors
+- Reused `LinkButton` + `IconChevronLeft` for the "Back to Jobs" link; added `rel="noopener noreferrer"` to the external apply link
+
+**Dates — now identical to the blog:**
+
+- `datePosted` is `z.date()` (was `z.string()`); frontmatter uses unquoted ISO; the scraper emits ISO at noon (avoids a timezone off-by-one); card + detail render via the shared `Datetime` component (calendar icon, `D MMM, YYYY`, `SITE.timezone`)
+
+Verified with `pnpm build` (`astro check`: 0 errors) and visual inspection of the listing + detail in light, dark, and mobile.
+
+### Remaining
+
+**Blocks confidence in the automation:**
+
+- [ ] **End-to-end scrape has never been tested.** Paste a real LinkedIn URL into `_raw_postings.txt` on a test branch, push, and watch the Action scrape → commit the `.md` → blank the input file. The Googlebot UA may or may not be honored by LinkedIn (original open question #3). Now that the Action can push, this is the next concrete step.
+
+**Decisions still open (from the original plan):**
+
+- [ ] Mobile nav dropped Archives in favor of Jobs — keep the swap or fit both? (open question #1)
+- [ ] Workflow triggers on a push to *any* branch that touches `_raw_postings.txt`; decide whether to restrict to `draft` (open question #4)
+- [ ] `category` is free-form `z.string()`; tighten to `z.enum([...])` once the taxonomy is settled (open question #5)
+
+**Consistency gaps noticed during the theming/date pass:**
+
+- [ ] Jobs pages lack `data-pagefind-body`, so they're excluded from site search. Add it to the jobs `<main>` if jobs should be searchable (product decision).
+- [ ] [Layout.astro](../../src/layouts/Layout.astro) emits `@type: BlogPosting` JSON-LD for every page, so job detail pages mislabel themselves. Consider schema.org `JobPosting` for the detail route.
+- [ ] Job detail is intentionally simpler than `PostDetails` (no ShareLinks / BackToTopButton / reading progress). Fine as-is — noted only if full parity is wanted later.
