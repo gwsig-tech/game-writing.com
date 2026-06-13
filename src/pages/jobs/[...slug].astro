@@ -3,6 +3,8 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
+import LinkButton from "../../components/LinkButton.astro";
+import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import { slugifyStr } from "../../utils/slugify";
 
 export async function getStaticPaths() {
@@ -36,12 +38,13 @@ const {
   <Header />
 
   <main id="main-content" class="mx-auto max-w-app px-4 py-12">
-    <button
-      onclick="history.back()"
-      class="mb-8 flex items-center gap-2 text-sm opacity-60 transition-opacity hover:opacity-100"
+    <LinkButton
+      href="/jobs"
+      class="-ms-2 mb-8 text-sm hover:text-foreground/75"
     >
-      ← Back to Jobs
-    </button>
+      <IconChevronLeft class="inline-block size-5 rtl:rotate-180" />
+      <span>Back to Jobs</span>
+    </LinkButton>
 
     <div class="border-b border-border pb-8">
       <div
@@ -50,16 +53,17 @@ const {
         <span>{category}</span> • <span>{company}</span>
       </div>
       <h1
-        class="mt-2 text-4xl font-bold text-slate-900 sm:text-5xl"
+        class="mt-2 text-4xl font-bold text-foreground sm:text-5xl"
         style={{ viewTransitionName: slugifyStr(title) }}
       >
         {title}
       </h1>
-      <p class="mt-4 text-xl text-slate-800">{location}</p>
+      <p class="mt-4 text-xl text-foreground/90">{location}</p>
 
       <a
         href={applyLink}
         target="_blank"
+        rel="noopener noreferrer"
         class="mt-6 inline-block rounded bg-accent px-8 py-3 font-semibold text-white transition-opacity hover:opacity-90"
       >
         Apply on {company}
@@ -67,28 +71,28 @@ const {
     </div>
 
     <div class="mt-12 grid grid-cols-1 gap-12 md:grid-cols-3">
-      <div class="job-content space-y-8 md:col-span-2">
+      <div class="app-prose md:col-span-2">
         <Content />
       </div>
 
       <aside
-        class="bg-skin-fill border-skin-line h-fit rounded-lg border p-6 shadow-sm"
+        class="h-fit rounded-lg border border-border bg-foreground/5 p-6 shadow-sm"
       >
         <h3 class="text-xs font-bold tracking-widest uppercase opacity-60">
           Job Details
         </h3>
         <dl class="mt-4 space-y-4">
           <div>
-            <dt class="text-sm font-bold text-slate-900">Experience</dt>
-            <dd class="text-slate-800">{experience}</dd>
+            <dt class="text-sm font-bold text-foreground">Experience</dt>
+            <dd class="text-foreground/80">{experience}</dd>
           </div>
           <div>
-            <dt class="text-sm font-bold text-slate-900">Work Type</dt>
-            <dd class="text-slate-800">{workType}</dd>
+            <dt class="text-sm font-bold text-foreground">Work Type</dt>
+            <dd class="text-foreground/80">{workType}</dd>
           </div>
           <div>
-            <dt class="text-sm font-bold text-slate-900">Date Posted</dt>
-            <dd class="text-slate-800">{datePosted}</dd>
+            <dt class="text-sm font-bold text-foreground">Date Posted</dt>
+            <dd class="text-foreground/80">{datePosted}</dd>
           </div>
         </dl>
       </aside>
@@ -97,27 +101,3 @@ const {
 
   <Footer />
 </Layout>
-
-<style is:global>
-  /* This ensures the Markdown output matches your design */
-  .job-content h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #0f172a;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  .job-content p {
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-    color: #1a1a1a;
-  }
-  .job-content ul {
-    list-style-type: disc;
-    padding-left: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-  .job-content li {
-    margin-bottom: 0.5rem;
-  }
-</style>

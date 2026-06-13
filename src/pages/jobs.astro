@@ -16,8 +16,8 @@ const jobs = (await getCollection("jobs")).sort(
   <Header />
   <main class="mx-auto max-w-app px-4 py-12">
     <header class="mb-12 border-b border-border pb-8">
-      <h1 class="text-4xl font-bold text-slate-900">Open Roles</h1>
-      <p class="mt-2 text-lg text-slate-600">
+      <h1 class="text-4xl font-bold text-foreground">Open Roles</h1>
+      <p class="mt-2 text-lg text-foreground/75">
         Opportunities within the narrative and game writing space.
       </p>
     </header>
@@ -41,7 +41,7 @@ const jobs = (await getCollection("jobs")).sort(
     </ul>
     {
       jobs.length === 0 && (
-        <p class="text-lg text-slate-600">
+        <p class="text-lg text-foreground/75">
           No open roles right now — check back soon.
         </p>
       )
