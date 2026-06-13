@@ -86,7 +86,7 @@ location: "{data['location']} ({data['mode']})"
 category: "Design"
 workType: "{data['workType']}"
 experience: "{data['experience']}"
-datePosted: "{datetime.now().strftime('%B %d, %Y')}"
+datePosted: {datetime.now().strftime('%Y-%m-%d')}T12:00:00
 applyLink: "{data['link']}"
 description: "{data['description']}"
 ---

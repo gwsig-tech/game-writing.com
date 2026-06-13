@@ -1,5 +1,6 @@
 ---
 import { slugifyStr } from "@/utils/slugify";
+import Datetime from "./Datetime.astro";
 
 interface Props {
   id: string;
@@ -10,7 +11,7 @@ interface Props {
   workType: string;
   experience: string;
   description: string;
-  date: string;
+  date: Date;
 }
 
 const {
@@ -60,11 +61,9 @@ const {
       </div>
     </div>
 
-    <time
-      class="hidden text-xs font-medium whitespace-nowrap text-foreground/60 sm:block"
-    >
-      {date}
-    </time>
+    <div class="hidden whitespace-nowrap sm:block">
+      <Datetime pubDatetime={date} />
+    </div>
   </div>
 
   <p class="mt-4 line-clamp-2 max-w-[70ch] leading-relaxed text-foreground/80">
@@ -72,6 +71,6 @@ const {
   </p>
 
   <div class="mt-4 sm:hidden">
-    <time class="text-xs font-medium text-foreground/60">{date}</time>
+    <Datetime pubDatetime={date} />
   </div>
 </li>

@@ -33,7 +33,7 @@ const jobs = defineCollection({
     category: z.string(),
     workType: z.string(),
     experience: z.string(),
-    datePosted: z.string(),
+    datePosted: z.date(),
     applyLink: z.string().url(),
     description: z.string(), // teaser shown on the listing card
   }),

@@ -6,9 +6,7 @@ import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
 
 const jobs = (await getCollection("jobs")).sort(
-  (a, b) =>
-    new Date(b.data.datePosted).valueOf() -
-    new Date(a.data.datePosted).valueOf()
+  (a, b) => b.data.datePosted.valueOf() - a.data.datePosted.valueOf()
 );
 ---
 

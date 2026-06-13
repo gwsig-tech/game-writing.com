@@ -5,7 +5,7 @@ location: "Stockholm, Sweden (On-site)"
 category: "Design"
 workType: "Full-Time"
 experience: "3+ Years"
-datePosted: "April 5, 2026"
+datePosted: 2026-04-05T09:00:00
 applyLink: "https://lnkd.in/ggzkgndy"
 description: "Join a blocky game studio in Stockholm and craft compelling content that captivates players around the globe. We are looking for narrative experts to build our world."
 ---

@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import LinkButton from "../../components/LinkButton.astro";
+import Datetime from "../../components/Datetime.astro";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import { slugifyStr } from "../../utils/slugify";
 
@@ -66,7 +67,7 @@ const {
         rel="noopener noreferrer"
         class="mt-6 inline-block rounded bg-accent px-8 py-3 font-semibold text-white transition-opacity hover:opacity-90"
       >
-        Apply on {company}
+        Apply to {company}
       </a>
     </div>
 
@@ -92,7 +93,9 @@ const {
           </div>
           <div>
             <dt class="text-sm font-bold text-foreground">Date Posted</dt>
-            <dd class="text-foreground/80">{datePosted}</dd>
+            <dd class="mt-1">
+              <Datetime pubDatetime={datePosted} />
+            </dd>
           </div>
         </dl>
       </aside>
