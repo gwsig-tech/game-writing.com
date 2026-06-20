@@ -1,56 +1,137 @@
 ---
-import { slugifyStr } from "@/utils/slugify";
-
 interface Props {
-  id: string;
+  href: string;
   title: string;
   company: string;
-  location: string;
-  category: string;
-  workType: string;
-  experience: string;
+  location?: string | null;
+  sourceLabel: string;
+  workType?: string | null;
+  remoteType?: string | null;
+  experience?: string | null;
   description: string;
-  date: string;
+  date: Date;
+  countries: string[];
+  initiallyHidden?: boolean;
 }
 
-const { id, title, company, location, category, workType, experience, description, date } = Astro.props;
+const {
+  href,
+  title,
+  company,
+  location,
+  sourceLabel,
+  workType,
+  remoteType,
+  experience,
+  description,
+  date,
+  countries,
+  initiallyHidden = false,
+} = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+}).format(date);
+
+const employmentTerms: Record<string, RegExp> = {
+  internship: /\b(?:internship|intern)\b/gi,
+  freelance: /\bfreelance\b/gi,
+  contract: /\bcontract\b/gi,
+  temporary: /\btemporary\b/gi,
+  "full-time": /\bfull[- ]time\b/gi,
+  "part-time": /\bpart[- ]time\b/gi,
+};
+
+const employmentType = workType?.trim().toLowerCase();
+const redundantTerm = employmentType ? employmentTerms[employmentType] : null;
+const shortenedTitle = redundantTerm
+  ? title
+      .replace(redundantTerm, "")
+      .replace(/\s+([,;:)])/g, "$1")
+      .replace(/^[\s|/,:;–—-]+|[\s|/,:;–—-]+$/g, "")
+      .replace(/\s{2,}/g, " ")
+      .trim()
+  : title;
+const displayTitle = shortenedTitle || title;
+const normalizeLabel = (value: string) =>
+  value.toLowerCase().replace(/[^a-z0-9]/g, "");
+const showSource = normalizeLabel(sourceLabel) !== normalizeLabel(company);
 ---
 
-<li class="group relative flex flex-col items-start border-b border-border/50 py-8 transition-all hover:bg-slate-50/50 px-4 -mx-4 rounded-lg">
-  <div class="flex w-full justify-between items-start gap-4">
-    <div class="space-y-2">
-      <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-accent">
-        <span>{category}</span>
-        <span class="text-border">•</span>
-        <span>{company}</span>
-      </div>
-
-      <a href={`/jobs/${id}`} class="block group-hover:text-accent transition-colors">
-        <h2 
-          class="text-2xl font-bold text-slate-900" 
-          style={{ viewTransitionName: slugifyStr(title) }}
+<li
+  class="job-card group relative border-b border-dashed border-[#b9a06e] transition-colors last:border-b-0"
+  data-job-card
+  data-countries={countries.join("|")}
+  data-company={company.toLowerCase()}
+  hidden={initiallyHidden}
+>
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={`${displayTitle} at ${company} (opens in a new tab)`}
+    class="job-row-link block w-full px-2 py-7 sm:px-4"
+  >
+    <div class="flex w-full items-start justify-between gap-4">
+      <div class="min-w-0 space-y-2">
+        <div
+          class="flex flex-wrap items-center gap-2 text-[10px] font-bold tracking-[0.18em] text-[#826532] uppercase"
         >
-          {title}
-        </h2>
-      </a>
+          {showSource && <span>{sourceLabel}</span>}
+          {showSource && <span class="text-border">•</span>}
+          <span>{company}</span>
+        </div>
 
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600">
-        <span class="flex items-center gap-1">📍 {location}</span>
-        <span class="flex items-center gap-1">💼 {workType}</span>
-        <span class="flex items-center gap-1">⏳ {experience}</span>
+        <h2 class="text-base leading-snug font-bold text-[#352b1d] sm:text-lg">
+          {displayTitle}
+          <span class="text-sm font-normal" aria-hidden="true">↗</span>
+        </h2>
+
+        <div
+          class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#665b49]"
+        >
+          {
+            location && (
+              <span class="flex items-center gap-1">📍 {location}</span>
+            )
+          }
+          {
+            remoteType && (
+              <span class="flex items-center gap-1">🏠 {remoteType}</span>
+            )
+          }
+          {
+            workType && (
+              <span class="flex items-center gap-1">💼 {workType}</span>
+            )
+          }
+          {
+            experience && (
+              <span class="flex items-center gap-1">⏳ {experience}</span>
+            )
+          }
+        </div>
       </div>
+
+      <time
+        class="hidden text-xs font-medium whitespace-nowrap text-[#8b7b60] sm:block"
+      >
+        {formattedDate}
+      </time>
     </div>
 
-    <time class="hidden sm:block text-xs font-medium text-slate-400 whitespace-nowrap">
-      {date}
-    </time>
-  </div>
+    {
+      description && (
+        <p class="mt-4 line-clamp-2 max-w-[70ch] leading-relaxed text-[#514838]">
+          {description}
+        </p>
+      )
+    }
 
-  <p class="mt-4 text-slate-700 leading-relaxed line-clamp-2 max-w-[70ch]">
-    {description}
-  </p>
-
-  <div class="mt-4 sm:hidden">
-     <time class="text-xs font-medium text-slate-400">{date}</time>
-  </div>
+    <div class="mt-4 sm:hidden">
+      <time class="text-xs font-medium text-[#8b7b60]">{formattedDate}</time>
+    </div>
+  </a>
 </li>

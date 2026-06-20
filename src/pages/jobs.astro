@@ -1,42 +1,456 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
+import {
+  getActiveJobs,
+  getExperienceLabel,
+  getJobCountries,
+  getJobSummary,
+  getSourceLabel,
+} from "../lib/jobs";
 
-const jobs = (await getCollection("jobs")).sort(
-  (a, b) =>
-    new Date(b.data.datePosted).valueOf() -
-    new Date(a.data.datePosted).valueOf()
+const INITIAL_RESULTS = 20;
+const jobs = await getActiveJobs();
+const jobsWithCountries = jobs.map(job => ({
+  job,
+  countries: getJobCountries(job),
+}));
+const countryCounts = new Map<string, number>();
+for (const { countries } of jobsWithCountries) {
+  for (const country of countries) {
+    countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
+  }
+}
+const countries = [...countryCounts.entries()].sort(([countryA], [countryB]) =>
+  countryA.localeCompare(countryB)
+);
+const companyCounts = new Map<string, number>();
+for (const job of jobs) {
+  companyCounts.set(
+    job.company_name,
+    (companyCounts.get(job.company_name) || 0) + 1
+  );
+}
+const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
+  companyA.localeCompare(companyB)
 );
 ---
 
 <Layout title="Jobs | IGDA Game Writing SIG">
   <Header />
-  <main class="mx-auto max-w-app px-4 py-12">
-    <header class="mb-12 border-b border-border pb-8">
-      <h1 class="text-4xl font-bold text-slate-900">Open Roles</h1>
-      <p class="mt-2 text-lg text-slate-600">Opportunities within the narrative and game writing space.</p>
-    </header>
+  <main class="jobs-page mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+    <div
+      class="jobs-paper relative rounded-[7px_12px_9px_5px] border-2 border-[#ad915c] shadow-[0_18px_50px_rgba(80,58,23,0.16)]"
+    >
+      <header
+        class="border-b border-dashed border-[#b9a06e] px-6 py-9 sm:px-10"
+      >
+        <p
+          class="mb-2 text-xs font-bold tracking-[0.24em] text-[#8a6c35] uppercase"
+        >
+          IGDA Game Writing SIG
+        </p>
+        <h1 class="text-4xl font-bold text-[#352b1d] sm:text-5xl">
+          Open Roles
+        </h1>
+        <p class="mt-3 max-w-2xl text-lg text-[#625746]">
+          Opportunities within the narrative and game writing space.
+        </p>
+        <p
+          class="mt-4 text-sm text-[#88785e]"
+          aria-live="polite"
+          id="jobs-count"
+        >
+          Showing {Math.min(INITIAL_RESULTS, jobs.length)} of {jobs.length} active
+          roles
+        </p>
+      </header>
 
-    <ul class="space-y-2">
-      {
-        jobs.map(job => (
-          <JobCard
-            id={job.id}
-            title={job.data.title}
-            company={job.data.company}
-            location={job.data.location}
-            category={job.data.category}
-            workType={job.data.workType}
-            experience={job.data.experience}
-            date={job.data.datePosted}
-            description={job.data.description}
-          />
-        ))
-      }
-    </ul>
+      <div class="grid md:grid-cols-[13rem_minmax(0,1fr)]">
+        <aside
+          class="border-b border-dashed border-[#b9a06e] px-6 py-7 md:border-r md:border-b-0 md:px-7"
+        >
+          <div class="md:sticky md:top-6">
+            <h2
+              class="text-[11px] font-bold tracking-[0.12em] text-[#56452c] uppercase"
+            >
+              Filter roles
+            </h2>
+            <details class="filter-picker mt-4">
+              <summary>
+                <span id="company-label">All companies</span>
+                <span aria-hidden="true">⌄</span>
+              </summary>
+              <div class="filter-menu">
+                <p>Select one or more companies</p>
+                <div class="filter-options">
+                  {
+                    companies.map(([company, count]) => (
+                      <label class="filter-option">
+                        <input
+                          type="checkbox"
+                          name="company"
+                          value={company.toLowerCase()}
+                          data-label={company}
+                        />
+                        <span>{company}</span>
+                        <small>{count}</small>
+                      </label>
+                    ))
+                  }
+                </div>
+                <button type="button" class="clear-picker" id="clear-companies">
+                  Clear companies
+                </button>
+              </div>
+            </details>
+            <details class="filter-picker mt-3">
+              <summary>
+                <span id="country-label">All countries</span>
+                <span aria-hidden="true">⌄</span>
+              </summary>
+              <div class="filter-menu">
+                <p>Select one or more countries</p>
+                <div class="filter-options">
+                  {
+                    countries.map(([country, count]) => (
+                      <label class="filter-option">
+                        <input type="checkbox" name="country" value={country} />
+                        <span>{country}</span>
+                        <small>{count}</small>
+                      </label>
+                    ))
+                  }
+                </div>
+                <button type="button" class="clear-picker" id="clear-countries">
+                  Clear countries
+                </button>
+              </div>
+            </details>
+            <button type="button" id="clear-filters">Clear all filters</button>
+          </div>
+        </aside>
+
+        <div class="min-w-0">
+          <ul class="px-5 sm:px-8">
+            {
+              jobsWithCountries.map(({ job, countries }, index) => (
+                <JobCard
+                  href={job.canonical_url}
+                  title={job.title}
+                  company={job.company_name}
+                  location={job.location}
+                  sourceLabel={getSourceLabel(job.source)}
+                  workType={job.employment_type}
+                  remoteType={job.remote_type}
+                  experience={getExperienceLabel(job)}
+                  date={job.first_seen_at}
+                  description={getJobSummary(job)}
+                  countries={countries}
+                  initiallyHidden={index >= INITIAL_RESULTS}
+                />
+              ))
+            }
+          </ul>
+          {
+            jobs.length === 0 && (
+              <p class="px-6 py-10 text-center text-[#625746]">
+                No active roles are listed right now. Check back soon.
+              </p>
+            )
+          }
+          <p
+            id="no-filter-results"
+            class="hidden px-6 py-12 text-center text-[#625746]"
+          >
+            No active roles match those filters.
+          </p>
+          <div class="px-7 py-7 sm:px-10">
+            <button
+              type="button"
+              id="load-more"
+              hidden={jobs.length <= INITIAL_RESULTS}
+            >
+              Load more roles
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
   <Footer />
 </Layout>
+
+<script>
+  const countryFilters = document.querySelectorAll<HTMLInputElement>(
+    'input[name="country"]'
+  );
+  const companyFilters = document.querySelectorAll<HTMLInputElement>(
+    'input[name="company"]'
+  );
+  const cards = document.querySelectorAll<HTMLElement>("[data-job-card]");
+  const count = document.querySelector<HTMLElement>("#jobs-count");
+  const empty = document.querySelector<HTMLElement>("#no-filter-results");
+  const loadMore = document.querySelector<HTMLButtonElement>("#load-more");
+
+  const countryLabel = document.querySelector<HTMLElement>("#country-label");
+  const companyLabel = document.querySelector<HTMLElement>("#company-label");
+  const clearCountries =
+    document.querySelector<HTMLButtonElement>("#clear-countries");
+  const clearCompanies =
+    document.querySelector<HTMLButtonElement>("#clear-companies");
+  const clearFilters =
+    document.querySelector<HTMLButtonElement>("#clear-filters");
+  const pageSize = 20;
+  let visibleLimit = pageSize;
+
+  function applyFilters(resetLimit = true) {
+    if (resetLimit) visibleLimit = pageSize;
+    const selectedCountries = [...countryFilters]
+      .filter(filter => filter.checked)
+      .map(filter => filter.value);
+    const selectedCompanyFilters = [...companyFilters].filter(
+      filter => filter.checked
+    );
+    const selectedCompanies = selectedCompanyFilters.map(
+      filter => filter.value
+    );
+    const matches: HTMLElement[] = [];
+
+    for (const card of cards) {
+      const countries = card.dataset.countries?.split("|") || [];
+      const matchesCountry =
+        selectedCountries.length === 0 ||
+        selectedCountries.some(country => countries.includes(country));
+      const matchesCompany =
+        selectedCompanies.length === 0 ||
+        selectedCompanies.includes(card.dataset.company || "");
+      if (matchesCountry && matchesCompany) matches.push(card);
+    }
+
+    for (const card of cards) card.hidden = true;
+    for (const [index, card] of matches.entries()) {
+      card.hidden = index >= visibleLimit;
+    }
+
+    const displayed = Math.min(visibleLimit, matches.length);
+
+    if (countryLabel) {
+      countryLabel.textContent =
+        selectedCountries.length === 0
+          ? "All countries"
+          : selectedCountries.length === 1
+            ? selectedCountries[0]
+            : `${selectedCountries.length} countries`;
+    }
+    if (companyLabel) {
+      companyLabel.textContent =
+        selectedCompanyFilters.length === 0
+          ? "All companies"
+          : selectedCompanyFilters.length === 1
+            ? selectedCompanyFilters[0].dataset.label || "1 company"
+            : `${selectedCompanyFilters.length} companies`;
+    }
+    if (count) {
+      count.textContent =
+        displayed < matches.length
+          ? `Showing ${displayed} of ${matches.length} active roles`
+          : `Showing ${matches.length} active ${matches.length === 1 ? "role" : "roles"}`;
+    }
+    empty?.classList.toggle("hidden", matches.length !== 0);
+    if (loadMore) loadMore.hidden = displayed >= matches.length;
+  }
+
+  for (const filter of [...countryFilters, ...companyFilters]) {
+    filter.addEventListener("change", () => applyFilters());
+  }
+
+  clearCountries?.addEventListener("click", () => {
+    for (const filter of countryFilters) filter.checked = false;
+    applyFilters();
+  });
+
+  clearCompanies?.addEventListener("click", () => {
+    for (const filter of companyFilters) filter.checked = false;
+    applyFilters();
+  });
+
+  clearFilters?.addEventListener("click", () => {
+    for (const filter of [...countryFilters, ...companyFilters]) {
+      filter.checked = false;
+    }
+    applyFilters();
+  });
+
+  loadMore?.addEventListener("click", () => {
+    visibleLimit += pageSize;
+    applyFilters(false);
+  });
+</script>
+
+<style>
+  .jobs-page {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .jobs-paper {
+    isolation: isolate;
+    background-color: #f2e4bd;
+    background-image:
+      radial-gradient(
+        circle at 18% 24%,
+        rgba(91, 66, 31, 0.09) 0 0.7px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 72% 66%,
+        rgba(120, 85, 38, 0.07) 0 0.8px,
+        transparent 1.2px
+      ),
+      linear-gradient(
+        115deg,
+        rgba(255, 250, 224, 0.28),
+        transparent 42%,
+        rgba(139, 101, 45, 0.05)
+      );
+    background-size:
+      19px 23px,
+      31px 29px,
+      100% 100%;
+  }
+
+  .jobs-paper::after {
+    position: absolute;
+    z-index: -1;
+    inset: 5px;
+    border: 1px solid rgba(112, 82, 41, 0.24);
+    border-radius: 9px 5px 11px 7px;
+    content: "";
+    pointer-events: none;
+  }
+
+  .filter-picker summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-width: 0;
+    border: 1.5px solid #9e824e;
+    border-radius: 5px 8px 4px 7px;
+    background: rgba(255, 249, 221, 0.52);
+    padding: 0.65rem 0.75rem;
+    color: #493a27;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .filter-picker summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .filter-picker[open] summary {
+    box-shadow: 2px 3px 0 rgba(103, 75, 36, 0.16);
+  }
+
+  .filter-picker[open] summary span:last-child {
+    transform: rotate(180deg);
+  }
+
+  .filter-menu {
+    margin-top: 0.55rem;
+    border: 1.5px dashed #a28754;
+    border-radius: 4px 9px 6px 3px;
+    background: #f8edca;
+    padding: 0.6rem;
+    box-shadow: 3px 4px 0 rgba(103, 75, 36, 0.12);
+  }
+
+  .filter-menu > p {
+    padding: 0.2rem 0.35rem 0.55rem;
+    color: #817056;
+    font-size: 0.7rem;
+  }
+
+  .filter-options {
+    max-height: 19rem;
+    overflow-y: auto;
+  }
+
+  .filter-option {
+    display: grid;
+    grid-template-columns: 1rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    border-radius: 0.2rem;
+    padding: 0.4rem 0.45rem;
+    color: #5f513c;
+    cursor: pointer;
+  }
+
+  .filter-option:hover,
+  .filter-option:has(input:checked) {
+    background: rgba(174, 139, 70, 0.14);
+    color: #3f311f;
+  }
+
+  .filter-option input {
+    accent-color: #8a6631;
+  }
+
+  .filter-option small {
+    color: #8b7b60;
+  }
+
+  .clear-picker {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-top: 1px dashed #b9a06e;
+    padding: 0.65rem 0.35rem 0.2rem;
+    color: #735c35;
+    font-size: 0.75rem;
+    text-align: left;
+  }
+
+  .clear-picker:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  #clear-filters {
+    margin-top: 1rem;
+    color: #735c35;
+    font-size: 0.75rem;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 4px;
+  }
+
+  #load-more {
+    width: 100%;
+    border: 1.5px dashed #967844;
+    border-radius: 7px 4px 9px 5px;
+    background: rgba(255, 249, 221, 0.46);
+    padding: 0.8rem 1rem;
+    color: #57452b;
+    font-weight: 700;
+  }
+
+  #load-more:hover {
+    background: rgba(255, 249, 221, 0.8);
+  }
+
+  :global(.job-card:hover) {
+    background: rgba(255, 251, 232, 0.5);
+  }
+
+  :global(.job-row-link:focus-visible) {
+    background: rgba(255, 251, 232, 0.64);
+  }
+
+  :global(.job-card[hidden]) {
+    display: none;
+  }
+</style>
