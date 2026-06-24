@@ -10,7 +10,7 @@ import {
   getJobSummary,
 } from "../lib/jobs";
 
-const INITIAL_RESULTS = 20;
+const INITIAL_RESULTS = 100;
 const jobs = (await getActiveJobs()).sort((a, b) => {
   const companyComparison = a.company_name.localeCompare(b.company_name);
   return companyComparison || a.title.localeCompare(b.title);
