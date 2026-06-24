@@ -6,8 +6,9 @@ backend:
   branch: draft
   base_url: https://sveltia-cms-auth.tech-0b2.workers.dev
 
-# Default media storage for markdown body images
-# Uses @/ alias for Astro image imports
+# Default media storage for markdown body images (fallback + Asset Library root).
+# public_folder uses the Astro @/ alias (written literally) so inserted refs flow
+# through Astro image optimization. Do NOT change to /assets — that bypasses it.
 media_folder: src/assets/
 public_folder: "@/assets/"
 
@@ -21,6 +22,38 @@ slug:
 output:
   omit_empty_optional_fields: true
 
+# Asset collections (Sveltia v0.167.0+): named, browsable image folders surfaced in
+# the Asset Library + image picker, reusable across all content collections. Keep
+# public_folder as the @/assets alias so inserted refs stay on the optimization path.
+# NOTE: behavior (alias-literal write + in-editor preview) is verified on the draft
+# preview deploy — see docs/plans/2026-06-23-cms-subfolder-collections.md (Phase B).
+asset_collections:
+  - name: images
+    label: Images (root)
+    icon: image
+    media_folder: /src/assets/images
+    public_folder: "@/assets/images"
+  - name: arcjam
+    label: Arcjam
+    icon: trophy
+    media_folder: /src/assets/images/arcjam
+    public_folder: "@/assets/images/arcjam"
+  - name: events
+    label: Events
+    icon: event
+    media_folder: /src/assets/images/events
+    public_folder: "@/assets/images/events"
+  - name: spotlights
+    label: Spotlights
+    icon: star
+    media_folder: /src/assets/images/spotlights
+    public_folder: "@/assets/images/spotlights"
+  - name: editor
+    label: Editor
+    icon: edit
+    media_folder: /src/assets/images/editor
+    public_folder: "@/assets/images/editor"
+
 collections:
   - name: posts
     label: Blog Posts
@@ -33,7 +66,7 @@ collections:
     sortable_fields:
       - pubDatetime
       - title
-    fields:
+    fields: &postFields
       - label: Title
         name: title
         widget: string
@@ -86,7 +119,45 @@ collections:
           - spotlight
           - 2025-arcjam
           - release
+          - write-club
 
       - label: Body
         name: body
         widget: richtext
+
+  # Events and Spotlights live in _-prefixed subfolders that Astro publishes at flat
+  # /posts/<slug> URLs (getPath.ts strips the _ segment) but that Sveltia can't list
+  # from the parent `posts` collection (folder collections are flat). Each subfolder
+  # therefore needs its own collection. Fields mirror `posts` via the *postFields
+  # anchor so the three never drift. Standardized on .mdx (one extension per
+  # collection). Per-collection media_folder defaults new uploads into the matching
+  # image bucket; posts keeps the global fallback.
+  - name: events
+    label: Events
+    label_singular: Event
+    folder: src/data/blog/_events
+    extension: mdx
+    create: true
+    delete: false
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    media_folder: /src/assets/images/events
+    public_folder: "@/assets/images/events"
+    sortable_fields:
+      - pubDatetime
+      - title
+    fields: *postFields
+
+  - name: spotlights
+    label: Spotlights
+    label_singular: Spotlight
+    folder: src/data/blog/_spotlights
+    extension: mdx
+    create: true
+    delete: false
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    media_folder: /src/assets/images/spotlights
+    public_folder: "@/assets/images/spotlights"
+    sortable_fields:
+      - pubDatetime
+      - title
+    fields: *postFields
