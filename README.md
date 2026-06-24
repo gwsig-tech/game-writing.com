@@ -162,11 +162,18 @@ pnpm update --latest <pkg-1> <pkg-2> ...
 pnpm update
 ```
 
-**Pinned packages — do not bump without verification:**
+**Held majors / packages — do not bump without verification:**
 
-- `cpx2` is pinned to exact `8.0.0`. Versions 8.0.1 / 8.0.2 trigger
-  `ERR_REQUIRE_ESM` during `pnpm build` because they `require()` `debounce@3`
-  which is now ESM-only. Unpin when 8.0.3+ ships with the require fixed.
+- We track **Astro 6** (matching the upstream theme), not Astro 7. The only
+  majors still held are **Astro 7** and **`sharp` 0.35** (native image backend —
+  validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis`
+  173 are applied. See the latest [maintenance plan](docs/plans/) for revisit
+  triggers.
+- `cpx2` was previously pinned to exact `8.0.0` to dodge an `ERR_REQUIRE_ESM`
+  regression. `cpx2@9` migrated to ESM and fixed it, so it is now `^9.0.0` —
+  do not re-pin.
+- Astro 6 requires **Node 22.12+** (enforced via `engines`); keep Vercel's
+  build Node version at 22+.
 
 For detailed guidance, see [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md)
 and the latest [maintenance plan](docs/plans/) for held items and revisit triggers.
@@ -185,22 +192,24 @@ git remote -v
 git remote add upstream https://github.com/satnaing/astro-paper.git
 ```
 
-**To update from upstream:**
+**⚠️ Do NOT merge or cherry-pick from upstream anymore.** As of upstream's
+`feat!: AstroPaper v6` (`f0b644d`), the theme is a ground-up rewrite (new i18n,
+`BaseLayout`/`PostLayout` replacing `Layout.astro`, design tokens). Our fork has
+diverged past the point where `git pull upstream main` or `git cherry-pick` is
+safe — a merge would be destructive. Treat upstream as **reference only** and
+port ideas by hand.
+
+**To review upstream for ideas to port:**
 
 ```bash
 # Fetch latest changes
 git fetch upstream
 
-# Check what's new
-git log upstream/main --oneline -10
+# Check what's new (read for ideas; do not merge)
+git log upstream/main --oneline -20
 
-# Create update branch
-git checkout -b update/astropaper-vX.X.X
-
-# Merge (expect conflicts with customized files)
-git pull upstream main
-
-# Resolve conflicts, test thoroughly, then merge to main
+# Inspect how upstream configures something on Astro 6+, e.g. its config:
+git show upstream/main:astro.config.ts
 ```
 
 **Resources:**

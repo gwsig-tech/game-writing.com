@@ -86,6 +86,7 @@ collections:
           - spotlight
           - 2025-arcjam
           - release
+          - write-club
 
       - label: Body
         name: body
