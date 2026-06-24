@@ -9,12 +9,27 @@
 > the review date. Full feature/compatibility analysis lives in
 > [`docs/plans/2026-06-23-cms-subfolder-collections.md`](plans/2026-06-23-cms-subfolder-collections.md).
 >
-> **How we load it.** Unpinned from the CDN
+> **How we load it (and why we stay unpinned).** Unpinned from the CDN
 > (`https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js` in `public/admin/index.html`),
-> so `/admin` always runs the latest release. Convenient — we auto-receive security
-> fixes (e.g. the v0.167.3 RichText XSS patch) — but a pre-1.0 release could change
-> behavior with no change on our side. Consider pinning `@0.167.3` for production
-> stability and bumping deliberately after testing on the `draft` preview.
+> so `/admin` always runs the latest release. This is a **deliberate choice**: for a
+> CDN-loaded admin tool, auto-receiving security fixes (e.g. the v0.167.3 RichText XSS
+> patch) is worth more than freezing behavior — and pinning would put the burden of
+> manually tracking security releases on us, which is exactly the upkeep that lapses
+> on a volunteer site. The pre-1.0 risk (an auto-update changing behavior) is real but
+> small: our config is vanilla/high-Decap-compat, and a broken admin UI is transient
+> and non-destructive (the deployed site builds independently). **Posture:**
+>
+> - **Document the baseline, don't freeze it.** The "reviewed against vX" line below is
+>   the known-good state to diff future behavior against; refresh it each maintenance
+>   round (next: bump from 0.167.3 when re-audited).
+> - **Verify on preview when adopting a *new* feature** that writes into committed
+>   content (e.g. asset collections writing `public_folder` refs) — a bad *write*
+>   persists in git, unlike a transient UI glitch. Note this is low-risk because the
+>   literal-`public_folder`-write behavior is already load-bearing for our global
+>   setting and stable across past auto-updates.
+> - **Pin only reactively.** If an auto-update ever regresses our workflow, pin to the
+>   last-good version then (`@x.y.z`) and bump deliberately after testing on `draft` —
+>   not preemptively.
 >
 > **Config compatibility (all audited current/valid as of v0.167.3):**
 >

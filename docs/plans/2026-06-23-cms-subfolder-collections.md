@@ -197,8 +197,12 @@ just picks a sensible default upload target. The two are complementary.
   docs review confirmed `public_folder` is officially expected to be a leading-slash
   web path — our `@/assets/...` alias is an accepted, out-of-spec deviation, and the
   maintainer's open issue #497 shows in-editor preview gaps for configured folders.
-  **Pin the CMS version (`@0.167.3`) before executing** so the alias flow can't
-  silently change mid-rollout.
+  This is **low-risk** because the literal-`public_folder`-write behavior is already
+  load-bearing for our global `public_folder: "@/assets/"` and has been stable across
+  continuous auto-updates. We **stay unpinned** (auto security fixes > freezing
+  behavior); the preview check above is the safeguard, and we'd pin *reactively* only
+  if an auto-update were ever observed to change the alias write. A bad write would
+  also surface in PR review / build (a web-path ref 404s or skips optimization).
 
 ### Config sketch
 
