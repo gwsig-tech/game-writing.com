@@ -76,6 +76,15 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
               </summary>
               <div class="filter-menu">
                 <p>Select one or more companies</p>
+                <label class="filter-search">
+                  <span>Search companies</span>
+                  <input
+                    type="search"
+                    id="company-search"
+                    placeholder="type a company"
+                    autocomplete="off"
+                  />
+                </label>
                 <div class="filter-options">
                   {
                     companies.map(([company, count]) => (
@@ -104,6 +113,15 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
               </summary>
               <div class="filter-menu">
                 <p>Select one or more countries</p>
+                <label class="filter-search">
+                  <span>Search countries</span>
+                  <input
+                    type="search"
+                    id="country-search"
+                    placeholder="type a country"
+                    autocomplete="off"
+                  />
+                </label>
                 <div class="filter-options">
                   {
                     countries.map(([country, count]) => (
@@ -120,6 +138,16 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
                 </button>
               </div>
             </details>
+            <label class="regex-search mt-4">
+              <span>Regex check</span>
+              <textarea
+                id="regex-filter"
+                rows="3"
+                placeholder="narrative|writer|remote"
+                spellcheck="false"></textarea>
+            </label>
+            <p id="regex-error" class="regex-error hidden" aria-live="polite">
+            </p>
             <button type="button" id="clear-filters">Clear all filters</button>
           </div>
         </aside>
@@ -186,6 +214,13 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   const loadMore = document.querySelector<HTMLButtonElement>("#load-more");
   const pickers =
     document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
+  const countrySearch =
+    document.querySelector<HTMLInputElement>("#country-search");
+  const companySearch =
+    document.querySelector<HTMLInputElement>("#company-search");
+  const regexFilter =
+    document.querySelector<HTMLTextAreaElement>("#regex-filter");
+  const regexError = document.querySelector<HTMLElement>("#regex-error");
 
   const countryLabel = document.querySelector<HTMLElement>("#country-label");
   const companyLabel = document.querySelector<HTMLElement>("#company-label");
@@ -225,6 +260,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     const selectedCompanies = selectedCompanyFilters.map(
       filter => filter.value
     );
+    const regex = getRegexFilter();
     const matches: HTMLElement[] = [];
 
     for (const card of cards) {
@@ -235,7 +271,9 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
       const matchesCompany =
         selectedCompanies.length === 0 ||
         selectedCompanies.includes(card.dataset.company || "");
-      if (matchesCountry && matchesCompany) matches.push(card);
+      const matchesRegex =
+        !regex || regex.test(card.dataset.search || card.textContent || "");
+      if (matchesCountry && matchesCompany && matchesRegex) matches.push(card);
     }
 
     for (const card of cards) card.hidden = true;
@@ -271,17 +309,60 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     if (loadMore) loadMore.hidden = displayed >= matches.length;
   }
 
+  function getRegexFilter() {
+    const pattern = regexFilter?.value.trim();
+    regexError?.classList.add("hidden");
+    regexFilter?.removeAttribute("aria-invalid");
+    if (!pattern) return null;
+
+    try {
+      return new RegExp(pattern, "i");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Invalid regex";
+      if (regexError) {
+        regexError.textContent = message;
+        regexError.classList.remove("hidden");
+      }
+      regexFilter?.setAttribute("aria-invalid", "true");
+      return null;
+    }
+  }
+
+  function filterPickerOptions(search: HTMLInputElement | null, name: string) {
+    const query = search?.value.trim().toLowerCase() || "";
+    const filters = name === "company" ? companyFilters : countryFilters;
+
+    for (const filter of filters) {
+      const option = filter.closest<HTMLElement>(".filter-option");
+      const label = filter.dataset.label || filter.value;
+      if (option)
+        option.hidden = query !== "" && !label.toLowerCase().includes(query);
+    }
+  }
+
   for (const filter of [...countryFilters, ...companyFilters]) {
     filter.addEventListener("change", () => applyFilters());
   }
 
+  companySearch?.addEventListener("input", () =>
+    filterPickerOptions(companySearch, "company")
+  );
+  countrySearch?.addEventListener("input", () =>
+    filterPickerOptions(countrySearch, "country")
+  );
+  regexFilter?.addEventListener("input", () => applyFilters());
+
   clearCountries?.addEventListener("click", () => {
     for (const filter of countryFilters) filter.checked = false;
+    if (countrySearch) countrySearch.value = "";
+    filterPickerOptions(countrySearch, "country");
     applyFilters();
   });
 
   clearCompanies?.addEventListener("click", () => {
     for (const filter of companyFilters) filter.checked = false;
+    if (companySearch) companySearch.value = "";
+    filterPickerOptions(companySearch, "company");
     applyFilters();
   });
 
@@ -289,6 +370,11 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     for (const filter of [...countryFilters, ...companyFilters]) {
       filter.checked = false;
     }
+    if (companySearch) companySearch.value = "";
+    if (countrySearch) countrySearch.value = "";
+    if (regexFilter) regexFilter.value = "";
+    filterPickerOptions(companySearch, "company");
+    filterPickerOptions(countrySearch, "country");
     applyFilters();
   });
 
@@ -417,6 +503,57 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     padding: 0.2rem 0.35rem 0.55rem;
     color: var(--jobs-subtle);
     font-size: 0.7rem;
+  }
+
+  .filter-search,
+  .regex-search {
+    display: grid;
+    gap: 0.35rem;
+    color: var(--jobs-subtle);
+    font-size: 0.7rem;
+  }
+
+  .filter-search {
+    padding: 0 0.35rem 0.6rem;
+  }
+
+  .filter-search span,
+  .regex-search span {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .filter-search input,
+  .regex-search textarea {
+    width: 100%;
+    border: 1.5px solid var(--jobs-border);
+    border-radius: 0.4rem;
+    background: var(--jobs-panel);
+    padding: 0.55rem 0.65rem;
+    color: var(--jobs-ink);
+    font-size: 0.8rem;
+  }
+
+  .regex-search textarea {
+    min-height: 5.5rem;
+    resize: vertical;
+  }
+
+  .filter-search input::placeholder,
+  .regex-search textarea::placeholder {
+    color: var(--jobs-subtle);
+  }
+
+  .regex-search textarea[aria-invalid="true"] {
+    border-color: var(--accent);
+  }
+
+  .regex-error {
+    margin-top: 0.45rem;
+    color: var(--accent);
+    font-size: 0.72rem;
+    line-height: 1.4;
   }
 
   .filter-options {

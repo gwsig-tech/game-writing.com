@@ -53,6 +53,20 @@ const shortenedTitle = redundantTerm
       .trim()
   : title;
 const displayTitle = shortenedTitle || title;
+const searchableText = [
+  company,
+  displayTitle,
+  title,
+  location,
+  remoteType,
+  workType,
+  experience,
+  description,
+  ...countries,
+]
+  .filter(Boolean)
+  .join(" ")
+  .toLowerCase();
 ---
 
 <li
@@ -60,6 +74,7 @@ const displayTitle = shortenedTitle || title;
   data-job-card
   data-countries={countries.join("|")}
   data-company={company.toLowerCase()}
+  data-search={searchableText}
   hidden={initiallyHidden}
 >
   <a
