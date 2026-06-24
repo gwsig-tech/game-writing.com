@@ -11,7 +11,10 @@ import {
 } from "../lib/jobs";
 
 const INITIAL_RESULTS = 20;
-const jobs = await getActiveJobs();
+const jobs = (await getActiveJobs()).sort((a, b) => {
+  const companyComparison = a.company_name.localeCompare(b.company_name);
+  return companyComparison || a.title.localeCompare(b.title);
+});
 const jobsWithCountries = jobs.map(job => ({
   job,
   countries: getJobCountries(job),
@@ -138,16 +141,16 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
                 </button>
               </div>
             </details>
-            <label class="regex-search mt-4">
-              <span>Regex check</span>
-              <textarea
-                id="regex-filter"
-                rows="3"
-                placeholder="narrative|writer|remote"
-                spellcheck="false"></textarea>
+            <label class="terms-search mt-4">
+              <span>Search terms</span>
+              <input
+                type="search"
+                id="search-terms"
+                placeholder="ex. narrative, designer..."
+                autocomplete="off"
+                spellcheck="false"
+              />
             </label>
-            <p id="regex-error" class="regex-error hidden" aria-live="polite">
-            </p>
             <button type="button" id="clear-filters">Clear all filters</button>
           </div>
         </aside>
@@ -218,9 +221,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     document.querySelector<HTMLInputElement>("#country-search");
   const companySearch =
     document.querySelector<HTMLInputElement>("#company-search");
-  const regexFilter =
-    document.querySelector<HTMLTextAreaElement>("#regex-filter");
-  const regexError = document.querySelector<HTMLElement>("#regex-error");
+  const searchTerms = document.querySelector<HTMLInputElement>("#search-terms");
 
   const countryLabel = document.querySelector<HTMLElement>("#country-label");
   const companyLabel = document.querySelector<HTMLElement>("#company-label");
@@ -260,7 +261,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     const selectedCompanies = selectedCompanyFilters.map(
       filter => filter.value
     );
-    const regex = getRegexFilter();
+    const terms = getSearchTerms();
     const matches: HTMLElement[] = [];
 
     for (const card of cards) {
@@ -271,9 +272,14 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
       const matchesCompany =
         selectedCompanies.length === 0 ||
         selectedCompanies.includes(card.dataset.company || "");
-      const matchesRegex =
-        !regex || regex.test(card.dataset.search || card.textContent || "");
-      if (matchesCountry && matchesCompany && matchesRegex) matches.push(card);
+      const searchableText = (
+        card.dataset.search ||
+        card.textContent ||
+        ""
+      ).toLowerCase();
+      const matchesSearch =
+        terms.length === 0 || terms.some(term => searchableText.includes(term));
+      if (matchesCountry && matchesCompany && matchesSearch) matches.push(card);
     }
 
     for (const card of cards) card.hidden = true;
@@ -309,23 +315,11 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     if (loadMore) loadMore.hidden = displayed >= matches.length;
   }
 
-  function getRegexFilter() {
-    const pattern = regexFilter?.value.trim();
-    regexError?.classList.add("hidden");
-    regexFilter?.removeAttribute("aria-invalid");
-    if (!pattern) return null;
-
-    try {
-      return new RegExp(pattern, "i");
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Invalid regex";
-      if (regexError) {
-        regexError.textContent = message;
-        regexError.classList.remove("hidden");
-      }
-      regexFilter?.setAttribute("aria-invalid", "true");
-      return null;
-    }
+  function getSearchTerms() {
+    return (searchTerms?.value || "")
+      .split(",")
+      .map(term => term.trim().toLowerCase())
+      .filter(Boolean);
   }
 
   function filterPickerOptions(search: HTMLInputElement | null, name: string) {
@@ -350,7 +344,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   countrySearch?.addEventListener("input", () =>
     filterPickerOptions(countrySearch, "country")
   );
-  regexFilter?.addEventListener("input", () => applyFilters());
+  searchTerms?.addEventListener("input", () => applyFilters());
 
   clearCountries?.addEventListener("click", () => {
     for (const filter of countryFilters) filter.checked = false;
@@ -372,7 +366,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     }
     if (companySearch) companySearch.value = "";
     if (countrySearch) countrySearch.value = "";
-    if (regexFilter) regexFilter.value = "";
+    if (searchTerms) searchTerms.value = "";
     filterPickerOptions(companySearch, "company");
     filterPickerOptions(countrySearch, "country");
     applyFilters();
@@ -506,7 +500,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   }
 
   .filter-search,
-  .regex-search {
+  .terms-search {
     display: grid;
     gap: 0.35rem;
     color: var(--jobs-subtle);
@@ -518,14 +512,14 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   }
 
   .filter-search span,
-  .regex-search span {
+  .terms-search span {
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .filter-search input,
-  .regex-search textarea {
+  .terms-search input {
     width: 100%;
     border: 1.5px solid var(--jobs-border);
     border-radius: 0.4rem;
@@ -535,25 +529,9 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     font-size: 0.8rem;
   }
 
-  .regex-search textarea {
-    min-height: 5.5rem;
-    resize: vertical;
-  }
-
   .filter-search input::placeholder,
-  .regex-search textarea::placeholder {
+  .terms-search input::placeholder {
     color: var(--jobs-subtle);
-  }
-
-  .regex-search textarea[aria-invalid="true"] {
-    border-color: var(--accent);
-  }
-
-  .regex-error {
-    margin-top: 0.45rem;
-    color: var(--accent);
-    font-size: 0.72rem;
-    line-height: 1.4;
   }
 
   .filter-options {
