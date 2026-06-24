@@ -41,40 +41,32 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 <Layout title="Jobs | IGDA Game Writing SIG">
   <Header />
   <main class="jobs-page mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-    <div
-      class="jobs-paper relative rounded-[7px_12px_9px_5px] border-2 border-[#ad915c] shadow-[0_18px_50px_rgba(80,58,23,0.16)]"
-    >
+    <div class="jobs-paper relative overflow-visible rounded-lg border-2">
       <header
-        class="border-b border-dashed border-[#b9a06e] px-6 py-9 sm:px-10"
+        class="jobs-section-border border-b border-dashed px-6 py-9 sm:px-10"
       >
         <p
-          class="mb-2 text-xs font-bold tracking-[0.24em] text-[#8a6c35] uppercase"
+          class="jobs-eyebrow mb-2 text-xs font-bold tracking-[0.24em] uppercase"
         >
           IGDA Game Writing SIG
         </p>
-        <h1 class="text-4xl font-bold text-[#352b1d] sm:text-5xl">
-          Open Roles
-        </h1>
-        <p class="mt-3 max-w-2xl text-lg text-[#625746]">
+        <h1 class="jobs-heading text-4xl font-bold sm:text-5xl">Open Roles</h1>
+        <p class="jobs-muted mt-3 max-w-2xl text-lg">
           Opportunities within the narrative and game writing space.
         </p>
-        <p
-          class="mt-4 text-sm text-[#88785e]"
-          aria-live="polite"
-          id="jobs-count"
-        >
+        <p class="jobs-subtle mt-4 text-sm" aria-live="polite" id="jobs-count">
           Showing {Math.min(INITIAL_RESULTS, jobs.length)} of {jobs.length} active
           roles
         </p>
       </header>
 
-      <div class="grid md:grid-cols-[13rem_minmax(0,1fr)]">
+      <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside
-          class="border-b border-dashed border-[#b9a06e] px-6 py-7 md:border-r md:border-b-0 md:px-7"
+          class="jobs-section-border relative z-10 border-b border-dashed px-6 py-7 lg:border-r lg:border-b-0 lg:px-7"
         >
-          <div class="md:sticky md:top-6">
+          <div class="lg:sticky lg:top-6">
             <h2
-              class="text-[11px] font-bold tracking-[0.12em] text-[#56452c] uppercase"
+              class="jobs-heading text-[11px] font-bold tracking-[0.12em] uppercase"
             >
               Filter roles
             </h2>
@@ -156,14 +148,14 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
           </ul>
           {
             jobs.length === 0 && (
-              <p class="px-6 py-10 text-center text-[#625746]">
+              <p class="jobs-muted px-6 py-10 text-center">
                 No active roles are listed right now. Check back soon.
               </p>
             )
           }
           <p
             id="no-filter-results"
-            class="hidden px-6 py-12 text-center text-[#625746]"
+            class="jobs-muted hidden px-6 py-12 text-center"
           >
             No active roles match those filters.
           </p>
@@ -194,6 +186,8 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   const count = document.querySelector<HTMLElement>("#jobs-count");
   const empty = document.querySelector<HTMLElement>("#no-filter-results");
   const loadMore = document.querySelector<HTMLButtonElement>("#load-more");
+  const pickers =
+    document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
 
   const countryLabel = document.querySelector<HTMLElement>("#country-label");
   const companyLabel = document.querySelector<HTMLElement>("#company-label");
@@ -205,6 +199,22 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     document.querySelector<HTMLButtonElement>("#clear-filters");
   const pageSize = 20;
   let visibleLimit = pageSize;
+
+  for (const picker of pickers) {
+    picker.addEventListener("toggle", () => {
+      if (!picker.open) return;
+      for (const otherPicker of pickers) {
+        if (otherPicker !== picker) otherPicker.open = false;
+      }
+    });
+  }
+
+  document.addEventListener("click", event => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest(".filter-picker")) return;
+    for (const picker of pickers) picker.open = false;
+  });
 
   function applyFilters(resetLimit = true) {
     if (resetLimit) visibleLimit = pageSize;
@@ -292,44 +302,63 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 
 <style>
   .jobs-page {
+    --jobs-surface: var(--background);
+    --jobs-ink: var(--foreground);
+    --jobs-muted: color-mix(in srgb, var(--foreground) 72%, var(--background));
+    --jobs-subtle: color-mix(in srgb, var(--foreground) 58%, var(--background));
+    --jobs-border: color-mix(in srgb, var(--border) 72%, var(--background));
+    --jobs-panel: color-mix(in srgb, var(--background) 88%, var(--foreground));
+    --jobs-panel-strong: color-mix(
+      in srgb,
+      var(--background) 78%,
+      var(--foreground)
+    );
+    --jobs-hover: color-mix(in srgb, var(--accent) 12%, transparent);
+    --jobs-shadow: color-mix(in srgb, var(--foreground) 18%, transparent);
     font-family:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 
   .jobs-paper {
     isolation: isolate;
-    background-color: #f2e4bd;
-    background-image:
-      radial-gradient(
-        circle at 18% 24%,
-        rgba(91, 66, 31, 0.09) 0 0.7px,
-        transparent 1px
-      ),
-      radial-gradient(
-        circle at 72% 66%,
-        rgba(120, 85, 38, 0.07) 0 0.8px,
-        transparent 1.2px
-      ),
-      linear-gradient(
-        115deg,
-        rgba(255, 250, 224, 0.28),
-        transparent 42%,
-        rgba(139, 101, 45, 0.05)
-      );
-    background-size:
-      19px 23px,
-      31px 29px,
-      100% 100%;
+    border-color: var(--jobs-border);
+    background: var(--jobs-surface);
+    box-shadow: 0 18px 50px var(--jobs-shadow);
+    color: var(--jobs-ink);
   }
 
   .jobs-paper::after {
     position: absolute;
     z-index: -1;
     inset: 5px;
-    border: 1px solid rgba(112, 82, 41, 0.24);
-    border-radius: 9px 5px 11px 7px;
+    border: 1px solid color-mix(in srgb, var(--jobs-border) 54%, transparent);
+    border-radius: 0.35rem;
     content: "";
     pointer-events: none;
+  }
+
+  .jobs-section-border {
+    border-color: var(--jobs-border);
+  }
+
+  .jobs-heading {
+    color: var(--jobs-ink);
+  }
+
+  .jobs-eyebrow {
+    color: var(--accent);
+  }
+
+  .jobs-muted {
+    color: var(--jobs-muted);
+  }
+
+  .jobs-subtle {
+    color: var(--jobs-subtle);
+  }
+
+  .filter-picker {
+    position: relative;
   }
 
   .filter-picker summary {
@@ -338,13 +367,21 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     justify-content: space-between;
     gap: 0.75rem;
     min-width: 0;
-    border: 1.5px solid #9e824e;
-    border-radius: 5px 8px 4px 7px;
-    background: rgba(255, 249, 221, 0.52);
+    width: 100%;
+    border: 1.5px solid var(--jobs-border);
+    border-radius: 0.45rem;
+    background: var(--jobs-panel);
     padding: 0.65rem 0.75rem;
-    color: #493a27;
+    color: var(--jobs-ink);
     cursor: pointer;
     list-style: none;
+  }
+
+  .filter-picker summary span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .filter-picker summary::-webkit-details-marker {
@@ -352,7 +389,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   }
 
   .filter-picker[open] summary {
-    box-shadow: 2px 3px 0 rgba(103, 75, 36, 0.16);
+    box-shadow: 2px 3px 0 var(--jobs-shadow);
   }
 
   .filter-picker[open] summary span:last-child {
@@ -360,17 +397,27 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   }
 
   .filter-menu {
+    position: absolute;
+    z-index: 20;
+    left: 0;
+    width: min(24rem, calc(100vw - 3rem));
     margin-top: 0.55rem;
-    border: 1.5px dashed #a28754;
-    border-radius: 4px 9px 6px 3px;
-    background: #f8edca;
+    border: 1.5px dashed var(--jobs-border);
+    border-radius: 0.45rem;
+    background: var(--jobs-panel-strong);
     padding: 0.6rem;
-    box-shadow: 3px 4px 0 rgba(103, 75, 36, 0.12);
+    box-shadow: 0 1rem 2rem var(--jobs-shadow);
+  }
+
+  @media (min-width: 1024px) {
+    .filter-menu {
+      width: 24rem;
+    }
   }
 
   .filter-menu > p {
     padding: 0.2rem 0.35rem 0.55rem;
-    color: #817056;
+    color: var(--jobs-subtle);
     font-size: 0.7rem;
   }
 
@@ -386,30 +433,30 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     gap: 0.55rem;
     border-radius: 0.2rem;
     padding: 0.4rem 0.45rem;
-    color: #5f513c;
+    color: var(--jobs-muted);
     cursor: pointer;
   }
 
   .filter-option:hover,
   .filter-option:has(input:checked) {
-    background: rgba(174, 139, 70, 0.14);
-    color: #3f311f;
+    background: var(--jobs-hover);
+    color: var(--jobs-ink);
   }
 
   .filter-option input {
-    accent-color: #8a6631;
+    accent-color: var(--accent);
   }
 
   .filter-option small {
-    color: #8b7b60;
+    color: var(--jobs-subtle);
   }
 
   .clear-picker {
     width: 100%;
     margin-top: 0.5rem;
-    border-top: 1px dashed #b9a06e;
+    border-top: 1px dashed var(--jobs-border);
     padding: 0.65rem 0.35rem 0.2rem;
-    color: #735c35;
+    color: var(--accent);
     font-size: 0.75rem;
     text-align: left;
   }
@@ -421,7 +468,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 
   #clear-filters {
     margin-top: 1rem;
-    color: #735c35;
+    color: var(--accent);
     font-size: 0.75rem;
     text-decoration: underline;
     text-decoration-style: dashed;
@@ -430,24 +477,24 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 
   #load-more {
     width: 100%;
-    border: 1.5px dashed #967844;
-    border-radius: 7px 4px 9px 5px;
-    background: rgba(255, 249, 221, 0.46);
+    border: 1.5px dashed var(--jobs-border);
+    border-radius: 0.45rem;
+    background: var(--jobs-panel);
     padding: 0.8rem 1rem;
-    color: #57452b;
+    color: var(--jobs-ink);
     font-weight: 700;
   }
 
   #load-more:hover {
-    background: rgba(255, 249, 221, 0.8);
+    background: var(--jobs-panel-strong);
   }
 
   :global(.job-card:hover) {
-    background: rgba(255, 251, 232, 0.5);
+    background: var(--jobs-hover);
   }
 
   :global(.job-row-link:focus-visible) {
-    background: rgba(255, 251, 232, 0.64);
+    background: var(--jobs-hover);
   }
 
   :global(.job-card[hidden]) {

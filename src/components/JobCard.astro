@@ -61,7 +61,7 @@ const showSource = normalizeLabel(sourceLabel) !== normalizeLabel(company);
 ---
 
 <li
-  class="job-card group relative border-b border-dashed border-[#b9a06e] transition-colors last:border-b-0"
+  class="job-card group relative border-b border-dashed transition-colors last:border-b-0"
   data-job-card
   data-countries={countries.join("|")}
   data-company={company.toLowerCase()}
@@ -77,20 +77,20 @@ const showSource = normalizeLabel(sourceLabel) !== normalizeLabel(company);
     <div class="flex w-full items-start justify-between gap-4">
       <div class="min-w-0 space-y-2">
         <div
-          class="flex flex-wrap items-center gap-2 text-[10px] font-bold tracking-[0.18em] text-[#826532] uppercase"
+          class="job-card-kicker flex flex-wrap items-center gap-2 text-[10px] font-bold tracking-[0.18em] uppercase"
         >
           {showSource && <span>{sourceLabel}</span>}
           {showSource && <span class="text-border">•</span>}
           <span>{company}</span>
         </div>
 
-        <h2 class="text-base leading-snug font-bold text-[#352b1d] sm:text-lg">
+        <h2 class="job-card-title text-base leading-snug font-bold sm:text-lg">
           {displayTitle}
           <span class="text-sm font-normal" aria-hidden="true">↗</span>
         </h2>
 
         <div
-          class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#665b49]"
+          class="job-card-meta flex flex-wrap items-center gap-x-4 gap-y-1 text-sm"
         >
           {
             location && (
@@ -116,7 +116,7 @@ const showSource = normalizeLabel(sourceLabel) !== normalizeLabel(company);
       </div>
 
       <time
-        class="hidden text-xs font-medium whitespace-nowrap text-[#8b7b60] sm:block"
+        class="job-card-date hidden text-xs font-medium whitespace-nowrap sm:block"
       >
         {formattedDate}
       </time>
@@ -124,14 +124,37 @@ const showSource = normalizeLabel(sourceLabel) !== normalizeLabel(company);
 
     {
       description && (
-        <p class="mt-4 line-clamp-2 max-w-[70ch] leading-relaxed text-[#514838]">
+        <p class="job-card-description mt-4 line-clamp-2 max-w-[70ch] leading-relaxed">
           {description}
         </p>
       )
     }
 
     <div class="mt-4 sm:hidden">
-      <time class="text-xs font-medium text-[#8b7b60]">{formattedDate}</time>
+      <time class="job-card-date text-xs font-medium">{formattedDate}</time>
     </div>
   </a>
 </li>
+
+<style>
+  .job-card {
+    border-color: var(--jobs-border, var(--border));
+  }
+
+  .job-card-kicker {
+    color: var(--accent);
+  }
+
+  .job-card-title {
+    color: var(--jobs-ink, var(--foreground));
+  }
+
+  .job-card-meta,
+  .job-card-description {
+    color: var(--jobs-muted, var(--foreground));
+  }
+
+  .job-card-date {
+    color: var(--jobs-subtle, var(--foreground));
+  }
+</style>
