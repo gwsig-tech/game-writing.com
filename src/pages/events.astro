@@ -45,8 +45,6 @@ if (API_KEY) {
       orderBy: "startTime",
     });
     events = (response.data.items as CalendarEvent[]) || [];
-    console.log("Calendar API response:", JSON.stringify(response.data, null, 2));
-    console.log("Events count:", events.length);
   } catch (e) {
     console.error("Failed to fetch calendar events:", e);
     error = "Unable to load calendar events.";
