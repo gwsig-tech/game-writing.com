@@ -1,10 +1,11 @@
 # CMS Subfolder Collections & Image Foldering — June 2026
 
-**Date:** 2026-06-23
-**Branch:** `draft` (plan only — no execution yet)
+**Date:** 2026-06-23 (implemented 2026-06-24)
+**Branch:** `draft` (shipped; pending preview verification)
 **Author:** Jon
-**Status:** Planned, intentionally deferred. Do lower-risk updates first; this
-touches published blog prose, so we want it sequenced after other work.
+**Status:** ✅ **Implemented** — see [Implementation](#implementation-2026-06-24)
+below. This document is retained as a **historical artifact** of the plan as
+designed and executed; the analysis sections preserve the original reasoning.
 
 ## Summary
 
@@ -25,7 +26,28 @@ The fix is two parts:
    defaults — all while keeping the Astro `@`-alias reference scheme that body
    images depend on.
 
-We are **not executing yet** — see [Sequencing](#sequencing--why-deferred).
+## Implementation (2026-06-24)
+
+**Shipped to `draft`** in commit **`8edd36f`** (Phase A + B together):
+
+- Renamed the 6 `.md` → `.mdx` (`git mv`, history preserved).
+- Unwrapped the 5 MDX-unsafe spotlight links, including the broken `dimopoulos`
+  `]>` link (which was broken on the live site).
+- Added the `events` + `spotlights` collections via the `*postFields` YAML anchor,
+  plus the 5 `asset_collections`, and created `src/assets/images/spotlights/.gitkeep`.
+
+**One deviation from the [config sketch](#config-sketch):** per-collection
+`media_folder` was set only on the **new** `events`/`spotlights` collections; the
+working `posts` collection kept the global default (the sketch showed
+`/src/assets/images` on `posts`). Changing the live collection's upload target
+wasn't needed for this goal and added avoidable risk — trivial to add later.
+
+Phase A was fully **verified locally** (build, unchanged URLs, the fixed link,
+YAML parse + anchor expansion); the Phase B CMS behaviors are **pending preview
+verification**. See the [validation checklist](#validation-checklist) for
+item-by-item status.
+
+_The sections below are preserved as the original planning record._
 
 ## Sveltia version & feature check (reviewed 2026-06-23)
 
@@ -302,22 +324,31 @@ content changes. When we pick this up:
    — but per-collection `media_folder` only takes effect once the `events` /
    `spotlights` collections exist, so it naturally rides with Phase A.
 
-## Validation checklist (when executed)
+## Validation checklist
 
-- [ ] `pnpm build` passes after the renames + MDX fixes (catches any remaining
-      MDX-hostile syntax). This is the real test of Phase A2.
-- [ ] All 9 subfolder posts still render and keep their existing `/posts/<slug>`
-      URLs (renames must not change slugs).
-- [ ] `dimopoulos` spotlight LinkedIn link now resolves (was broken).
-- [ ] `config.yml` parses as valid YAML and loads in the CMS without schema
-      errors; Events and Spotlights collections appear with all entries listed.
+**Verified locally (2026-06-24):**
+
+- [x] `pnpm build` passes after the renames + MDX fixes — exit 0 (the real test of
+      Phase A2; the 6 files compile as MDX under Astro 6 / mdx 6).
+- [x] All 9 subfolder posts still render and keep their existing `/posts/<slug>`
+      URLs (slugs are frontmatter-driven, so the `.md`→`.mdx` rename can't move them).
+- [x] `dimopoulos` spotlight LinkedIn link now resolves (was broken — confirmed
+      `<a href=…>` in the rendered HTML).
+- [x] `config.yml` parses as valid YAML and the `*postFields` anchor expands
+      (events/spotlights inherit posts' 9 fields).
+
+**Pending preview verification** (`config.yml` is CMS-runtime, not read by the
+Astro build — confirm on `preview.game-writing.com`):
+
+- [ ] `config.yml` loads in the CMS without schema errors; Events and Spotlights
+      collections appear with all entries listed.
 - [ ] Asset collections appear in the Asset Library / image picker; editors can
       browse into Arcjam / Events / Spotlights / Editor and select existing images.
 - [ ] Inserting an image from the Events asset collection writes an
       `@/assets/images/events/…` reference (alias preserved) and the image renders
       optimized after build — NOT a raw web path.
-- [ ] (If per-collection defaults are set) uploading from within a new Events post
-      defaults into `src/assets/images/events/`.
+- [ ] (Per-collection defaults) uploading from within a new Events/Spotlights post
+      defaults into the matching `src/assets/images/…` folder.
 
 ## Open questions / future work
 
