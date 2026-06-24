@@ -34,8 +34,12 @@ pnpm sync             # Generate TypeScript types for Astro modules
 ### CMS
 
 - **Sveltia CMS**: `public/admin/` with config.yml and custom editor components
+- **Version**: loaded unpinned from CDN (`@sveltia/cms` in `public/admin/index.html`), so always the latest release — re-check the [releases](https://github.com/sveltia/sveltia-cms/releases) before relying on specific behavior. Last full review: **2026-06-23 against v0.167.3** (config audited clean; details in `docs/sveltia-CMS-readme.md`). Consider pinning `@0.167.3` for production stability.
 - **Draft workflow**: CMS commits to `draft` branch, merged to `main` for production
-- **GameEmbed component**: Custom MDX component for embedding Arcweave games
+- **GameEmbed component**: Custom MDX component for embedding Arcweave games, inserted via a `CMS.registerEditorComponent` editor component in `index.html` (officially supported)
+- **`public_folder` is an Astro alias, not a web path**: `public_folder: "@/assets/"` is an intentional, out-of-spec deviation so body images go through Astro image optimization — do NOT change it to a `/assets` web path
+- **Body widget**: `widget: richtext` is canonical (`markdown` is the back-compat alias); it outputs Markdown, and `<GameEmbed/>` round-trips via the editor component
+- **Subfolder limitation**: a collection lists only files directly in its `folder` (no recursive/nested listing) and allows one file extension, so blog posts in `_events`/`_spotlights` and image subfolders aren't editable without dedicated collections / asset collections — see `docs/plans/2026-06-23-cms-subfolder-collections.md`
 
 ### Key Directories
 

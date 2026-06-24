@@ -234,7 +234,7 @@ git pull upstream main
 | Framework  | [Astro](https://astro.build/) v5.16.6                        |
 | Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.1 |
 | Styling    | [Tailwind CSS](https://tailwindcss.com/) v4                  |
-| CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms)        |
+| CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (loaded unpinned — always latest) |
 | Search     | [Pagefind](https://pagefind.app/)                            |
 | Icons      | [Tabler Icons](https://tabler-icons.io/)                     |
 | OG Images  | [Satori](https://github.com/vercel/satori) + Resvg           |

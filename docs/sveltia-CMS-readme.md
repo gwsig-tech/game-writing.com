@@ -1,10 +1,48 @@
 # Sveltia CMS: Netlify/Decap CMS successor
 
-Sveltia CMS is a Git-based lightweight headless CMS under active development as a modern, powerful, direct replacement for Netlify CMS (now Decap CMS). We have picked up where they left off and have already solved over 280 issues reported in the predecessor’s repository, ranging from critical bugs to top feature requests.
+> ## Local notes & config review for game-writing.com
+>
+> **Reviewed 2026-06-23 against Sveltia CMS v0.167.3** — our first comprehensive
+> review; this is the baseline to diff future reviews against. The body below is
+> adapted from the former upstream README (upstream has since slimmed its README to a
+> docs-site pointer); its project-status figures were refreshed from the live docs on
+> the review date. Full feature/compatibility analysis lives in
+> [`docs/plans/2026-06-23-cms-subfolder-collections.md`](plans/2026-06-23-cms-subfolder-collections.md).
+>
+> **How we load it.** Unpinned from the CDN
+> (`https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js` in `public/admin/index.html`),
+> so `/admin` always runs the latest release. Convenient — we auto-receive security
+> fixes (e.g. the v0.167.3 RichText XSS patch) — but a pre-1.0 release could change
+> behavior with no change on our side. Consider pinning `@0.167.3` for production
+> stability and bumping deliberately after testing on the `draft` preview.
+>
+> **Config compatibility (all audited current/valid as of v0.167.3):**
+>
+> - `widget: richtext` is the **canonical** body widget; `markdown` is only a
+>   back-compat alias. Our Arcweave `<GameEmbed/>` via `CMS.registerEditorComponent`
+>   is officially supported (its `toPreview` now renders too, since v0.146.0). Don't
+>   add an `editor_components` allowlist — omitting it already includes all components.
+> - `public_folder: "@/assets/"` is an **intentional, out-of-spec deviation**: the
+>   docs expect a leading-slash web path, but we use Astro's `@` import alias so body
+>   images flow through Astro image optimization. It works because Sveltia writes the
+>   prefix literally. Do **not** "fix" it to `/assets` — that bypasses optimization.
+>   After a CMS auto-update, confirm inserted images still emit `@/assets/...`.
+> - Everything else (datetime, slug, `output.omit_empty_optional_fields`, the `select`
+>   tags field, explicit `create`/`delete`, GitHub+OAuth backend) is current. One
+>   breaking change to note: v0.162.0 replaced `allow_token_auth` with `auth_methods`
+>   — we set neither, so we're unaffected.
+>
+> **Subfolders.** Single-extension-per-collection still holds. Subfolder *storage*
+> via the `path` option now exists, but there's still no recursive/**nested entry
+> listing**, so blog posts in `src/data/blog/_events` / `_spotlights` still need their
+> own collections (+`.mdx` normalization). For images, **asset collections**
+> (v0.167.0) expose `src/assets/images/*` as browsable buckets. See the plan above.
+
+Sveltia CMS is a Git-based lightweight headless CMS under active development as a modern, powerful, direct replacement for Netlify CMS (now Decap CMS). We have picked up where they left off and have already solved over 300 issues reported in the predecessor’s repository, ranging from critical bugs to top feature requests.
 
 Built from the ground up, Sveltia CMS offers excellent UX, DX, performance, security and internationalization (i18n) support. Although some features are still missing, our numerous enhancements across the board ensure smooth daily workflows for content editors and developers alike.
 
-This free, open source successor to Netlify/Decap CMS is currently in public beta, with version 1.0 expected in early 2026. Despite the beta status, it’s already used by hundreds of individuals and organizations worldwide in production. Check out the [Showcase](https://sveltiacms.app/en/showcase) page for some examples.
+This free, open source successor to Netlify/Decap CMS is currently in public beta, with version 1.0 targeted for mid-2026 (gated on GitHub adding client-side PKCE support, and may slip further). Despite the beta status, it’s already used by thousands of users and projects worldwide in production. Check out the [Showcase](https://sveltiacms.app/en/showcase) page for some examples.
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
@@ -45,7 +83,7 @@ See the [Successor to Netlify CMS](https://sveltiacms.app/en/docs/successor-to-n
 
 ## Project Status
 
-Sveltia CMS is currently in **beta**, with version 1.0 (GA) scheduled for release in early 2026. Check our [release notes](https://github.com/sveltia/sveltia-cms/releases) and follow us on [Bluesky](https://bsky.app/profile/sveltiacms.app) for updates. See also our [roadmap](https://sveltiacms.app/en/roadmap).
+Sveltia CMS is currently in **beta**, with version 1.0 (GA) tentatively targeted for mid-2026 (gated on GitHub client-side PKCE support; the date may shift). Check our [release notes](https://github.com/sveltia/sveltia-cms/releases) and follow us on [Bluesky](https://bsky.app/profile/sveltiacms.app) for updates. See also our [roadmap](https://sveltiacms.app/en/roadmap).
 
 While we fix reported bugs as quickly as possible, usually within 24 hours, our overall progress may be slower than you think. The thing is, it’s not just a personal project of [@kyoshino](https://github.com/kyoshino), but also a complicated system involving various kinds of activities that require considerable effort:
 
@@ -54,9 +92,9 @@ While we fix reported bugs as quickly as possible, usually within 24 hours, our 
   - It works as a drop-in replacement for most use cases
   - Some missing features will be implemented before or shortly after GA
 - Tackling as many [Netlify/Decap CMS issues](https://github.com/decaporg/decap-cms/issues) as possible
-  - So far, **280+ issues, or 610+ if including duplicates, have been effectively solved** in Sveltia CMS (Yes, you read it right)
+  - So far, **300+ issues, or 675+ if including duplicates, have been effectively solved** in Sveltia CMS (Yes, you read it right)
   - Target:
-    - 300 issues, or 600 if including duplicates, by GA — Almost there! 🚀
+    - 350 issues, or 750 if including duplicates, by v1.0 🚀
     - 450 issues, or 900 if including duplicates, in the future 💪
     - or every single issue that’s relevant, fixable, and worth dealing with 🔥
   - Issues include everything:
@@ -71,7 +109,7 @@ While we fix reported bugs as quickly as possible, usually within 24 hours, our 
 - Preparing top-notch [documentation](https://github.com/sveltia/sveltia-cms/issues/485)
 - Implementing our own enhancement ideas for every part of the product
 
-![280 Netlify/Decap CMS issues solved in Sveltia CMS](https://raw.githubusercontent.com/sveltia/sveltia-cms/main/docs/headline-1.webp?20251228)<br>
+![300+ Netlify/Decap CMS issues solved in Sveltia CMS](https://raw.githubusercontent.com/sveltia/sveltia-cms/main/docs/headline-1.webp?20251228)<br>
 
 ## Differentiators
 
