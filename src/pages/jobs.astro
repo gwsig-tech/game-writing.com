@@ -8,7 +8,6 @@ import {
   getExperienceLabel,
   getJobCountries,
   getJobSummary,
-  getSourceLabel,
 } from "../lib/jobs";
 
 const INITIAL_RESULTS = 20;
@@ -134,7 +133,6 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
                   title={job.title}
                   company={job.company_name}
                   location={job.location}
-                  sourceLabel={getSourceLabel(job.source)}
                   workType={job.employment_type}
                   remoteType={job.remote_type}
                   experience={getExperienceLabel(job)}
