@@ -46,160 +46,170 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 >
   <Header />
   <Breadcrumb />
-  <main
-    id="main-content"
-    class="jobs-page mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14"
-  >
-    <div class="jobs-paper relative overflow-visible rounded-lg border-2">
-      <header
-        class="jobs-section-border border-b border-dashed px-6 py-9 sm:px-10"
-      >
-        <h1 class="jobs-heading text-4xl font-bold sm:text-5xl">Open Roles</h1>
-        <p class="jobs-muted mt-3 max-w-2xl text-lg">
-          Job opportunities for game writers and narrative designers.
-        </p>
-        <p class="jobs-subtle mt-3 max-w-3xl text-sm">
-          The Game Writing SIG jobs board collects open roles for game writers,
-          narrative designers, and editors across the industry. We share these
-          to help our community find work and connect companies with writers.
-          <br /><br />
-          These listings are collected from the public postings found at each linked
-          page. Listings are updated periodically, and roles may close or change without
-          notice, so always confirm details and apply through the official link. The
-          IGDA Game Writing SIG is not affiliated with, sponsored by, or endorsing
-          any of the companies or positions listed here.
-        </p>
-        <p class="jobs-subtle mt-4 text-sm" aria-live="polite" id="jobs-count">
-          {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"} available.
-          Filter by company or country, or search by keyword to narrow the list.
-        </p>
-      </header>
-
-      <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <aside
-          class="jobs-section-border relative z-10 border-b border-dashed px-6 py-7 lg:border-r lg:border-b-0 lg:px-7"
-        >
-          <div class="lg:sticky lg:top-6">
-            <h2
-              class="jobs-heading text-[11px] font-bold tracking-[0.12em] uppercase"
-            >
-              Filter roles
-            </h2>
-            <details class="filter-picker mt-4">
-              <summary>
-                <span id="company-label">All companies</span>
-                <span aria-hidden="true">⌄</span>
-              </summary>
-              <div class="filter-menu">
-                <p>Select one or more companies</p>
-                <label class="filter-search">
-                  <span>Search companies</span>
-                  <input
-                    type="search"
-                    id="company-search"
-                    placeholder="type a company"
-                    autocomplete="off"
-                  />
-                </label>
-                <div class="filter-options">
-                  {
-                    companies.map(([company, count]) => (
-                      <label class="filter-option">
-                        <input
-                          type="checkbox"
-                          name="company"
-                          value={company.toLowerCase()}
-                          data-label={company}
-                        />
-                        <span>{company}</span>
-                        <small>{count}</small>
-                      </label>
-                    ))
-                  }
-                </div>
-                <button type="button" class="clear-picker" id="clear-companies">
-                  Clear companies
-                </button>
-              </div>
-            </details>
-            <details class="filter-picker mt-3">
-              <summary>
-                <span id="country-label">All countries</span>
-                <span aria-hidden="true">⌄</span>
-              </summary>
-              <div class="filter-menu">
-                <p>Select one or more countries</p>
-                <label class="filter-search">
-                  <span>Search countries</span>
-                  <input
-                    type="search"
-                    id="country-search"
-                    placeholder="type a country"
-                    autocomplete="off"
-                  />
-                </label>
-                <div class="filter-options">
-                  {
-                    countries.map(([country, count]) => (
-                      <label class="filter-option">
-                        <input type="checkbox" name="country" value={country} />
-                        <span>{country}</span>
-                        <small>{count}</small>
-                      </label>
-                    ))
-                  }
-                </div>
-                <button type="button" class="clear-picker" id="clear-countries">
-                  Clear countries
-                </button>
-              </div>
-            </details>
-            <label class="terms-search mt-4">
-              <span>Search terms</span>
-              <input
-                type="search"
-                id="search-terms"
-                placeholder="ex. remote, full-time..."
-                autocomplete="off"
-                spellcheck="false"
-              />
-            </label>
-            <button type="button" id="clear-filters">Clear all filters</button>
-          </div>
-        </aside>
-
-        <div class="min-w-0">
-          <ul class="px-5 sm:px-8">
-            {
-              jobsWithCountries.map(({ job, countries }) => (
-                <JobCard
-                  href={job.canonical_url}
-                  title={job.title}
-                  company={job.company_name}
-                  location={job.location}
-                  workType={job.employment_type}
-                  remoteType={job.remote_type}
-                  experience={getExperienceLabel(job)}
-                  date={job.first_seen_at}
-                  description={getJobSummary(job)}
-                  countries={countries}
-                />
-              ))
-            }
-          </ul>
-          {
-            jobs.length === 0 && (
-              <p class="jobs-muted px-6 py-10 text-center">
-                No active roles are listed right now. Check back soon.
-              </p>
-            )
-          }
-          <p
-            id="no-filter-results"
-            class="jobs-muted hidden px-6 py-12 text-center"
+  <main id="main-content" class="jobs-page py-10 sm:py-14">
+    <section class="app-prose max-w-app">
+      <h1 class="text-2xl tracking-wider sm:text-3xl">Open Roles</h1>
+      <p>Job opportunities for game writers and narrative designers.</p>
+      <p>
+        The Game Writing SIG jobs board collects open roles for game writers,
+        narrative designers, and editors across the industry. We share these to
+        help our community find work and connect companies with writers.
+      </p>
+      <p>
+        These listings are collected from the public postings found at each
+        linked page. Listings are updated periodically, and roles may close or
+        change without notice, so always confirm details and apply through the
+        official link. The IGDA Game Writing SIG is not affiliated with,
+        sponsored by, or endorsing any of the companies or positions listed
+        here.
+      </p>
+      <p aria-live="polite" id="jobs-count">
+        {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"}
+        available. Filter by company or country, or search by keyword to narrow the
+        list.
+      </p>
+    </section>
+    <div class="mx-auto mt-10 max-w-6xl px-4">
+      <div class="jobs-paper relative overflow-visible rounded-lg border-2">
+        <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)]">
+          <aside
+            class="jobs-section-border relative z-10 border-b border-dashed px-6 py-7 lg:border-r lg:border-b-0 lg:px-7"
           >
-            No active roles match those filters.
-          </p>
+            <div class="lg:sticky lg:top-6">
+              <h2
+                class="jobs-heading text-[11px] font-bold tracking-[0.12em] uppercase"
+              >
+                Filter roles
+              </h2>
+              <details class="filter-picker mt-4">
+                <summary>
+                  <span id="company-label">All companies</span>
+                  <span aria-hidden="true">⌄</span>
+                </summary>
+                <div class="filter-menu">
+                  <p>Select one or more companies</p>
+                  <label class="filter-search">
+                    <span>Search companies</span>
+                    <input
+                      type="search"
+                      id="company-search"
+                      placeholder="type a company"
+                      autocomplete="off"
+                    />
+                  </label>
+                  <div class="filter-options">
+                    {
+                      companies.map(([company, count]) => (
+                        <label class="filter-option">
+                          <input
+                            type="checkbox"
+                            name="company"
+                            value={company.toLowerCase()}
+                            data-label={company}
+                          />
+                          <span>{company}</span>
+                          <small>{count}</small>
+                        </label>
+                      ))
+                    }
+                  </div>
+                  <button
+                    type="button"
+                    class="clear-picker"
+                    id="clear-companies"
+                  >
+                    Clear companies
+                  </button>
+                </div>
+              </details>
+              <details class="filter-picker mt-3">
+                <summary>
+                  <span id="country-label">All countries</span>
+                  <span aria-hidden="true">⌄</span>
+                </summary>
+                <div class="filter-menu">
+                  <p>Select one or more countries</p>
+                  <label class="filter-search">
+                    <span>Search countries</span>
+                    <input
+                      type="search"
+                      id="country-search"
+                      placeholder="type a country"
+                      autocomplete="off"
+                    />
+                  </label>
+                  <div class="filter-options">
+                    {
+                      countries.map(([country, count]) => (
+                        <label class="filter-option">
+                          <input
+                            type="checkbox"
+                            name="country"
+                            value={country}
+                          />
+                          <span>{country}</span>
+                          <small>{count}</small>
+                        </label>
+                      ))
+                    }
+                  </div>
+                  <button
+                    type="button"
+                    class="clear-picker"
+                    id="clear-countries"
+                  >
+                    Clear countries
+                  </button>
+                </div>
+              </details>
+              <label class="terms-search mt-4">
+                <span>Search terms</span>
+                <input
+                  type="search"
+                  id="search-terms"
+                  placeholder="ex. remote, full-time..."
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </label>
+              <button type="button" id="clear-filters">Clear all filters</button
+              >
+            </div>
+          </aside>
+
+          <div class="min-w-0">
+            <ul class="px-5 sm:px-8">
+              {
+                jobsWithCountries.map(({ job, countries }) => (
+                  <JobCard
+                    href={job.canonical_url}
+                    title={job.title}
+                    company={job.company_name}
+                    location={job.location}
+                    workType={job.employment_type}
+                    remoteType={job.remote_type}
+                    experience={getExperienceLabel(job)}
+                    date={job.first_seen_at}
+                    description={getJobSummary(job)}
+                    countries={countries}
+                  />
+                ))
+              }
+            </ul>
+            {
+              jobs.length === 0 && (
+                <p class="jobs-muted px-6 py-10 text-center">
+                  No active roles are listed right now. Check back soon.
+                </p>
+              )
+            }
+            <p
+              id="no-filter-results"
+              class="jobs-muted hidden px-6 py-12 text-center"
+            >
+              No active roles match those filters.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -426,16 +436,8 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     color: var(--foreground);
   }
 
-  .jobs-eyebrow {
-    color: var(--accent);
-  }
-
   .jobs-muted {
     color: var(--jobs-muted);
-  }
-
-  .jobs-subtle {
-    color: var(--jobs-subtle);
   }
 
   .filter-picker {
