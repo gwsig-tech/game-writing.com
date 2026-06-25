@@ -10,7 +10,6 @@ interface Props {
   description: string;
   date: Date;
   countries: string[];
-  initiallyHidden?: boolean;
 }
 
 const {
@@ -24,7 +23,6 @@ const {
   description,
   date,
   countries,
-  initiallyHidden = false,
 } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -75,7 +73,6 @@ const searchableText = [
   data-countries={countries.join("|")}
   data-company={company.toLowerCase()}
   data-search={searchableText}
-  hidden={initiallyHidden}
 >
   <a
     href={href}

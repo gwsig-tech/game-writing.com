@@ -1,7 +1,7 @@
 # Jobs Board — `JobPosting` structured data (JSON-LD) — Future feature
 
-**Date:** 2026-06-25
-**Branch:** TBD (do AFTER [jobs-board-reintegration](./2026-06-25-jobs-board-reintegration.md) lands)
+**Date:** 2026-06-26
+**Branch:** TBD (do AFTER [jobs-board-reintegration](./2026-06-26-jobs-board-reintegration.md) lands)
 **Author:** Jon (with Claude)
 **Status:** Planned / deferred — documented as the next jobs feature. Not yet started.
 
@@ -44,3 +44,7 @@ Build the JSON-LD in `jobs.astro` frontmatter (server-rendered) and inject one `
 ## Effort
 
 ~half a day including enum mapping, `validThrough` policy, description sanitization, and validation. Isolated to `jobs.astro` (+ small helpers in `src/lib/jobs.ts`); no new deps.
+
+## Reference - Google
+
+[https://developers.google.com/search/docs/appearance/structured-data/job-posting](https://developers.google.com/search/docs/appearance/structured-data/job-posting)
