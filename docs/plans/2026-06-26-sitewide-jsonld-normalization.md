@@ -1,9 +1,12 @@
 # Site-wide JSON-LD normalization — fix the hardcoded `BlogPosting` on non-post pages
 
 **Date:** 2026-06-26
-**Branch:** TBD (small, isolated; can ride along with the jobs reintegration or stand alone)
+**Branch:** `narrative-job-board-jm`
 **Author:** Jon (with Claude)
-**Status:** Planned — ready to execute. Low risk.
+**Status:** ✅ Implemented 2026-06-26 as part of the jobs-page normalization sweep —
+approach: **guard + neutral default** (valid `BlogPosting` only when `pubDatetime`
+is present; `WebSite` on the homepage, `WebPage` elsewhere). See
+[2026-06-26-jobs-page-normalization.md](./2026-06-26-jobs-page-normalization.md).
 
 ## Context
 

@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
 import {
   getActiveJobs,
   getExperienceLabel,
@@ -44,7 +45,11 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   description="Open narrative and game-writing roles collected from public postings, curated by the IGDA Game Writing SIG."
 >
   <Header />
-  <main class="jobs-page mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+  <Breadcrumb />
+  <main
+    id="main-content"
+    class="jobs-page mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14"
+  >
     <div class="jobs-paper relative overflow-visible rounded-lg border-2">
       <header
         class="jobs-section-border border-b border-dashed px-6 py-9 sm:px-10"
@@ -382,8 +387,6 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 
 <style>
   .jobs-page {
-    --jobs-surface: var(--background);
-    --jobs-ink: var(--foreground);
     --jobs-muted: color-mix(in srgb, var(--foreground) 72%, var(--background));
     --jobs-subtle: color-mix(in srgb, var(--foreground) 58%, var(--background));
     --jobs-border: color-mix(in srgb, var(--border) 72%, var(--background));
@@ -395,16 +398,14 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     );
     --jobs-hover: color-mix(in srgb, var(--accent) 12%, transparent);
     --jobs-shadow: color-mix(in srgb, var(--foreground) 18%, transparent);
-    font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 
   .jobs-paper {
     isolation: isolate;
     border-color: var(--jobs-border);
-    background: var(--jobs-surface);
+    background: var(--background);
     box-shadow: 0 18px 50px var(--jobs-shadow);
-    color: var(--jobs-ink);
+    color: var(--foreground);
   }
 
   .jobs-paper::after {
@@ -422,7 +423,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   }
 
   .jobs-heading {
-    color: var(--jobs-ink);
+    color: var(--foreground);
   }
 
   .jobs-eyebrow {
@@ -452,7 +453,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     border-radius: 0.45rem;
     background: var(--jobs-panel);
     padding: 0.65rem 0.75rem;
-    color: var(--jobs-ink);
+    color: var(--foreground);
     cursor: pointer;
     list-style: none;
   }
@@ -527,7 +528,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     border-radius: 0.4rem;
     background: var(--jobs-panel);
     padding: 0.55rem 0.65rem;
-    color: var(--jobs-ink);
+    color: var(--foreground);
     font-size: 0.8rem;
   }
 
@@ -555,7 +556,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   .filter-option:hover,
   .filter-option:has(input:checked) {
     background: var(--jobs-hover);
-    color: var(--jobs-ink);
+    color: var(--foreground);
   }
 
   .filter-option input {

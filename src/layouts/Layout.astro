@@ -31,21 +31,36 @@ const {
 
 const socialImageURL = new URL(ogImage, Astro.url);
 
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: `${title}`,
-  image: `${socialImageURL}`,
-  datePublished: `${pubDatetime?.toISOString()}`,
-  ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-  author: [
-    {
-      "@type": "Person",
-      name: `${author}`,
-      ...(profile && { url: profile }),
-    },
-  ],
-};
+// Emit a valid BlogPosting only for real articles (pages that pass pubDatetime,
+// i.e. blog posts via PostDetails). Every other route gets a neutral WebSite
+// (homepage) or WebPage so crawlers never see the wrong @type or a
+// `datePublished: "undefined"` string.
+const isHome = Astro.url.pathname === "/";
+
+const structuredData = pubDatetime
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: `${title}`,
+      image: `${socialImageURL}`,
+      datePublished: pubDatetime.toISOString(),
+      ...(modDatetime && { dateModified: modDatetime.toISOString() }),
+      author: [
+        {
+          "@type": "Person",
+          name: `${author}`,
+          ...(profile && { url: profile }),
+        },
+      ],
+    }
+  : {
+      "@context": "https://schema.org",
+      "@type": isHome ? "WebSite" : "WebPage",
+      name: `${title}`,
+      description: `${description}`,
+      url: `${canonicalURL}`,
+      image: `${socialImageURL}`,
+    };
 ---
 
 <!doctype html>
