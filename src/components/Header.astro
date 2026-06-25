@@ -150,8 +150,8 @@ const isActive = (path: string) => {
           </a>
         </li>
         <li>
-          <a 
-            href="/jobs" 
+          <a
+            href="/jobs"
             class:list={["font-medium hover:text-accent", { "active-nav": isActive("/jobs") }]}
           >
             Jobs
@@ -205,12 +205,20 @@ const isActive = (path: string) => {
         {
           SITE.showArchives && (
             <li class="col-span-2">
-              <a
+              <LinkButton
                 href="/archives"
-                class:list={{ "active-nav": isActive("/archives") }}
+                class:list={[
+                  "focus-outline flex justify-center p-3",
+                  {
+                    "active-nav [&>svg]:stroke-accent": isActive("/archives"),
+                  },
+                ]}
+                aria-label="archives"
+                title="Archives"
               >
-                Archives
-              </a>
+                <IconArchive class="inline-block" />
+                <span>Archives</span>
+              </LinkButton>
             </li>
           )
         }

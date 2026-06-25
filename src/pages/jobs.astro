@@ -40,7 +40,10 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 );
 ---
 
-<Layout title="Jobs | IGDA Game Writing SIG">
+<Layout
+  title="Jobs | IGDA Game Writing SIG"
+  description="Open narrative and game-writing roles collected from public postings, curated by the IGDA Game Writing SIG."
+>
   <Header />
   <main class="jobs-page mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
     <div class="jobs-paper relative overflow-visible rounded-lg border-2">
@@ -210,176 +213,193 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 </Layout>
 
 <script>
-  const countryFilters = document.querySelectorAll<HTMLInputElement>(
-    'input[name="country"]'
-  );
-  const companyFilters = document.querySelectorAll<HTMLInputElement>(
-    'input[name="company"]'
-  );
-  const cards = document.querySelectorAll<HTMLElement>("[data-job-card]");
-  const count = document.querySelector<HTMLElement>("#jobs-count");
-  const empty = document.querySelector<HTMLElement>("#no-filter-results");
-  const loadMore = document.querySelector<HTMLButtonElement>("#load-more");
-  const pickers =
-    document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
-  const countrySearch =
-    document.querySelector<HTMLInputElement>("#country-search");
-  const companySearch =
-    document.querySelector<HTMLInputElement>("#company-search");
-  const searchTerms = document.querySelector<HTMLInputElement>("#search-terms");
-
-  const countryLabel = document.querySelector<HTMLElement>("#country-label");
-  const companyLabel = document.querySelector<HTMLElement>("#company-label");
-  const clearCountries =
-    document.querySelector<HTMLButtonElement>("#clear-countries");
-  const clearCompanies =
-    document.querySelector<HTMLButtonElement>("#clear-companies");
-  const clearFilters =
-    document.querySelector<HTMLButtonElement>("#clear-filters");
-  const pageSize = 20;
-  let visibleLimit = pageSize;
-
-  for (const picker of pickers) {
-    picker.addEventListener("toggle", () => {
-      if (!picker.open) return;
-      for (const otherPicker of pickers) {
-        if (otherPicker !== picker) otherPicker.open = false;
-      }
-    });
-  }
-
+  // Close any open filter dropdown when clicking outside it. Attached once at the
+  // document level (document persists across View Transitions) and re-queries the
+  // pickers at click time, so it stays correct after astro:page-load swaps.
   document.addEventListener("click", event => {
     const target = event.target;
     if (!(target instanceof Element)) return;
     if (target.closest(".filter-picker")) return;
-    for (const picker of pickers) picker.open = false;
+    for (const picker of document.querySelectorAll<HTMLDetailsElement>(
+      ".filter-picker"
+    )) {
+      picker.open = false;
+    }
   });
 
-  function applyFilters(resetLimit = true) {
-    if (resetLimit) visibleLimit = pageSize;
-    const selectedCountries = [...countryFilters]
-      .filter(filter => filter.checked)
-      .map(filter => filter.value);
-    const selectedCompanyFilters = [...companyFilters].filter(
-      filter => filter.checked
+  // Re-run on initial load and after every View Transition navigation so the
+  // filter / load-more handlers bind to the freshly-swapped DOM.
+  document.addEventListener("astro:page-load", () => {
+    const countryFilters = document.querySelectorAll<HTMLInputElement>(
+      'input[name="country"]'
     );
-    const selectedCompanies = selectedCompanyFilters.map(
-      filter => filter.value
+    const companyFilters = document.querySelectorAll<HTMLInputElement>(
+      'input[name="company"]'
     );
-    const terms = getSearchTerms();
-    const matches: HTMLElement[] = [];
+    const cards = document.querySelectorAll<HTMLElement>("[data-job-card]");
+    const count = document.querySelector<HTMLElement>("#jobs-count");
+    const empty = document.querySelector<HTMLElement>("#no-filter-results");
+    const loadMore = document.querySelector<HTMLButtonElement>("#load-more");
+    const pickers =
+      document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
+    const countrySearch =
+      document.querySelector<HTMLInputElement>("#country-search");
+    const companySearch =
+      document.querySelector<HTMLInputElement>("#company-search");
+    const searchTerms =
+      document.querySelector<HTMLInputElement>("#search-terms");
 
-    for (const card of cards) {
-      const countries = card.dataset.countries?.split("|") || [];
-      const matchesCountry =
-        selectedCountries.length === 0 ||
-        selectedCountries.some(country => countries.includes(country));
-      const matchesCompany =
-        selectedCompanies.length === 0 ||
-        selectedCompanies.includes(card.dataset.company || "");
-      const searchableText = (
-        card.dataset.search ||
-        card.textContent ||
-        ""
-      ).toLowerCase();
-      const matchesSearch =
-        terms.length === 0 || terms.some(term => searchableText.includes(term));
-      if (matchesCountry && matchesCompany && matchesSearch) matches.push(card);
+    const countryLabel = document.querySelector<HTMLElement>("#country-label");
+    const companyLabel = document.querySelector<HTMLElement>("#company-label");
+    const clearCountries =
+      document.querySelector<HTMLButtonElement>("#clear-countries");
+    const clearCompanies =
+      document.querySelector<HTMLButtonElement>("#clear-companies");
+    const clearFilters =
+      document.querySelector<HTMLButtonElement>("#clear-filters");
+    const pageSize = 20;
+    let visibleLimit = pageSize;
+
+    for (const picker of pickers) {
+      picker.addEventListener("toggle", () => {
+        if (!picker.open) return;
+        for (const otherPicker of pickers) {
+          if (otherPicker !== picker) otherPicker.open = false;
+        }
+      });
     }
 
-    for (const card of cards) card.hidden = true;
-    for (const [index, card] of matches.entries()) {
-      card.hidden = index >= visibleLimit;
+    function applyFilters(resetLimit = true) {
+      if (resetLimit) visibleLimit = pageSize;
+      const selectedCountries = [...countryFilters]
+        .filter(filter => filter.checked)
+        .map(filter => filter.value);
+      const selectedCompanyFilters = [...companyFilters].filter(
+        filter => filter.checked
+      );
+      const selectedCompanies = selectedCompanyFilters.map(
+        filter => filter.value
+      );
+      const terms = getSearchTerms();
+      const matches: HTMLElement[] = [];
+
+      for (const card of cards) {
+        const countries = card.dataset.countries?.split("|") || [];
+        const matchesCountry =
+          selectedCountries.length === 0 ||
+          selectedCountries.some(country => countries.includes(country));
+        const matchesCompany =
+          selectedCompanies.length === 0 ||
+          selectedCompanies.includes(card.dataset.company || "");
+        const searchableText = (
+          card.dataset.search ||
+          card.textContent ||
+          ""
+        ).toLowerCase();
+        const matchesSearch =
+          terms.length === 0 ||
+          terms.some(term => searchableText.includes(term));
+        if (matchesCountry && matchesCompany && matchesSearch)
+          matches.push(card);
+      }
+
+      for (const card of cards) card.hidden = true;
+      for (const [index, card] of matches.entries()) {
+        card.hidden = index >= visibleLimit;
+      }
+
+      const displayed = Math.min(visibleLimit, matches.length);
+
+      if (countryLabel) {
+        countryLabel.textContent =
+          selectedCountries.length === 0
+            ? "All countries"
+            : selectedCountries.length === 1
+              ? selectedCountries[0]
+              : `${selectedCountries.length} countries`;
+      }
+      if (companyLabel) {
+        companyLabel.textContent =
+          selectedCompanyFilters.length === 0
+            ? "All companies"
+            : selectedCompanyFilters.length === 1
+              ? selectedCompanyFilters[0].dataset.label || "1 company"
+              : `${selectedCompanyFilters.length} companies`;
+      }
+      if (count) {
+        count.textContent =
+          displayed < matches.length
+            ? `Showing ${displayed} of ${matches.length} active roles`
+            : `Showing ${matches.length} active ${matches.length === 1 ? "role" : "roles"}`;
+      }
+      empty?.classList.toggle("hidden", matches.length !== 0);
+      if (loadMore) loadMore.hidden = displayed >= matches.length;
     }
 
-    const displayed = Math.min(visibleLimit, matches.length);
-
-    if (countryLabel) {
-      countryLabel.textContent =
-        selectedCountries.length === 0
-          ? "All countries"
-          : selectedCountries.length === 1
-            ? selectedCountries[0]
-            : `${selectedCountries.length} countries`;
+    function getSearchTerms() {
+      return (searchTerms?.value || "")
+        .split(",")
+        .map(term => term.trim().toLowerCase())
+        .filter(Boolean);
     }
-    if (companyLabel) {
-      companyLabel.textContent =
-        selectedCompanyFilters.length === 0
-          ? "All companies"
-          : selectedCompanyFilters.length === 1
-            ? selectedCompanyFilters[0].dataset.label || "1 company"
-            : `${selectedCompanyFilters.length} companies`;
+
+    function filterPickerOptions(
+      search: HTMLInputElement | null,
+      name: string
+    ) {
+      const query = search?.value.trim().toLowerCase() || "";
+      const filters = name === "company" ? companyFilters : countryFilters;
+
+      for (const filter of filters) {
+        const option = filter.closest<HTMLElement>(".filter-option");
+        const label = filter.dataset.label || filter.value;
+        if (option)
+          option.hidden = query !== "" && !label.toLowerCase().includes(query);
+      }
     }
-    if (count) {
-      count.textContent =
-        displayed < matches.length
-          ? `Showing ${displayed} of ${matches.length} active roles`
-          : `Showing ${matches.length} active ${matches.length === 1 ? "role" : "roles"}`;
-    }
-    empty?.classList.toggle("hidden", matches.length !== 0);
-    if (loadMore) loadMore.hidden = displayed >= matches.length;
-  }
 
-  function getSearchTerms() {
-    return (searchTerms?.value || "")
-      .split(",")
-      .map(term => term.trim().toLowerCase())
-      .filter(Boolean);
-  }
-
-  function filterPickerOptions(search: HTMLInputElement | null, name: string) {
-    const query = search?.value.trim().toLowerCase() || "";
-    const filters = name === "company" ? companyFilters : countryFilters;
-
-    for (const filter of filters) {
-      const option = filter.closest<HTMLElement>(".filter-option");
-      const label = filter.dataset.label || filter.value;
-      if (option)
-        option.hidden = query !== "" && !label.toLowerCase().includes(query);
-    }
-  }
-
-  for (const filter of [...countryFilters, ...companyFilters]) {
-    filter.addEventListener("change", () => applyFilters());
-  }
-
-  companySearch?.addEventListener("input", () =>
-    filterPickerOptions(companySearch, "company")
-  );
-  countrySearch?.addEventListener("input", () =>
-    filterPickerOptions(countrySearch, "country")
-  );
-  searchTerms?.addEventListener("input", () => applyFilters());
-
-  clearCountries?.addEventListener("click", () => {
-    for (const filter of countryFilters) filter.checked = false;
-    if (countrySearch) countrySearch.value = "";
-    filterPickerOptions(countrySearch, "country");
-    applyFilters();
-  });
-
-  clearCompanies?.addEventListener("click", () => {
-    for (const filter of companyFilters) filter.checked = false;
-    if (companySearch) companySearch.value = "";
-    filterPickerOptions(companySearch, "company");
-    applyFilters();
-  });
-
-  clearFilters?.addEventListener("click", () => {
     for (const filter of [...countryFilters, ...companyFilters]) {
-      filter.checked = false;
+      filter.addEventListener("change", () => applyFilters());
     }
-    if (companySearch) companySearch.value = "";
-    if (countrySearch) countrySearch.value = "";
-    if (searchTerms) searchTerms.value = "";
-    filterPickerOptions(companySearch, "company");
-    filterPickerOptions(countrySearch, "country");
-    applyFilters();
-  });
 
-  loadMore?.addEventListener("click", () => {
-    visibleLimit += pageSize;
-    applyFilters(false);
+    companySearch?.addEventListener("input", () =>
+      filterPickerOptions(companySearch, "company")
+    );
+    countrySearch?.addEventListener("input", () =>
+      filterPickerOptions(countrySearch, "country")
+    );
+    searchTerms?.addEventListener("input", () => applyFilters());
+
+    clearCountries?.addEventListener("click", () => {
+      for (const filter of countryFilters) filter.checked = false;
+      if (countrySearch) countrySearch.value = "";
+      filterPickerOptions(countrySearch, "country");
+      applyFilters();
+    });
+
+    clearCompanies?.addEventListener("click", () => {
+      for (const filter of companyFilters) filter.checked = false;
+      if (companySearch) companySearch.value = "";
+      filterPickerOptions(companySearch, "company");
+      applyFilters();
+    });
+
+    clearFilters?.addEventListener("click", () => {
+      for (const filter of [...countryFilters, ...companyFilters]) {
+        filter.checked = false;
+      }
+      if (companySearch) companySearch.value = "";
+      if (countrySearch) countrySearch.value = "";
+      if (searchTerms) searchTerms.value = "";
+      filterPickerOptions(companySearch, "company");
+      filterPickerOptions(countrySearch, "country");
+      applyFilters();
+    });
+
+    loadMore?.addEventListener("click", () => {
+      visibleLimit += pageSize;
+      applyFilters(false);
+    });
   });
 </script>
 

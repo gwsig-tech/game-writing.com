@@ -34,8 +34,12 @@ pnpm sync             # Generate TypeScript types for Astro modules
 ### CMS
 
 - **Sveltia CMS**: `public/admin/` with config.yml and custom editor components
+- **Version**: loaded unpinned from CDN (`@sveltia/cms` in `public/admin/index.html`), so always the latest release — re-check the [releases](https://github.com/sveltia/sveltia-cms/releases) before relying on specific behavior. Last full review: **2026-06-23 against v0.167.3** (config audited clean; details in `docs/sveltia-CMS-readme.md`). **Intentionally stay unpinned** — auto-receiving security fixes outweighs the small risk of a pre-1.0 behavior change. Track the last-reviewed version in the docs as the baseline; pin *reactively* only if an auto-update ever regresses our workflow.
 - **Draft workflow**: CMS commits to `draft` branch, merged to `main` for production
-- **GameEmbed component**: Custom MDX component for embedding Arcweave games
+- **GameEmbed component**: Custom MDX component for embedding Arcweave games, inserted via a `CMS.registerEditorComponent` editor component in `index.html` (officially supported)
+- **`public_folder` is an Astro alias, not a web path**: `public_folder: "@/assets/"` is an intentional, out-of-spec deviation so body images go through Astro image optimization — do NOT change it to a `/assets` web path
+- **Body widget**: `widget: richtext` is canonical (`markdown` is the back-compat alias); it outputs Markdown, and `<GameEmbed/>` round-trips via the editor component
+- **Subfolder limitation**: a collection lists only files directly in its `folder` (no recursive/nested listing) and allows one file extension, so blog posts in `_events`/`_spotlights` and image subfolders aren't editable without dedicated collections / asset collections — see `docs/plans/2026-06-23-cms-subfolder-collections.md`
 
 ### Key Directories
 
@@ -66,13 +70,14 @@ pnpm sync             # Generate TypeScript types for Astro modules
 ## Upstream Theme
 
 - `upstream` remote points to `satnaing/astro-paper`
-- Fork has heavily diverged — prefer cherry-picking specific commits over a full merge
+- **As of upstream's `feat!: AstroPaper v6` (`f0b644d`), the theme is a ground-up rewrite** (new i18n, `BaseLayout`/`PostLayout` replacing `Layout.astro`, design tokens). Our fork has diverged past the point of merging OR cherry-picking — a `git pull upstream main` would be destructive. Treat upstream as a **reference** for "how to configure X on Astro 6+", and port ideas by hand.
 - See `docs/plans/` for maintenance history and decisions
 
-## Pinned Dependencies (do not bump without checking)
+## Dependencies (do not bump without checking)
 
-- `cpx2` is pinned to exact `8.0.0`. Versions 8.0.1 / 8.0.2 break the build with `ERR_REQUIRE_ESM` (require of ESM-only `debounce@3`).
-- See the latest plan in `docs/plans/` for the full list of held majors and their revisit triggers.
+- We track Astro **6** (matching the upstream theme), not Astro 7. The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis` 173 are applied. See the latest plan in `docs/plans/` for revisit triggers.
+- `cpx2` was previously pinned to exact `8.0.0` to dodge an `ERR_REQUIRE_ESM` regression; `cpx2@9` migrated to ESM and resolved it, so it is now `^9.0.0` (do not re-pin).
+- Astro 6 requires **Node 22.12+** (`engines` field enforces it) — keep Vercel's build Node version at 22+.
 
 ## Claude Code Settings
 

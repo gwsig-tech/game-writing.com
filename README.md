@@ -25,6 +25,7 @@ Custom features for this site:
 - [x] GameEmbed component for embedding Arcweave interactive games
 - [x] Google Calendar API integration for live events
 - [x] Game jam showcase pages
+- [x] Jobs board — curated game-writing roles from a build-time CSV (`src/data/jobs/`)
 
 ## Quick Start
 
@@ -162,11 +163,18 @@ pnpm update --latest <pkg-1> <pkg-2> ...
 pnpm update
 ```
 
-**Pinned packages — do not bump without verification:**
+**Held majors / packages — do not bump without verification:**
 
-- `cpx2` is pinned to exact `8.0.0`. Versions 8.0.1 / 8.0.2 trigger
-  `ERR_REQUIRE_ESM` during `pnpm build` because they `require()` `debounce@3`
-  which is now ESM-only. Unpin when 8.0.3+ ships with the require fixed.
+- We track **Astro 6** (matching the upstream theme), not Astro 7. The only
+  majors still held are **Astro 7** and **`sharp` 0.35** (native image backend —
+  validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis`
+  173 are applied. See the latest [maintenance plan](docs/plans/) for revisit
+  triggers.
+- `cpx2` was previously pinned to exact `8.0.0` to dodge an `ERR_REQUIRE_ESM`
+  regression. `cpx2@9` migrated to ESM and fixed it, so it is now `^9.0.0` —
+  do not re-pin.
+- Astro 6 requires **Node 22.12+** (enforced via `engines`); keep Vercel's
+  build Node version at 22+.
 
 For detailed guidance, see [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md)
 and the latest [maintenance plan](docs/plans/) for held items and revisit triggers.
