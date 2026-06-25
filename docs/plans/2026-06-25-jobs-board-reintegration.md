@@ -7,35 +7,18 @@
 
 ## Context
 
-Another developer built a solid **jobs board** feature on `narrative-job-board`.
-That branch **already contains** the June Astro 6 upgrade — it merged
-`main@2e12a44` in at commit `902a380`. The problem is the very next commit,
-**`b8e1aa0` "Fix Astro build config and lockfile," resolved that merge by
-DOWNGRADING the framework back to Astro 5** — but only three files:
-[astro.config.ts](../../astro.config.ts), [package.json](../../package.json),
-`pnpm-lock.yaml`. The result is an **inconsistent tree**: Astro-5 toolchain +
-Astro-6 source (e.g. [content.config.ts](../../src/content.config.ts) imports `z`
-from `astro/zod`, which doesn't exist in Astro 5), which likely doesn't build cleanly.
+Another developer built a solid **jobs board** feature on `narrative-job-board`. That branch **already contains** the June Astro 6 upgrade — it merged `main@2e12a44` in at commit `902a380`. The problem is the very next commit, **`b8e1aa0` "Fix Astro build config and lockfile," resolved that merge by DOWNGRADING the framework back to Astro 5** — but only three files: [astro.config.ts](../../astro.config.ts), [package.json](../../package.json), `pnpm-lock.yaml`. The result is an **inconsistent tree**: Astro-5 toolchain + Astro-6 source (e.g. [content.config.ts](../../src/content.config.ts) imports `z` from `astro/zod`, which doesn't exist in Astro 5), which likely doesn't build cleanly.
 
-**Goal:** on this branch, restore the stable Astro 6 framework (undo the
-downgrade), keep the well-built feature, fix two small gaps (SEO description +
-View-Transitions script re-bind), verify the whole site builds, then land via the
-normal flow. The feature is **not** rebuilt and **not** cherry-picked onto a new
-branch — it's already here; we just correct what `b8e1aa0` got wrong.
+**Goal:** on this branch, restore the stable Astro 6 framework (undo the downgrade), keep the well-built feature, fix two small gaps (SEO description + View-Transitions script re-bind), verify the whole site builds, then land via the normal flow. The feature is **not** rebuilt and **not** cherry-picked onto a new branch — it's already here; we just correct what `b8e1aa0` got wrong.
 
 **Decisions:**
-- Mobile nav: **keep main's icon-button Archives link** (the branch also restyled it
-  to plain text — unrelated to jobs; revert that part).
+- Mobile nav: **keep main's icon-button Archives link** (the branch also restyled it to plain text — unrelated to jobs; revert that part).
 - Include the **View-Transitions script fix**.
-- **JobPosting structured data** is documented as a separate future feature —
-  see [2026-06-25-job-posting-structured-data.md](./2026-06-25-job-posting-structured-data.md).
+- **JobPosting structured data** is documented as a separate future feature — see [2026-06-25-job-posting-structured-data.md](./2026-06-25-job-posting-structured-data.md).
 
 ## Diagnostic workflow — comparing a feature branch against an upgraded trunk
 
-The reusable method (all read-only). **The trap:** `git diff main..<branch>`
-conflates the feature's real changes with the *reverse* of everything the branch
-is missing/changed in the framework. **Don't diff against the tip — diff against
-the merge-base.**
+The reusable method (all read-only). **The trap:** `git diff main..<branch>` conflates the feature's real changes with the *reverse* of everything the branch is missing/changed in the framework. **Don't diff against the tip — diff against the merge-base.**
 
 ```bash
 # 1. Topology — where did the branch fork, and has it already absorbed the trunk?
@@ -52,16 +35,12 @@ git show origin/narrative-job-board:package.json   | grep -E '"astro"|mdx'  # ^5
 git show origin/narrative-job-board:astro.config.ts | grep -nE 'unified|remarkPlugins'  # v5 remarkPlugins, no unified()
 ```
 
-Then **classify** each changed file into feature-additive / framework-regression /
-docs, and decide **restore-vs-keep** per file. (Generalizes to any feature branch
-vs an upgraded trunk.)
+Then **classify** each changed file into feature-additive / framework-regression / docs, and decide **restore-vs-keep** per file. (Generalizes to any feature branch vs an upgraded trunk.)
 
 ## Findings
 
 ### Topology (verified)
-`narrative-job-board` = [old jobs work] → `902a380` (merge `main@2e12a44`, Astro 6)
-→ `b8e1aa0` (DOWNGRADE config + lockfile to Astro 5; `package.json` reverted in this
-stretch too) → `32cf88a`/`034d822`/`3dcf82e`/`e6ed38c` (jobs refinements).
+`narrative-job-board` = [old jobs work] → `902a380` (merge `main@2e12a44`, Astro 6) → `b8e1aa0` (DOWNGRADE config + lockfile to Astro 5; `package.json` reverted in this stretch too) → `32cf88a`/`034d822`/`3dcf82e`/`e6ed38c` (jobs refinements).
 
 ### The 13-file changeset, classified (`git diff 2e12a44..jobs`)
 | Disposition | Files |
@@ -71,22 +50,13 @@ stretch too) → `32cf88a`/`034d822`/`3dcf82e`/`e6ed38c` (jobs refinements).
 | **RECONCILE** | [src/components/Header.astro](../../src/components/Header.astro) (keep `/jobs` nav add; revert the unrelated mobile-Archives restyle), `CLAUDE.md`, `README.md` (branch dropped June notes → take main's), `.gitignore` (branch adds `.pnpm-store/` + EOF newline — harmless, keep) |
 
 ### Feature quality (verified Astro-6-safe — no rewrite needed)
-- **`src/lib/jobs.ts`** — pure `node:fs/promises` + `node:path`; reads the committed
-  CSV at build time; hand-rolled RFC-4180 parser; **no `astro:content`, no `Astro.glob`,
-  no new deps.** Throws on a malformed CSV (build fails loudly — acceptable).
-- **`src/pages/jobs.astro`** — uses the shared `Layout` + `Header`/`Footer`; top-level
-  `await getActiveJobs()` (build-time SSG); inline bundled `<script>` for filtering.
-- **`src/components/JobCard.astro`** — no imports; current `class:list`/`hidden` syntax;
-  styling via `color-mix()` on AstroPaper tokens (`--accent`/`--foreground`/`--background`/`--border`)
-  → light/dark correct.
+- **`src/lib/jobs.ts`** — pure `node:fs/promises` + `node:path`; reads the committed CSV at build time; hand-rolled RFC-4180 parser; **no `astro:content`, no `Astro.glob`, no new deps.** Throws on a malformed CSV (build fails loudly — acceptable).
+- **`src/pages/jobs.astro`** — uses the shared `Layout` + `Header`/`Footer`; top-level `await getActiveJobs()` (build-time SSG); inline bundled `<script>` for filtering.
+- **`src/components/JobCard.astro`** — no imports; current `class:list`/`hidden` syntax; styling via `color-mix()` on AstroPaper tokens (`--accent`/`--foreground`/`--background`/`--border`) → light/dark correct.
 
 ### Two gaps to fix on the way in
-1. **SEO:** `jobs.astro` passes `title` but not `description` to `Layout` → generic
-   `og:description` (falls back to `SITE.desc`).
-2. **View Transitions:** the page `<script>` (lines 212–384) binds on hard load but has
-   **no `astro:page-load`/`astro:after-swap` handler**, so reaching `/jobs` via an
-   in-site nav click (Layout has `<ClientRouter />`) leaves filters & "load more"
-   **dead until a hard refresh.**
+1. **SEO:** `jobs.astro` passes `title` but not `description` to `Layout` → generic `og:description` (falls back to `SITE.desc`).
+2. **View Transitions:** the page `<script>` (lines 212–384) binds on hard load but has **no `astro:page-load`/`astro:after-swap` handler**, so reaching `/jobs` via an in-site nav click (Layout has `<ClientRouter />`) leaves filters & "load more" **dead until a hard refresh.**
 
 ## Integration plan (in-place on `narrative-job-board-jm`)
 
@@ -100,9 +70,7 @@ git branch backup/jobs-pre-fix-2026-06-25      # cheap rollback point
 ```bash
 git checkout origin/main -- astro.config.ts package.json pnpm-lock.yaml
 ```
-Toolchain returns to Astro 6 (astro `^6.4.8`, mdx `^6.0.3`, `@astrojs/markdown-remark`,
-`markdown.processor: unified({...})`, the Astro-6 lockfile). The feature added no deps
-and no config, so taking main's is purely correct.
+Toolchain returns to Astro 6 (astro `^6.4.8`, mdx `^6.0.3`, `@astrojs/markdown-remark`, `markdown.processor: unified({...})`, the Astro-6 lockfile). The feature added no deps and no config, so taking main's is purely correct.
 
 **2. Header — take main's, re-add only the `/jobs` nav (keep main's mobile Archives)**
 ```bash
@@ -128,16 +96,13 @@ Then hand-insert two whitespace-clean blocks:
     </a>
   </li>
   ```
-Do **not** `git checkout` Header from the jobs branch (that drags in the
-mobile-Archives icon→text restyle we're rejecting).
+Do **not** `git checkout` Header from the jobs branch (that drags in the mobile-Archives icon→text restyle we're rejecting).
 
 **3. Docs — keep main's June docs; fold in a jobs note**
 ```bash
 git checkout origin/main -- CLAUDE.md README.md
 ```
-Optionally note in README/CLAUDE: jobs data lives in `src/data/jobs/job_postings.csv`
-(build-time), refreshed by the external `narrative_job_board` service; see
-`src/data/jobs/README.md`. Leave `.gitignore` as the branch has it.
+Optionally note in README/CLAUDE: jobs data lives in `src/data/jobs/job_postings.csv` (build-time), refreshed by the external `narrative_job_board` service; see `src/data/jobs/README.md`. Leave `.gitignore` as the branch has it.
 
 **4. SEO fix — `src/pages/jobs.astro` (~line 43)**
 ```astro
@@ -147,13 +112,7 @@ Optionally note in README/CLAUDE: jobs data lives in `src/data/jobs/job_postings
 >
 ```
 
-**5. View-Transitions fix — `src/pages/jobs.astro` `<script>` (212–384)**
-Wrap the body in `setupJobsPage()` and bind on `astro:page-load` (fires on initial
-load **and** after every VT swap). **Guard the one document-level listener** (the
-dropdown "click outside to close" at ~line 251): attach it ONCE outside `setupJobsPage`
-(or via a module flag), since `document` persists across swaps and re-adding it each
-navigation stacks duplicates. Element-scoped listeners are safe to re-run (elements are
-replaced each swap). Mirror the proven pattern in `src/components/Header.astro`.
+**5. View-Transitions fix — `src/pages/jobs.astro` `<script>` (212–384)** Wrap the body in `setupJobsPage()` and bind on `astro:page-load` (fires on initial load **and** after every VT swap). **Guard the one document-level listener** (the dropdown "click outside to close" at ~line 251): attach it ONCE outside `setupJobsPage` (or via a module flag), since `document` persists across swaps and re-adding it each navigation stacks duplicates. Element-scoped listeners are safe to re-run (elements are replaced each swap). Mirror the proven pattern in `src/components/Header.astro`.
 ```js
 <script>
   function setupJobsPage() { /* existing element-scoped wiring */ }
@@ -187,20 +146,16 @@ pnpm dev            # manual smoke test
 ```
 `/jobs` checklist:
 - [ ] Renders (CSV parser didn't throw on the 284-row file).
-- [ ] **Reach `/jobs` via the nav LINK (View-Transition), not only a hard load** —
-      filters + "load more" work (validates the VT fix).
+- [ ] **Reach `/jobs` via the nav LINK (View-Transition), not only a hard load** — filters + "load more" work (validates the VT fix).
 - [ ] Light **and** dark: company accent = `--accent`; readable contrast.
 - [ ] Nav active state on `/jobs` (desktop + mobile); **mobile Archives still the icon button.**
 - [ ] Company / country / free-text filters; label + count update; clear works.
 - [ ] "Load more" (+20, initial 100); empty-state when nothing matches.
 - [ ] `view-source` shows the new `description` / `og:description`.
-- [ ] Rest of site builds & renders: home, `/posts`, `/tags`, `/about`, `/events`,
-      `/constitution`, `/archives`, `/search` (pagefind), RSS, sitemap.
+- [ ] Rest of site builds & renders: home, `/posts`, `/tags`, `/about`, `/events`, `/constitution`, `/archives`, `/search` (pagefind), RSS, sitemap.
 
 ## Open items / cleanup (post-landing)
-- Delete the stale `narrative-job-board` / `narrative-job-board-jm` once the fix lands
-  (their history carries the misleading downgrade) — optional.
-- Sibling branches `job-postings` (Apr) and `jobs-tab` (Jun) are earlier jobs iterations
-  superseded by this work — delete or keep for reference.
+- Delete the stale `narrative-job-board` / `narrative-job-board-jm` once the fix lands (their history carries the misleading downgrade) — optional.
+- Sibling branches `job-postings` (Apr) and `jobs-tab` (Jun) are earlier jobs iterations superseded by this work — delete or keep for reference.
 - CSV refresh cadence/ownership; confirm "build hard-fails on malformed CSV" is desired.
 - `/jobs` nav order (currently last) — confirm or move (e.g. after Posts).
