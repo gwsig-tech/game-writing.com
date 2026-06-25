@@ -2,7 +2,7 @@
 import { google } from "googleapis";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
@@ -116,33 +116,37 @@ const title = "Game Writing SIG Events";
 
 <Layout title={`${title} | ${SITE.title}`}>
   <Header />
-  <Breadcrumb />
-  <main id="main-content">
-    <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
-      <h1 class="text-2xl tracking-wider sm:text-3xl">{title}</h1>
-
-      <p>Check in here to learn about events relevant to industry writers</p>
-
-      <hr />
-
+  <Main
+    pageTitle={title}
+    pageDesc="Check in here to learn about events relevant to industry writers."
+  >
+    <section class="app-prose mb-28 max-w-app prose-img:border-0">
       <h2>Jams</h2>
 
-      <h3><a href="/jams/2025-arcjam">2025 Game Writing SIG Arcjam</a> (Nov 21-24)</h3>
+      <h3>
+        <a href="/jams/2025-arcjam">2025 Game Writing SIG Arcjam</a> (Nov 21-24)
+      </h3>
 
-      <br>
+      <br />
 
       <h2>Calendar</h2>
 
       <p class="flex flex-wrap gap-x-6 gap-y-2">
-        <LinkButton href={calendarViewUrl} target="_blank" rel="noopener noreferrer">
+        <LinkButton
+          href={calendarViewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           View full calendar
         </LinkButton>
-        <LinkButton href={calendarSubscribeUrl} target="_blank" rel="noopener noreferrer">
+        <LinkButton
+          href={calendarSubscribeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Add to Google Calendar
         </LinkButton>
-        <LinkButton href={calendarIcalUrl}>
-          Subscribe (iCal)
-        </LinkButton>
+        <LinkButton href={calendarIcalUrl}> Subscribe (iCal) </LinkButton>
       </p>
 
       <!-- Debug: error={error}, events.length={events.length} -->
@@ -151,9 +155,10 @@ const title = "Game Writing SIG Events";
 
       {!error && events.length === 0 && <p>No upcoming events scheduled.</p>}
 
-      {!error && events.length > 0 && (
-        <div class="overflow-x-auto">
-          <table>
+      {
+        !error && events.length > 0 && (
+          <div class="overflow-x-auto">
+            <table>
               <thead>
                 <tr>
                   <th>When</th>
@@ -164,7 +169,9 @@ const title = "Game Writing SIG Events";
               <tbody>
                 {events.map(event => (
                   <tr>
-                    <td class="whitespace-pre-line">{formatEventDate(event)}</td>
+                    <td class="whitespace-pre-line">
+                      {formatEventDate(event)}
+                    </td>
                     <td>
                       {event.htmlLink ? (
                         <a href={event.htmlLink} target="_blank" rel="noopener">
@@ -180,7 +187,8 @@ const title = "Game Writing SIG Events";
               </tbody>
             </table>
           </div>
-      )}
+        )
+      }
 
       <hr />
 
@@ -201,7 +209,10 @@ const title = "Game Writing SIG Events";
               <td>Various</td>
               <td>Day of the Devs</td>
               <td>San Francisco, CA, USA</td>
-              <td><a href="https://www.dayofthedevs.org/">dayofthedevs.org</a></td>
+              <td
+                ><a href="https://www.dayofthedevs.org/">dayofthedevs.org</a
+                ></td
+              >
             </tr>
             <tr>
               <td>Various</td>
@@ -219,13 +230,21 @@ const title = "Game Writing SIG Events";
               <td>April</td>
               <td>Reboot Develop Blue</td>
               <td>Dubrovnik, Croatia</td>
-              <td><a href="https://rebootdevelopblue.com/">rebootdevelopblue.com</a></td>
+              <td
+                ><a href="https://rebootdevelopblue.com/"
+                  >rebootdevelopblue.com</a
+                ></td
+              >
             </tr>
             <tr>
               <td>April</td>
               <td>Future Fest Connect</td>
               <td>Raleigh, NC</td>
-              <td><a href="https://www.futurefestconnect.com/">futurefestconnect.com</a></td>
+              <td
+                ><a href="https://www.futurefestconnect.com/"
+                  >futurefestconnect.com</a
+                ></td
+              >
             </tr>
             <tr>
               <td>May</td>
@@ -253,7 +272,10 @@ const title = "Game Writing SIG Events";
               <td>August</td>
               <td>Gamescom</td>
               <td>Cologne, Germany</td>
-              <td><a href="https://www.gamescom.global/en">gamescom.global</a></td>
+              <td
+                ><a href="https://www.gamescom.global/en">gamescom.global</a
+                ></td
+              >
             </tr>
             <tr>
               <td>Early fall</td>
@@ -283,13 +305,20 @@ const title = "Game Writing SIG Events";
               <td>October</td>
               <td>BGS – Brasil Game Show</td>
               <td>São Paulo, Brazil</td>
-              <td><a href="https://www.brasilgameshow.com.br/">brasilgameshow.com.br</a></td>
+              <td
+                ><a href="https://www.brasilgameshow.com.br/"
+                  >brasilgameshow.com.br</a
+                ></td
+              >
             </tr>
             <tr>
               <td>November</td>
               <td>AdventureX</td>
               <td>London, UK</td>
-              <td><a href="https://www.adventurexpo.org/">adventurexpo.org</a></td>
+              <td
+                ><a href="https://www.adventurexpo.org/">adventurexpo.org</a
+                ></td
+              >
             </tr>
             <tr>
               <td>November</td>
@@ -315,9 +344,15 @@ const title = "Game Writing SIG Events";
             </tr>
             <tr>
               <td>December</td>
-              <td>ICIDS - International Conference on Interactive Digital Storytelling</td>
+              <td
+                >ICIDS - International Conference on Interactive Digital
+                Storytelling</td
+              >
               <td>Varies</td>
-              <td><a href="https://www.facebook.com/ICIDS/">facebook.com/ICIDS</a></td>
+              <td
+                ><a href="https://www.facebook.com/ICIDS/">facebook.com/ICIDS</a
+                ></td
+              >
             </tr>
             <tr>
               <td>December</td>
@@ -330,8 +365,7 @@ const title = "Game Writing SIG Events";
       </div>
 
       <hr />
-
     </section>
-  </main>
+  </Main>
   <Footer />
 </Layout>
