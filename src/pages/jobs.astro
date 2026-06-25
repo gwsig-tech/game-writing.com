@@ -236,7 +236,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     document.querySelector<HTMLButtonElement>("#clear-companies");
   const clearFilters =
     document.querySelector<HTMLButtonElement>("#clear-filters");
-  const pageSize = 20;
+  const pageSize = 100;
   let visibleLimit = pageSize;
 
   for (const picker of pickers) {
