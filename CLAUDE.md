@@ -30,6 +30,7 @@ pnpm sync             # Generate TypeScript types for Astro modules
 
 - **Site settings**: `src/config.ts` (site URL, author, title, etc.)
 - **Social links**: `src/constants.ts` (SOCIALS and SHARE_LINKS arrays)
+- **Environment variables**: declared with a typed schema in `astro.config.ts` (`env`/`envField`); set in local `.env` and as Vercel env vars. Build-time secrets use `access: "secret", context: "server"` (e.g. `GOOGLE_CALENDAR_API_KEY`, read at build by `src/pages/events.astro`) and never reach the client bundle since the site is SSG. All are `optional` and degrade gracefully. Document and reuse this pattern for new build-time integrations — see the **Environment Variables** section in `README.md`.
 
 ### CMS
 

@@ -36,6 +36,23 @@ pnpm build            # Build for production (includes search index)
 pnpm preview          # Preview production build
 ```
 
+## Environment Variables
+
+Environment variables are declared with a typed schema in [`astro.config.ts`](astro.config.ts) (Astro's `env` / `envField`). Set them in a local `.env` file (gitignored) for development, and as **Vercel Environment Variables** for preview/production builds.
+
+| Variable | Access / Context | Required | Purpose |
+| :------- | :--------------- | :------- | :------ |
+| `GOOGLE_CALENDAR_API_KEY` | `secret` / `server` | optional | Server-side Google Calendar API key. Read at **build time** in [`src/pages/events.astro`](src/pages/events.astro) to fetch upcoming events via `googleapis`. |
+| `PUBLIC_GOOGLE_SITE_VERIFICATION` | `public` / `client` | optional | Search Console verification token, emitted as a `<meta>` tag in [`src/layouts/Layout.astro`](src/layouts/Layout.astro) **only when set**. Not needed in the current setup — the domain is verified with Google Search Console via a **DNS TXT record** (a one-time, domain-level method), so this meta-tag alternative is redundant and the variable is normally left unset. |
+
+How the build uses these:
+
+- The site is **statically generated (SSG)**, so `secret` / `context: "server"` variables (like `GOOGLE_CALENDAR_API_KEY`) are read on the build machine and **never shipped to the client bundle** — only the rendered output (e.g. the events table) is published.
+- Because data is fetched at build time, content refreshes when the site rebuilds. A daily GitHub Actions cron ([`.github/workflows/scheduled-build.yml`](.github/workflows/scheduled-build.yml)) pings a Vercel deploy hook to trigger that rebuild.
+- All variables are `optional` and **degrade gracefully** when unset (e.g. `/events` shows a "not configured" message instead of failing the build). Add new build-time integrations using this same pattern.
+
+> **Planned:** live build-time aggregation for the jobs board will introduce `JOBS_SOURCE_URL` (and an optional `JOBS_API_KEY`) following the same `secret` / `server` / `optional` pattern. See [docs/plans/2026-06-26-job-posting-structured-data.md](docs/plans/2026-06-26-job-posting-structured-data.md).
+
 ## Project Structure
 
 ```text
