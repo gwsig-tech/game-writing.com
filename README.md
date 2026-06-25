@@ -40,9 +40,9 @@ pnpm preview          # Preview production build
 
 Environment variables are declared with a typed schema in [`astro.config.ts`](astro.config.ts) (Astro's `env` / `envField`). Set them in a local `.env` file (gitignored) for development, and as **Vercel Environment Variables** for preview/production builds.
 
-| Variable | Access / Context | Required | Purpose |
-| :------- | :--------------- | :------- | :------ |
-| `GOOGLE_CALENDAR_API_KEY` | `secret` / `server` | optional | Server-side Google Calendar API key. Read at **build time** in [`src/pages/events.astro`](src/pages/events.astro) to fetch upcoming events via `googleapis`. |
+| Variable                          | Access / Context    | Required | Purpose                                                                                                                                                                                                                                                                                                                                                                      |
+| :-------------------------------- | :------------------ | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GOOGLE_CALENDAR_API_KEY`         | `secret` / `server` | optional | Server-side Google Calendar API key. Read at **build time** in [`src/pages/events.astro`](src/pages/events.astro) to fetch upcoming events via `googleapis`.                                                                                                                                                                                                                 |
 | `PUBLIC_GOOGLE_SITE_VERIFICATION` | `public` / `client` | optional | Search Console verification token, emitted as a `<meta>` tag in [`src/layouts/Layout.astro`](src/layouts/Layout.astro) **only when set**. Not needed in the current setup — the domain is verified with Google Search Console via a **DNS TXT record** (a one-time, domain-level method), so this meta-tag alternative is redundant and the variable is normally left unset. |
 
 How the build uses these:
@@ -71,28 +71,31 @@ How the build uses these:
 │   │   └── images/            # Site images (also CMS media folder)
 │   ├── components/
 │   │   ├── GameEmbed.astro    # [Custom] Arcweave game embedding
+│   │   ├── JobCard.astro      # [Custom] Jobs board listing card
 │   │   ├── Header.astro       # [Modified] Custom navigation
 │   │   ├── Card.astro         # Blog post cards
 │   │   ├── Datetime.astro     # Date/time display
 │   │   ├── Tag.astro          # Tag links
 │   │   └── ...                # Other AstroPaper components
 │   ├── data/
-│   │   └── blog/
-│   │       ├── YYYY-MM-DD-slug.mdx  # Blog posts
-│   │       ├── examples/      # AstroPaper documentation (drafts)
-│   │       ├── _releases/     # AstroPaper release notes (drafts)
-│   │       ├── _events/       # Event announcements
-│   │       └── _spotlights/   # Member spotlights
+│   │   ├── blog/
+│   │   │   ├── YYYY-MM-DD-slug.mdx  # Blog posts
+│   │   │   ├── examples/      # AstroPaper documentation (drafts)
+│   │   │   ├── _releases/     # AstroPaper release notes (drafts)
+│   │   │   ├── _events/       # Event announcements
+│   │   │   └── _spotlights/   # Member spotlights
+│   │   └── jobs/              # [Custom] Jobs board source (job_postings.csv)
 │   ├── layouts/
-│   │   ├── Layout.astro       # [Modified] Base HTML layout + Vercel analytics + theme script
+│   │   ├── Layout.astro       # [Modified] Base HTML layout + Vercel analytics + theme script + JSON-LD
 │   │   ├── PostDetails.astro  # [Modified] Blog post layout + GameEmbed
-│   │   ├── AboutLayout.astro  # [Custom] Static page layout
-│   │   └── Main.astro         # Main content wrapper
+│   │   ├── DefaultLayout.astro # [Custom] Default markdown/content page layout
+│   │   └── Main.astro         # Main content wrapper (utility/hub pages)
 │   ├── pages/
 │   │   ├── index.astro        # Homepage
-│   │   ├── about.md           # About page
-│   │   ├── constitution.md    # SIG constitution
+│   │   ├── about.mdx          # About page
+│   │   ├── constitution.mdx   # SIG constitution
 │   │   ├── events.astro       # [Custom] Google Calendar integration
+│   │   ├── jobs.astro         # [Custom] Jobs board (build-time CSV)
 │   │   ├── search.astro       # Pagefind search
 │   │   ├── jams/              # [Custom] Game jam pages
 │   │   ├── posts/             # Blog post routes
@@ -104,6 +107,7 @@ How the build uses these:
 │   │   ├── global.css         # Tailwind config + CSS variables
 │   │   └── typography.css     # Prose/markdown styling
 │   ├── utils/                 # Helper functions
+│   ├── lib/                   # [Custom] Build-time libs (jobs.ts — CSV jobs board)
 │   ├── config.ts              # Site configuration (URL, title, etc.)
 │   ├── constants.ts           # Social links, sharing options
 │   ├── content.config.ts      # Content collection schema
@@ -236,36 +240,28 @@ git show upstream/main:astro.config.ts
 - [Compare versions](https://github.com/satnaing/astro-paper/compare/v5.5.1...main) (current base: v5.5.1)
 - [Release Notes](src/data/blog/_releases/) (local copies)
 
-**Files likely to have conflicts** (customized for this site):
+**Most heavily-customized files** (preserve these when porting any upstream idea by hand):
 
-- `src/components/Header.astro` - Custom navigation
-- `src/layouts/Layout.astro` - Vercel analytics/speed-insights injection
-- `src/layouts/PostDetails.astro` - GameEmbed integration
-- `src/config.ts` - Site-specific settings
-- `src/constants.ts` - Social links
+- `src/layouts/` — `Layout` (Vercel analytics/speed-insights + conditional JSON-LD + theme script), `DefaultLayout`, `Main`, `PostDetails` (GameEmbed)
+- `src/components/Header.astro` — custom nav (About/Events/Constitution/Posts/Tags/Jobs)
+- `src/config.ts` / `src/constants.ts` — site settings, social/share links
+- `src/styles/global.css` — custom light/dark palette + utilities
+- `src/pages/jobs.astro` + `src/lib/jobs.ts`, `src/pages/events.astro`, `public/admin/config.yml` — the jobs board, Google Calendar, and Sveltia CMS
 
-**Files safe to update** (minimal or no customization):
-
-- `src/utils/` - Helper functions
-- `src/styles/` - Global styles (minor customizations to section/footer)
-- Most components in `src/components/`
-
-> **Recommendation:** the fork has heavily diverged from upstream. Prefer
-> cherry-picking specific upstream commits over a full merge. See
-> [docs/plans/](docs/plans/) for prior maintenance notes and decisions.
+A full adoption of upstream's AstroPaper **v6** rewrite is scoped (and deliberately deferred) in [docs/plans/2026-06-26-astropaper-v6-adoption.md](docs/plans/2026-06-26-astropaper-v6-adoption.md).
 
 ## Tech Stack
 
-| Category   | Technology                                                   |
-| :--------- | :----------------------------------------------------------- |
-| Framework  | [Astro](https://astro.build/) v5.16.6                        |
-| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.1 |
-| Styling    | [Tailwind CSS](https://tailwindcss.com/) v4                  |
+| Category   | Technology                                                                              |
+| :--------- | :-------------------------------------------------------------------------------------- |
+| Framework  | [Astro](https://astro.build/) v6.4.8                                                    |
+| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.1                            |
+| Styling    | [Tailwind CSS](https://tailwindcss.com/) v4                                             |
 | CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (loaded unpinned — always latest) |
-| Search     | [Pagefind](https://pagefind.app/)                            |
-| Icons      | [Tabler Icons](https://tabler-icons.io/)                     |
-| OG Images  | [Satori](https://github.com/vercel/satori) + Resvg           |
-| Deployment | [Vercel](https://vercel.com/)                                |
+| Search     | [Pagefind](https://pagefind.app/)                                                       |
+| Icons      | [Tabler Icons](https://tabler-icons.io/)                                                |
+| OG Images  | [Satori](https://github.com/vercel/satori) + Resvg                                      |
+| Deployment | [Vercel](https://vercel.com/)                                                           |
 
 ## Documentation
 

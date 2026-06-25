@@ -35,7 +35,7 @@ pnpm sync             # Generate TypeScript types for Astro modules
 ### CMS
 
 - **Sveltia CMS**: `public/admin/` with config.yml and custom editor components
-- **Version**: loaded unpinned from CDN (`@sveltia/cms` in `public/admin/index.html`), so always the latest release — re-check the [releases](https://github.com/sveltia/sveltia-cms/releases) before relying on specific behavior. Last full review: **2026-06-23 against v0.167.3** (config audited clean; details in `docs/sveltia-CMS-readme.md`). **Intentionally stay unpinned** — auto-receiving security fixes outweighs the small risk of a pre-1.0 behavior change. Track the last-reviewed version in the docs as the baseline; pin *reactively* only if an auto-update ever regresses our workflow.
+- **Version**: loaded unpinned from CDN (`@sveltia/cms` in `public/admin/index.html`), so always the latest release — re-check the [releases](https://github.com/sveltia/sveltia-cms/releases) before relying on specific behavior. Last full review: **2026-06-23 against v0.167.3** (config audited clean; details in `docs/sveltia-CMS-readme.md`). **Intentionally stay unpinned** — auto-receiving security fixes outweighs the small risk of a pre-1.0 behavior change. Track the last-reviewed version in the docs as the baseline; pin _reactively_ only if an auto-update ever regresses our workflow.
 - **Draft workflow**: CMS commits to `draft` branch, merged to `main` for production
 - **GameEmbed component**: Custom MDX component for embedding Arcweave games, inserted via a `CMS.registerEditorComponent` editor component in `index.html` (officially supported)
 - **`public_folder` is an Astro alias, not a web path**: `public_folder: "@/assets/"` is an intentional, out-of-spec deviation so body images go through Astro image optimization — do NOT change it to a `/assets` web path
@@ -44,10 +44,11 @@ pnpm sync             # Generate TypeScript types for Astro modules
 
 ### Key Directories
 
-- `src/components/` - Astro components (Card, Header, Datetime, etc.)
-- `src/layouts/` - Page layouts (Layout, PostDetails, AboutLayout)
-- `src/pages/` - Route pages including static pages like about.md, constitution.md
+- `src/components/` - Astro components (Card, Header, Datetime, JobCard, etc.)
+- `src/layouts/` - Page layouts: `Layout` (base), `PostDetails` (posts), `DefaultLayout` (the default for markdown/content pages — formerly `AboutLayout`), `Main` (utility/hub pages)
+- `src/pages/` - Route pages including static `.mdx` pages (`about.mdx`, `constitution.mdx`) and custom pages (`events.astro`, `jobs.astro`)
 - `src/utils/` - Helper functions for posts, tags, OG images
+- `src/lib/` - Standalone build-time libraries (`jobs.ts` parses `src/data/jobs/job_postings.csv` for the jobs board)
 - `src/assets/` - Images and icons (also used as CMS media folder)
 
 ### Build Output
