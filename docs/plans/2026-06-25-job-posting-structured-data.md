@@ -7,10 +7,7 @@
 
 ## Goal
 
-Emit `schema.org/JobPosting` JSON-LD per listing on [/jobs](../../src/pages/jobs.astro)
-so search engines can surface the board in Job rich results / Google Jobs and so
-shared links carry richer metadata. Currently the page emits no per-listing
-structured data (the shared `Layout` emits a generic `BlogPosting`, which is wrong
+Emit `schema.org/JobPosting` JSON-LD per listing on [/jobs](../../src/pages/jobs.astro) so search engines can surface the board in Job rich results / Google Jobs and so shared links carry richer metadata. Currently the page emits no per-listing structured data (the shared `Layout` emits a generic `BlogPosting`, which is wrong
 for this page).
 
 ## Data we have → `JobPosting` field mapping
