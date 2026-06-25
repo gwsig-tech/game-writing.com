@@ -11,6 +11,7 @@ import {
 } from "../lib/jobs";
 
 const INITIAL_RESULTS = 100;
+const PAGE_SIZE = 20;
 const jobs = (await getActiveJobs()).sort((a, b) => {
   const companyComparison = a.company_name.localeCompare(b.company_name);
   return companyComparison || a.title.localeCompare(b.title);
@@ -50,19 +51,23 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
       <header
         class="jobs-section-border border-b border-dashed px-6 py-9 sm:px-10"
       >
-        <p
-          class="jobs-eyebrow mb-2 text-xs font-bold tracking-[0.24em] uppercase"
-        >
-          IGDA Game Writing SIG
-        </p>
         <h1 class="jobs-heading text-4xl font-bold sm:text-5xl">Open Roles</h1>
         <p class="jobs-muted mt-3 max-w-2xl text-lg">
-          Opportunities within the narrative and game writing space.
+          Job opportunities for game writers and narrative designers.
         </p>
         <p class="jobs-subtle mt-3 max-w-3xl text-sm">
-          These listings are collected from public postings. IGDA Game Writing
-          SIG is not affiliated with, sponsored by, or endorsed by the companies
-          listed here.
+          The Game Writing SIG jobs board collects open roles for game writers,
+          narrative designers, and editors across the industry. We share these
+          to help our community find work and connect companies with writers.
+          <br /><br />
+          These listings are collected from the public postings found at each linked
+          page. Listings are updated periodically, and roles may close or change without
+          notice, so always confirm details and apply through the official link. The
+          IGDA Game Writing SIG is not affiliated with, sponsored by, or endorsing
+          any of the companies or positions listed here.
+          <br /><br />
+          Hiring narrative talent or notice a good link? Email info@game-writing.com
+          to suggest a role for this board.
         </p>
         <p class="jobs-subtle mt-4 text-sm" aria-live="polite" id="jobs-count">
           Showing {Math.min(INITIAL_RESULTS, jobs.length)} of {jobs.length} active
@@ -200,6 +205,8 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
             <button
               type="button"
               id="load-more"
+              data-initial={INITIAL_RESULTS}
+              data-page-size={PAGE_SIZE}
               hidden={jobs.length <= INITIAL_RESULTS}
             >
               Load more roles
@@ -257,8 +264,11 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
       document.querySelector<HTMLButtonElement>("#clear-companies");
     const clearFilters =
       document.querySelector<HTMLButtonElement>("#clear-filters");
-    const pageSize = 20;
-    let visibleLimit = pageSize;
+    // Source of truth lives in the frontmatter (data-* on #load-more) so the
+    // server-rendered initial count and the client pagination can't drift apart.
+    const initialResults = Number(loadMore?.dataset.initial) || 100;
+    const pageSize = Number(loadMore?.dataset.pageSize) || 20;
+    let visibleLimit = initialResults;
 
     for (const picker of pickers) {
       picker.addEventListener("toggle", () => {
@@ -270,7 +280,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
     }
 
     function applyFilters(resetLimit = true) {
-      if (resetLimit) visibleLimit = pageSize;
+      if (resetLimit) visibleLimit = initialResults;
       const selectedCountries = [...countryFilters]
         .filter(filter => filter.checked)
         .map(filter => filter.value);
