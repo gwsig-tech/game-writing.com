@@ -63,9 +63,6 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
           notice, so always confirm details and apply through the official link. The
           IGDA Game Writing SIG is not affiliated with, sponsored by, or endorsing
           any of the companies or positions listed here.
-          <br /><br />
-          Hiring narrative talent or notice a good link? Email info@game-writing.com
-          to suggest a role for this board.
         </p>
         <p class="jobs-subtle mt-4 text-sm" aria-live="polite" id="jobs-count">
           {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"} available.
@@ -157,7 +154,7 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
               <input
                 type="search"
                 id="search-terms"
-                placeholder="ex. narrative, designer..."
+                placeholder="ex. remote, full-time..."
                 autocomplete="off"
                 spellcheck="false"
               />
