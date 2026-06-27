@@ -29,11 +29,13 @@ const months = [
   "November",
   "December",
 ];
+
+const pageDesc = "Every Game Writing SIG article, organized by date.";
 ---
 
-<Layout title={`Archives | ${SITE.title}`}>
+<Layout title={`Archives | ${SITE.title}`} description={pageDesc}>
   <Header />
-  <Main pageTitle="Archives" pageDesc="All the articles I've archived.">
+  <Main pageTitle="Archives" pageDesc={pageDesc}>
     {
       Object.entries(
         getPostsByGroupCondition(posts, post =>

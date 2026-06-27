@@ -7,11 +7,12 @@ import Footer from "@/components/Footer.astro";
 import { SITE } from "@/config";
 
 const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
+const pageDesc = "Search articles across the Game Writing SIG site.";
 ---
 
-<Layout title={`Search | ${SITE.title}`}>
+<Layout title={`Search | ${SITE.title}`} description={pageDesc}>
   <Header />
-  <Main pageTitle="Search" pageDesc="Search any article ...">
+  <Main pageTitle="Search" pageDesc={pageDesc}>
     <div id="pagefind-search" transition:persist data-backurl={backUrl}></div>
   </Main>
   <Footer />

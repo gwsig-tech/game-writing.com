@@ -25,12 +25,26 @@ pnpm sync             # Generate TypeScript types for Astro modules
 - **Blog posts**: `src/data/blog/` as MDX files with `YYYY-MM-DD-slug.mdx` naming convention
 - **Content schema**: `src/content.config.ts` defines the blog collection with Zod validation
 - **Post frontmatter**: title, description, author, pubDatetime, slug, featured, draft, tags
+- **Reference posts**: `src/data/blog/examples/` and `_releases/` are stock AstroPaper demo posts kept **intentionally** as living documentation/examples (all `draft: true`, so excluded from the build and never routed). They demonstrate theme features — including ones we haven't adopted yet (e.g. code-block rendering, callouts, advanced typography) — so the worked example is already here if/when we enable one. Leave them drafted; don't delete them.
 
 ### Configuration
 
 - **Site settings**: `src/config.ts` (site URL, author, title, etc.)
 - **Social links**: `src/constants.ts` (SOCIALS and SHARE_LINKS arrays)
 - **Environment variables**: declared with a typed schema in `astro.config.ts` (`env`/`envField`); set in local `.env` and as Vercel env vars. Build-time secrets use `access: "secret", context: "server"` (e.g. `GOOGLE_CALENDAR_API_KEY`, read at build by `src/pages/events.astro`) and never reach the client bundle since the site is SSG. All are `optional` and degrade gracefully. Document and reuse this pattern for new build-time integrations — see the **Environment Variables** section in `README.md`.
+
+### Page metadata (titles & descriptions)
+
+Two independent layers, wired per page (this split is stock AstroPaper, kept in v6):
+
+- **`Layout.astro` `title` / `description`** → the `<head>`: browser-tab `<title>`, `<meta name="description">`, OG/Twitter cards, JSON-LD. Defaults to `SITE.title` / `SITE.desc`.
+- **`Main.astro` `pageTitle` / `pageDesc`** → the **visible** on-page `<h1>` + italic intro. Not in `<head>`.
+
+Conventions:
+
+- `title` (tab/SEO) and `pageTitle` (visible heading) are **separate props**, set independently per page — `title` builds the `<head>`/tab string, `pageTitle` the visible `<h1>`. The theme treats them as distinct (they're free to differ; today our pages keep them aligned), so setting one does not set the other.
+- **Single-source the description** (convention added 2026-06-27): hub/custom pages declare one `const pageDesc` and pass it to **both** `<Main pageDesc={pageDesc}>` (visible) and `<Layout description={pageDesc}>` (`<head>`), so the SEO/OG/JSON-LD description is the real per-page text, not `SITE.desc`. `.mdx` content pages set a `description:` frontmatter line, forwarded by `DefaultLayout`. New hub/custom pages should follow this. See `docs/plans/2026-06-27-page-meta-descriptions.md`.
+- The `` | ${SITE.title} `` title suffix is applied **per call site** (matches stock + v6); centralizing it ("decision B") is deliberately deferred. Do not centralize it without re-reading that plan.
 
 ### CMS
 

@@ -42,15 +42,13 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
 );
 
 const title = "Jobs";
+const pageDesc =
+  "Job opportunities for game writers and narrative designers.";
 ---
 
-<Layout title={`${title} | ${SITE.title}`}>
+<Layout title={`${title} | ${SITE.title}`} description={pageDesc}>
   <Header />
-  <Main
-    pageTitle="Open Roles"
-    pageDesc="Job opportunities for game writers and narrative designers."
-    wide
-  >
+  <Main pageTitle={title} pageDesc={pageDesc} wide>
     <div class="jobs-page">
       <section class="app-prose app-layout">
         <p>

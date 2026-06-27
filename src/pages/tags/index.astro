@@ -11,11 +11,12 @@ import { SITE } from "@/config";
 const posts = await getCollection("blog");
 
 let tags = getUniqueTags(posts);
+const pageDesc = "All the tags used in posts.";
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
+<Layout title={`Tags | ${SITE.title}`} description={pageDesc}>
   <Header />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
+  <Main pageTitle="Tags" pageDesc={pageDesc}>
     <ul class="flex flex-wrap gap-6">
       {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} />)}
     </ul>

@@ -139,6 +139,10 @@ draft: false
 
 For detailed instructions, see [Adding New Posts](src/data/blog/examples/adding-new-post.md).
 
+### Reference posts (`examples/` and `_releases/`)
+
+`src/data/blog/examples/` and `src/data/blog/_releases/` hold the stock AstroPaper demo posts (how-to guides, color-scheme references, theme release notes). They are **kept intentionally** as living documentation: every file is `draft: true`, so they are excluded from the production build and never routed — but they stay in the repo as worked examples of theme features, including ones this site hasn't adopted yet (e.g. code-block rendering, callouts, advanced typography). If we enable such a feature later, the example is already here to crib from. Leave them drafted; don't delete them.
+
 ### Using the CMS
 
 Access the CMS at `/admin/`. The CMS uses a draft workflow:

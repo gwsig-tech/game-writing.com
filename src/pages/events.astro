@@ -112,14 +112,12 @@ function formatEventDate(event: CalendarEvent): string {
 }
 
 const title = "Events";
+const pageDesc = "Learn about events relevant to industry writers.";
 ---
 
-<Layout title={`${title} | ${SITE.title}`}>
+<Layout title={`${title} | ${SITE.title}`} description={pageDesc}>
   <Header />
-  <Main
-    pageTitle={title}
-    pageDesc="Learn about events relevant to industry writers."
-  >
+  <Main pageTitle={title} pageDesc={pageDesc}>
     <section class="app-prose mb-28 max-w-app prose-img:border-0">
       
       <h2>Calendar of Upcoming Events</h2>

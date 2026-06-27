@@ -16,11 +16,12 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+const pageDesc = "All the articles we've posted.";
 ---
 
-<Layout title={`Posts | ${SITE.title}`}>
+<Layout title={`Posts | ${SITE.title}`} description={pageDesc}>
   <Header />
-  <Main pageTitle="Posts" pageDesc="All the articles we've posted.">
+  <Main pageTitle="Posts" pageDesc={pageDesc}>
     <ul>
       {page.data.map(data => <Card {...data} />)}
     </ul>
