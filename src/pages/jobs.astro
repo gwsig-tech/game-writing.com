@@ -4,6 +4,7 @@ import Main from "../layouts/Main.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
+import BackToTopButton from "../components/BackToTopButton.astro";
 import {
   getActiveJobs,
   getExperienceLabel,
@@ -215,6 +216,8 @@ const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
             </div>
           </div>
         </div>
+        <br>
+        <BackToTopButton />
       </div>
     </div>
   </Main>
