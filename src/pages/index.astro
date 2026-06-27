@@ -41,15 +41,25 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>We are the Game Writing SIG. More here soon.</p>
+      <p>
+        We are the Game Writing SIG. Click here to read
+        <LinkButton 
+          class="underline decoration-dashed underline-offset-4 hover:text-accent"
+          href="/about"
+        >
+         ABOUT
+        </LinkButton>
+        us
+        </p>
       <p class="mt-2">
-        Read the blog posts or join our
+        Join our
         <LinkButton
           class="underline decoration-dashed underline-offset-4 hover:text-accent"
           href="https://discord.gg/2uWGBsUgxT"
         >
           DISCORD
-        </LinkButton> server to be part of our community.
+        </LinkButton> 
+        server to be part of our community.
       </p>
       {
         // only display if at least one social link is enabled
