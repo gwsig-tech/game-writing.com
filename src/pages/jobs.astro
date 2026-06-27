@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
 import BackToTopButton from "../components/BackToTopButton.astro";
+import { SITE } from "@/config";
 import {
   getActiveJobs,
   getExperienceLabel,
@@ -39,12 +40,11 @@ for (const job of jobs) {
 const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
   companyA.localeCompare(companyB)
 );
+
+const title = "Events";
 ---
 
-<Layout
-  title="Jobs | IGDA Game Writing SIG"
-  description="Open narrative and game-writing roles collected from public postings, curated by the IGDA Game Writing SIG."
->
+<Layout title={`${title} | ${SITE.title}`}>
   <Header />
   <Main
     pageTitle="Open Roles"
