@@ -2,9 +2,11 @@
 
 This is the **living standard** for keeping the site visually consistent and easy to re-theme. It is not a point-in-time plan — it applies to every new page, component, and feature. The decision record that produced it is [plans/2026-06-27-jobs-theme-conformance.md](./plans/2026-06-27-jobs-theme-conformance.md), and the jobs board ([src/pages/jobs.astro](../src/pages/jobs.astro) + [src/components/JobCard.astro](../src/components/JobCard.astro)) is the first page brought fully into conformance under it — use it as a worked example.
 
+> **Update 2026-06-28 — aligned to AstroPaper v6's 7-token system.** As part of the v6 parity migration ([plans/2026-06-28-astropaper-v6-parity-migration.md](./plans/2026-06-28-astropaper-v6-parity-migration.md), Decision 1), the palette moved from 5 color-only tokens to v6's **7 tokens** — adding **`--accent-foreground`** (text/icon color on accent fills) and **`--muted-foreground`** (the sanctioned secondary-text color). Tokens now live in [src/styles/theme.css](../src/styles/theme.css). **This reverses the previous "opacity, never a secondary-text token" rule:** de-emphasized text now uses **`text-muted-foreground`** (matching upstream so v6 components merge cleanly), and text on an accent surface uses **`text-accent-foreground`**. The `--muted-foreground` hex is tuned to approximate our prior `opacity-75/80` look; **if secondary text reads too light/dark, retune `--muted-foreground` in `theme.css` first** (currently light `#646566`, dark `#cacdd0`). `opacity-*` is still fine for incidental, non-text de-emphasis.
+
 ## Policy
 
-For any styling need, use AstroPaper's sanctioned pattern if one exists — **borders** for separation (never shadows/depth), **opacity** for text de-emphasis (never a new text color), **`bg-muted`** for surface fills/hover, the **five color tokens** consumed through semantic Tailwind utilities (`bg-*`/`text-*`/`border-*`, never raw `var()` in a non-bespoke component's `<style>` when a utility exists), and **Tailwind's default rem scale** via utilities for type/spacing/radius/border-width/width (`max-w-app`, or `Main`'s `wide` prop for wide bodies).
+For any styling need, use AstroPaper's sanctioned pattern if one exists — **borders** for separation (never shadows/depth), **`text-muted-foreground`** for secondary text (and `opacity-*` for incidental fades), **`bg-muted`** for surface fills/hover, the **seven color tokens** consumed through semantic Tailwind utilities (`bg-*`/`text-*`/`border-*`, never raw `var()` in a non-bespoke component's `<style>` when a utility exists), and **Tailwind's default rem scale** via utilities for type/spacing/radius/border-width/width (`max-w-app`, or `Main`'s `wide` prop for wide bodies).
 
 For genuinely-novel UI with no sanctioned analog, build in the theme's **spirit** using those same primitives — flat, bordered, existing tokens, opacity, default scale — minimal, never a new visual language.
 
@@ -12,12 +14,12 @@ For genuinely-novel UI with no sanctioned analog, build in the theme's **spirit*
 
 ## The sanctioned vocabulary
 
-The theme contract is **color only**: five tokens (`--background`/`--foreground`/`--accent`/`--muted`/`--border`) in [src/styles/global.css](../src/styles/global.css), exposed to Tailwind via `@theme inline` as `bg-*`/`text-*`/`border-*`. The universal selector ships `border-border` + `outline-accent/75` to every element, so structure-by-border is the site-wide default. Everything non-color uses Tailwind's default scale.
+The theme contract is **color only**: seven tokens (`--background`/`--foreground`/`--accent`/`--accent-foreground`/`--muted`/`--muted-foreground`/`--border`) in [src/styles/theme.css](../src/styles/theme.css), exposed to Tailwind via `@theme inline` as `bg-*`/`text-*`/`border-*`. The universal selector ships `border-border` + `outline-accent/75` to every element, so structure-by-border is the site-wide default. Everything non-color uses Tailwind's default scale.
 
 | Concept | Sanctioned pattern | NOT in the vocabulary |
 |---|---|---|
 | Separation / structure | Borders + dashed underlines + whitespace (`Card.astro`, `*{border-border}`) | box-shadow / elevation; inset or double decorative borders |
-| Text de-emphasis | `opacity-75` / `opacity-60` on `text-foreground` (`figcaption`, `blockquote`) | any secondary-text or "subtle" color token |
+| Text de-emphasis | `text-muted-foreground` for secondary text; `opacity-75`/`opacity-60` on `text-foreground` for incidental fades (`figcaption`, `blockquote`) | inventing a NEW secondary-text token beyond `--muted-foreground` |
 | Surfaces / panels / hover | `bg-muted` (+ optional `/75`) with `border` + default `rounded`/`p-*` | color-mix panel fills; any surface token beyond `--muted` |
 | Hover / active / selected | `hover:text-accent` / `hover:border-accent` / `marker:text-accent` / `.active-nav` underline / `accent-color: var(--accent)` | hover background tints other than `bg-muted`; hover shadows |
 | Type / spacing / radius / width | Tailwind default steps via utilities (`text-xs/sm/lg`, `p-*`, `rounded/rounded-sm`, `border/border-2`, `max-w-app`, `wide` prop) | bespoke px font-sizes, fractional borders (1.5px), rem-literal radii, `clamp()` fluid type, letter-spacing literals |
@@ -46,7 +48,8 @@ SEPARATION & DEPTH
     for a shadow/overlay (inverts across light/dark) → remove.
 
 DE-EMPHASIS
-[ ] Dimmed TEXT as a color/color-mix instead of opacity-* on text-foreground.
+[ ] Dimmed TEXT via a hardcoded color/color-mix instead of `text-muted-foreground`
+    (or `opacity-*` on `text-foreground` for incidental fades).
 
 SCALE (Tailwind default steps only)
 [ ] Off-scale border-width (1.5px, 3px) → border / border-2.

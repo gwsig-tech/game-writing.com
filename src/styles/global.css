@@ -1,32 +1,8 @@
 @import "tailwindcss";
+@import "./theme.css";
 @import "./typography.css";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
-:root,
-html[data-theme="light"] {
-  --background: #f2f5ec;
-  --foreground: #353538;
-  --accent: #1158d1;
-  --muted: #e6e6e6;
-  --border: #7cadff;
-}
-
-html[data-theme="dark"] {
-  --background: #21233d;
-  --foreground: #f4f7f5;
-  --accent: #ff5256;
-  --muted: #4a4e86;
-  --border: #b12f32;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
-}
 
 @layer base {
   * {
