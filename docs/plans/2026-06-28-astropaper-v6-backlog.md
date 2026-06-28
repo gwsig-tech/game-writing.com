@@ -61,7 +61,3 @@
 - **Vercel env scope:** make sure `GOOGLE_CALENDAR_API_KEY` is set for the **Preview** environment, not just Production — otherwise `/events` shows "not configured" on previews. (For local dev/build in a worktree, copy `.env` in — it's gitignored, so it isn't carried into `.worktrees/`.)
 - **Formatting:** `pnpm format:check` reports pre-existing style issues across the repo (predates this migration). Per the "never whole-repo format" convention, left untouched; format deliberately if/when wanted.
 - **Decision B (pre-existing):** centralizing the `` | ${config.site.title} `` title suffix into `Layout` is still deferred — see [2026-06-27-page-meta-descriptions.md](./2026-06-27-page-meta-descriptions.md).
-
-## 10. Next major — AstroPaper v7 / Astro 7
-
-Upstream is at **v6.1.0**; **no v7 exists yet**. When upstream ships v7 (likely paired with **Astro 7** — the held major we're tracking), that's the next theme upgrade. Now that we're on v6 structure, future upstream pulls are far cheaper: diff `upstream/main`, port new components/config, and re-graft our customizations (jobs, events, GameEmbed, custom Header/Footer, palette). See the "Update AstroPaper Theme" section in `README.md`.
