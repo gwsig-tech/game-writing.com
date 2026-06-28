@@ -128,4 +128,4 @@ Front-loaded: **config (P1) and i18n (P2) unblock almost everything**; critical 
 
 - The **layouts** audit agent failed (structured-output retry cap); covered here by P5 + direct reading of v6 `Layout.astro`/`PostLayout.astro` and ours.
 - Critic-flagged items folded into phases: OG build-time font-fetch fragility (removed via self-hosted OG font / dormant generator, P5), v6 PR `ci.yml` (P7), theme-script `.dark`-class vs `data-theme` (P4), Vercel preservation (P5), RSS lockstep (P3), `search.astro` reconciliation (P6), `/jams/*` coverage (Decision 7).
-- Optional cheap risk-control (out of parity scope): retire legacy `.pages.yml` if confirmed dead; pin the Sveltia CDN for the upgrade window.
+- Cheap risk-control: legacy `.pages.yml` (a dead Pages-CMS config, unused by Sveltia) was confirmed unreferenced and **retired/deleted 2026-06-28**. Pinning the Sveltia CDN for the upgrade window remains optional (we stay unpinned).
