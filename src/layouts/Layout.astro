@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import SpeedInsights from "@vercel/speed-insights/astro";
-import { SITE } from "@/config";
+import config from "@/config";
 import "@/styles/global.css";
 
 type Props = {
@@ -18,11 +18,11 @@ type Props = {
 };
 
 const {
-  title = SITE.title,
-  author = SITE.author,
-  profile = SITE.profile,
-  description = SITE.desc,
-  ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
+  title = config.site.title,
+  author = config.site.author,
+  profile = config.site.profile,
+  description = config.site.description,
+  ogImage = config.site.ogImage ? `/${config.site.ogImage}` : "/og.png",
   canonicalURL = new URL(Astro.url.pathname, Astro.url),
   pubDatetime,
   modDatetime,
@@ -65,8 +65,8 @@ const structuredData = pubDatetime
 
 <!doctype html>
 <html
-  dir={SITE.dir}
-  lang=`${SITE.lang ?? "en"}`
+  dir={config.site.dir}
+  lang=`${config.site.lang ?? "en"}`
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
@@ -131,7 +131,7 @@ const structuredData = pubDatetime
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={SITE.title}
+      title={config.site.title}
       href={new URL("rss.xml", Astro.site)}
     />
 

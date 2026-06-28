@@ -9,7 +9,7 @@ import Card from "@/components/Card.astro";
 import Pagination from "@/components/Pagination.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
 import getPostsByTag from "@/utils/getPostsByTag";
-import { SITE } from "@/config";
+import config from "@/config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
@@ -21,7 +21,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     return paginate(tagPosts, {
       params: { tag },
       props: { tagName },
-      pageSize: SITE.postPerPage,
+      pageSize: config.posts.perPage,
     });
   });
 }
@@ -32,7 +32,7 @@ const { page, tagName } = Astro.props;
 const pageDesc = `All the articles with the tag "${tagName}".`;
 ---
 
-<Layout title={`Tag: ${tagName} | ${SITE.title}`} description={pageDesc}>
+<Layout title={`Tag: ${tagName} | ${config.site.title}`} description={pageDesc}>
   <Header />
   <Main
     pageTitle={[`Tag:`, `${tagName}`]}

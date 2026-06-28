@@ -1,5 +1,5 @@
 import satori from "satori";
-import { SITE } from "@/config";
+import config from "@/config";
 import loadGoogleFonts from "../loadGoogleFont";
 
 export default async () => {
@@ -78,14 +78,14 @@ export default async () => {
                             type: "p",
                             props: {
                               style: { fontSize: 72, fontWeight: "bold" },
-                              children: SITE.title,
+                              children: config.site.title,
                             },
                           },
                           {
                             type: "p",
                             props: {
                               style: { fontSize: 28 },
-                              children: SITE.desc,
+                              children: config.site.description,
                             },
                           },
                         ],
@@ -105,7 +105,7 @@ export default async () => {
                           type: "span",
                           props: {
                             style: { overflow: "hidden", fontWeight: "bold" },
-                            children: new URL(SITE.website).hostname,
+                            children: new URL(config.site.url).hostname,
                           },
                         },
                       },
@@ -122,7 +122,7 @@ export default async () => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: await loadGoogleFonts(SITE.title + SITE.desc + SITE.website),
+      fonts: await loadGoogleFonts(config.site.title + config.site.description + config.site.url),
     }
   );
 };

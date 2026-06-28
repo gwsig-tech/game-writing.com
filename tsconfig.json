@@ -4,7 +4,8 @@
   "exclude": ["dist", "public/pagefind"],
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/astro-paper.config": ["./astro-paper.config"]
     }
   }
 }

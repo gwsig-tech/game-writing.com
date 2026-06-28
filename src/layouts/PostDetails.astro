@@ -13,7 +13,7 @@ import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
-import { SITE } from "@/config";
+import config from "@/config";
 import GameEmbed from "@/components/GameEmbed.astro";
 
 type Props = {
@@ -48,17 +48,17 @@ if (typeof initOgImage === "string") {
 }
 
 // Use dynamic OG image if enabled and no remote|local ogImage
-if (!ogImageUrl && SITE.dynamicOgImage) {
+if (!ogImageUrl && config.features.dynamicOgImage) {
   ogImageUrl = `${getPath(post.id, post.filePath)}/index.png`;
 }
 
-// Resolve OG image URL (or fallback to SITE.ogImage / default `og.png`)
+// Resolve OG image URL (or fallback to config.site.ogImage / default `og.png`)
 const ogImage = ogImageUrl
   ? new URL(ogImageUrl, Astro.url.origin).href
   : undefined;
 
 const layoutProps = {
-  title: `${title} | ${SITE.title}`,
+  title: `${title} | ${config.site.title}`,
   author,
   description,
   pubDatetime,
@@ -88,7 +88,7 @@ const nextPost =
   <BackButton />
   <main
     id="main-content"
-    class:list={["app-layout pb-12", { "mt-8": !SITE.showBackButton }]}
+    class:list={["app-layout pb-12", { "mt-8": !config.features.showBackButton }]}
     data-pagefind-body
   >
     <h1
@@ -103,7 +103,7 @@ const nextPost =
         aria-hidden="true"
         class:list={[
           "max-sm:hidden",
-          { hidden: !SITE.editPost.enabled || hideEditPost },
+          { hidden: !config.features.editPost.enabled || hideEditPost },
         ]}>|</span
       >
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
