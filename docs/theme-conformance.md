@@ -23,11 +23,11 @@ The theme contract is **color only**: seven tokens (`--background`/`--foreground
 | Surfaces / panels / hover | `bg-muted` (+ optional `/75`) with `border` + default `rounded`/`p-*` | color-mix panel fills; any surface token beyond `--muted` |
 | Hover / active / selected | `hover:text-accent` / `hover:border-accent` / `marker:text-accent` / `.active-nav` underline / `accent-color: var(--accent)` | hover background tints other than `bg-muted`; hover shadows |
 | Type / spacing / radius / width | Tailwind default steps via utilities (`text-xs/sm/lg`, `p-*`, `rounded/rounded-sm`, `border/border-2`, `max-w-app`, `wide` prop) | bespoke px font-sizes, fractional borders (1.5px), rem-literal radii, `clamp()` fluid type, letter-spacing literals |
-| Color application | Semantic utilities off the five tokens | raw `var(--token)` in a non-bespoke component's `<style>`; hardcoded hex/rgb/hsl |
+| Color application | Semantic utilities off the seven tokens | raw `var(--token)` in a non-bespoke component's `<style>`; hardcoded hex/rgb/hsl |
 
 ## Re-theming is a top-level edit (the payoff)
 
-Because every surface routes through the five tokens, **re-theming is a single edit in [src/styles/global.css](../src/styles/global.css), not a per-page sweep.** Changing one token value — e.g. retuning `--muted` — instantly recolors every surface and hover state across the whole site (inline code, search cards, the copy button, the scrollbar, the jobs filter UI) with zero component edits. That propagation is the entire reason for the rules above, and it is why this guide deliberately never names specific hues: a token's _role_ (`--muted` = surface/hover fill) is stable, while its _value_ is yours to retune at the top whenever you like. A page that hardcodes a hue or invents its own token opts out of that propagation — exactly the drift this guide prevents.
+Because every surface routes through the seven tokens, **re-theming is a single edit in [src/styles/theme.css](../src/styles/theme.css), not a per-page sweep.** Changing one token value — e.g. retuning `--muted` — instantly recolors every surface and hover state across the whole site (inline code, search cards, the copy button, the scrollbar, the jobs filter UI) with zero component edits. That propagation is the entire reason for the rules above, and it is why this guide deliberately never names specific hues: a token's _role_ (`--muted` = surface/hover fill) is stable, while its _value_ is yours to retune at the top whenever you like. A page that hardcodes a hue or invents its own token opts out of that propagation — exactly the drift this guide prevents.
 
 ## Per-page / per-component audit rubric
 
@@ -35,12 +35,13 @@ Run this against any page or component. Each checked box is a **departure to fix
 
 ```
 COLOR
-[ ] Hardcoded hex/rgb/hsl/named color literal → semantic utility off the 5 tokens.
+[ ] Hardcoded hex/rgb/hsl/named color literal → semantic utility off the 7 tokens.
 [ ] Raw var(--token) in a <style> block where a utility exists → utility class
     (color:var(--foreground)→text-foreground; border-color:var(--border)→border-border).
     Allowed only in genuinely-custom components (GameEmbed) or JS that can't be a utility.
-[ ] Invented color token duplicating a theme concept: --x-muted/-subtle (=opacity),
-    --x-panel/-surface (=bg-muted), --x-border (=border-border), --x-hover/-shadow (=none).
+[ ] Invented color token duplicating a theme concept: --x-subtle/-secondary (=text-muted-foreground),
+    --x-panel/-surface (=bg-muted), --x-border (=border-border), --x-on-accent (=text-accent-foreground),
+    --x-hover/-shadow (=none).
 
 SEPARATION & DEPTH
 [ ] box-shadow / drop-shadow / inset ::before|::after "double border" → real border.
