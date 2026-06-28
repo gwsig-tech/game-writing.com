@@ -22,10 +22,10 @@ pnpm sync             # Generate TypeScript types for Astro modules
 
 ### Content System
 
-- **Blog posts**: `src/data/blog/` as MDX files with `YYYY-MM-DD-slug.mdx` naming convention
+- **Blog posts**: `src/content/posts/` as MDX files with `YYYY-MM-DD-slug.mdx` naming convention
 - **Content schema**: `src/content.config.ts` defines the blog collection with Zod validation
 - **Post frontmatter**: title, description, author, pubDatetime, slug, featured, draft, tags
-- **Reference posts**: `src/data/blog/examples/` and `_releases/` are stock AstroPaper demo posts kept **intentionally** as living documentation/examples (all `draft: true`, so excluded from the build and never routed). They demonstrate theme features — including ones we haven't adopted yet (e.g. code-block rendering, callouts, advanced typography) — so the worked example is already here if/when we enable one. Leave them drafted; don't delete them.
+- **Reference posts**: `src/content/posts/examples/` and `_releases/` are stock AstroPaper demo posts kept **intentionally** as living documentation/examples (all `draft: true`, so excluded from the build and never routed). They demonstrate theme features — including ones we haven't adopted yet (e.g. code-block rendering, callouts, advanced typography) — so the worked example is already here if/when we enable one. Leave them drafted; don't delete them.
 
 ### Configuration
 

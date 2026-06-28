@@ -121,7 +121,7 @@ How the build uses these:
 
 ### Adding Blog Posts
 
-Blog posts are MDX files in `src/data/blog/` using the naming convention `YYYY-MM-DD-slug.mdx`.
+Blog posts are MDX files in `src/content/posts/` using the naming convention `YYYY-MM-DD-slug.mdx`.
 
 **Required frontmatter:**
 
@@ -138,11 +138,11 @@ draft: false
 ---
 ```
 
-For detailed instructions, see [Adding New Posts](src/data/blog/examples/adding-new-post.md).
+For detailed instructions, see [Adding New Posts](src/content/posts/examples/adding-new-post.md).
 
 ### Reference posts (`examples/` and `_releases/`)
 
-`src/data/blog/examples/` and `src/data/blog/_releases/` hold the stock AstroPaper demo posts (how-to guides, color-scheme references, theme release notes). They are **kept intentionally** as living documentation: every file is `draft: true`, so they are excluded from the production build and never routed — but they stay in the repo as worked examples of theme features, including ones this site hasn't adopted yet (e.g. code-block rendering, callouts, advanced typography). If we enable such a feature later, the example is already here to crib from. Leave them drafted; don't delete them.
+`src/content/posts/examples/` and `src/content/posts/_releases/` hold the stock AstroPaper demo posts (how-to guides, color-scheme references, theme release notes). They are **kept intentionally** as living documentation: every file is `draft: true`, so they are excluded from the production build and never routed — but they stay in the repo as worked examples of theme features, including ones this site hasn't adopted yet (e.g. code-block rendering, callouts, advanced typography). If we enable such a feature later, the example is already here to crib from. Leave them drafted; don't delete them.
 
 ### Using the CMS
 
@@ -202,7 +202,7 @@ pnpm update
 - Astro 6 requires **Node 22.12+** (enforced via `engines`); keep Vercel's
   build Node version at 22+.
 
-For detailed guidance, see [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md)
+For detailed guidance, see [How to Update Dependencies](src/content/posts/examples/how-to-update-dependencies.md)
 and the latest [maintenance plan](docs/plans/) for held items and revisit triggers.
 
 ### Update AstroPaper Theme
@@ -243,7 +243,7 @@ git show upstream/main:astro.config.ts
 
 - [AstroPaper Releases](https://github.com/satnaing/astro-paper/releases)
 - [Compare versions](https://github.com/satnaing/astro-paper/compare/v5.5.1...main) (current base: v5.5.1)
-- [Release Notes](src/data/blog/_releases/) (local copies)
+- [Release Notes](src/content/posts/_releases/) (local copies)
 
 **Most heavily-customized files** (preserve these when porting any upstream idea by hand):
 
@@ -273,13 +273,13 @@ A full adoption of upstream's AstroPaper **v6** rewrite is scoped (and deliberat
 ### Internal (in this repo)
 
 - [Theme Conformance Guide](docs/theme-conformance.md) — the standard for consistent, easy-to-re-theme styling (borders not shadows, opacity not text-color tokens, theme tokens via utilities); includes a copy-pasteable per-page audit rubric
-- [Adding New Posts](src/data/blog/examples/adding-new-post.md)
-- [How to Configure AstroPaper](src/data/blog/examples/how-to-configure-astropaper-theme.md)
-- [Customizing Color Schemes](src/data/blog/examples/customizing-astropaper-theme-color-schemes.md)
-- [Predefined Color Schemes](src/data/blog/examples/predefined-color-schemes.md)
-- [Dynamic OG Images](src/data/blog/examples/dynamic-og-images.md)
-- [How to Update Dependencies](src/data/blog/examples/how-to-update-dependencies.md)
-- [AstroPaper v5 Release Notes](src/data/blog/_releases/astro-paper-5.md)
+- [Adding New Posts](src/content/posts/examples/adding-new-post.md)
+- [How to Configure AstroPaper](src/content/posts/examples/how-to-configure-astropaper-theme.md)
+- [Customizing Color Schemes](src/content/posts/examples/customizing-astropaper-theme-color-schemes.md)
+- [Predefined Color Schemes](src/content/posts/examples/predefined-color-schemes.md)
+- [Dynamic OG Images](src/content/posts/examples/dynamic-og-images.md)
+- [How to Update Dependencies](src/content/posts/examples/how-to-update-dependencies.md)
+- [AstroPaper v5 Release Notes](src/content/posts/_releases/astro-paper-5.md)
 
 ### External
 

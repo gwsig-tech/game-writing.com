@@ -17,8 +17,8 @@ import config from "@/config";
 import GameEmbed from "@/components/GameEmbed.astro";
 
 type Props = {
-  post: CollectionEntry<"blog">;
-  posts: CollectionEntry<"blog">[];
+  post: CollectionEntry<"posts">;
+  posts: CollectionEntry<"posts">[];
 };
 
 const { post, posts } = Astro.props;

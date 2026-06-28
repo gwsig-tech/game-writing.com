@@ -49,7 +49,7 @@
 >
 > **Subfolders.** Single-extension-per-collection still holds. Subfolder *storage*
 > via the `path` option now exists, but there's still no recursive/**nested entry
-> listing**, so blog posts in `src/data/blog/_events` / `_spotlights` still need their
+> listing**, so blog posts in `src/content/posts/_events` / `_spotlights` still need their
 > own collections (+`.mdx` normalization). For images, **asset collections**
 > (v0.167.0) expose `src/assets/images/*` as browsable buckets. See the plan above.
 
