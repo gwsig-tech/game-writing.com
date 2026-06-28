@@ -59,6 +59,7 @@ How the build uses these:
 /
 ├── .claude/                   # Claude Code project settings (settings.local.json is per-user, gitignored)
 ├── docs/
+│   ├── theme-conformance.md   # Theme conformance standard + audit rubric
 │   └── plans/                 # Maintenance and feature plans
 ├── public/
 │   ├── admin/                 # Sveltia CMS configuration
@@ -249,7 +250,7 @@ git show upstream/main:astro.config.ts
 - `src/layouts/` — `Layout` (Vercel analytics/speed-insights + conditional JSON-LD + theme script), `DefaultLayout`, `Main`, `PostDetails` (GameEmbed)
 - `src/components/Header.astro` — custom nav (About/Events/Constitution/Posts/Tags/Jobs)
 - `src/config.ts` / `src/constants.ts` — site settings, social/share links
-- `src/styles/global.css` — custom light/dark palette + utilities
+- `src/styles/global.css` — custom light/dark palette + utilities (styling follows [docs/theme-conformance.md](docs/theme-conformance.md))
 - `src/pages/jobs.astro` + `src/lib/jobs.ts`, `src/pages/events.astro`, `public/admin/config.yml` — the jobs board, Google Calendar, and Sveltia CMS
 
 A full adoption of upstream's AstroPaper **v6** rewrite is scoped (and deliberately deferred) in [docs/plans/2026-06-26-astropaper-v6-adoption.md](docs/plans/2026-06-26-astropaper-v6-adoption.md).
@@ -271,6 +272,7 @@ A full adoption of upstream's AstroPaper **v6** rewrite is scoped (and deliberat
 
 ### Internal (in this repo)
 
+- [Theme Conformance Guide](docs/theme-conformance.md) — the standard for consistent, easy-to-re-theme styling (borders not shadows, opacity not text-color tokens, theme tokens via utilities); includes a copy-pasteable per-page audit rubric
 - [Adding New Posts](src/data/blog/examples/adding-new-post.md)
 - [How to Configure AstroPaper](src/data/blog/examples/how-to-configure-astropaper-theme.md)
 - [Customizing Color Schemes](src/data/blog/examples/customizing-astropaper-theme-color-schemes.md)

@@ -2,7 +2,14 @@
 
 **Date:** 2026-06-26
 **Branch:** `narrative-job-board-jm` (continues the jobs work)
-**Status:** Planned — ready to execute. Low risk.
+**Status:** Partially executed (shell + a11y fixes landed). **Two styling decisions below are SUPERSEDED** — see the update note.
+
+> **Update (2026-06-27): superseded in part by [2026-06-27-jobs-theme-conformance.md](./2026-06-27-jobs-theme-conformance.md).**
+> The shell + a11y fixes here (Main layout, `id="main-content"`, Breadcrumb, monospace removal) were correct and have landed — keep them. But two **styling** decisions in this plan *codified departures* from AstroPaper's flat/minimal design language and are now **reversed**:
+> 1. "Keep the jobs-board _paper look_" (drop shadow + inset double border) → **flattened** to a plain bordered card (the site separates with borders, not depth; the foreground-derived shadow also inverted to a white halo in dark mode).
+> 2. "Keep the custom filter tokens `--jobs-muted/subtle/border/panel/panel-strong/hover/shadow`" (rationale: "color-mix blends with no theme equivalent") → **removed**; re-expressed via sanctioned primitives (opacity for dim text, `bg-muted` for surfaces, `border-border`, no shadow). "No theme equivalent" was the tell that these were inventions outside the contract, not a reason to keep them.
+>
+> The conformance policy + reusable audit rubric now live at [../theme-conformance.md](../theme-conformance.md).
 
 ## Context
 

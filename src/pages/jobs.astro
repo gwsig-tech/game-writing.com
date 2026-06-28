@@ -6,12 +6,7 @@ import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
 import BackToTopButton from "../components/BackToTopButton.astro";
 import { SITE } from "@/config";
-import {
-  getActiveJobs,
-  getExperienceLabel,
-  getJobCountries,
-  getJobSummary,
-} from "../lib/jobs";
+import { getActiveJobs, getExperienceLabel, getJobCountries, getJobSummary } from "../lib/jobs";
 
 const jobs = (await getActiveJobs()).sort((a, b) => {
   const companyComparison = a.company_name.localeCompare(b.company_name);
@@ -27,195 +22,105 @@ for (const { countries } of jobsWithCountries) {
     countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
   }
 }
-const countries = [...countryCounts.entries()].sort(([countryA], [countryB]) =>
-  countryA.localeCompare(countryB)
-);
+const countries = [...countryCounts.entries()].sort(([countryA], [countryB]) => countryA.localeCompare(countryB));
 const companyCounts = new Map<string, number>();
 for (const job of jobs) {
-  companyCounts.set(
-    job.company_name,
-    (companyCounts.get(job.company_name) || 0) + 1
-  );
+  companyCounts.set(job.company_name, (companyCounts.get(job.company_name) || 0) + 1);
 }
-const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) =>
-  companyA.localeCompare(companyB)
-);
+const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) => companyA.localeCompare(companyB));
 
 const title = "Jobs";
-const pageDesc =
-  "Job opportunities for game writers and narrative designers.";
+const pageDesc = "Job opportunities for game writers and narrative designers.";
 ---
 
 <Layout title={`${title} | ${SITE.title}`} description={pageDesc}>
   <Header />
   <Main pageTitle={title} pageDesc={pageDesc} wide>
-    <div class="jobs-page">
+    <div>
       <section class="app-prose app-layout">
-        <p>
-          The Game Writing SIG jobs board collects open roles for game writers,
-          narrative designers, and editors across the industry. We share these
-          to help our community find work and connect companies with writers.
-        </p>
-        <p>
-          These listings are collected from the public postings found at each
-          linked page. Listings are updated periodically, and roles may close or
-          change without notice, so always confirm details and apply through the
-          official link. The IGDA Game Writing SIG is not affiliated with,
-          sponsored by, or endorsing any of the companies or positions listed
-          here.
-        </p>
+        <p>The Game Writing SIG jobs board collects open roles for game writers, narrative designers, and editors across the industry. We share these to help our community find work and connect companies with writers.</p>
+        <p>These listings are collected from the public postings found at each linked page. Listings are updated periodically, and roles may close or change without notice, so always confirm details and apply through the official link. The IGDA Game Writing SIG is not affiliated with, sponsored by, or endorsing any of the companies or positions listed here.</p>
         <p aria-live="polite" id="jobs-count">
           {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"}
-          available. Filter by company or country, or search by keyword to narrow
-          the list.
+          available. Filter by company or country, or search by keyword to narrow the list.
         </p>
       </section>
       <div class="mx-auto mt-10 mb-28 max-w-6xl px-4">
-        <div class="jobs-paper relative overflow-visible rounded-lg border-2">
+        <div class="relative overflow-visible rounded-lg border-2 bg-background">
           <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)]">
-            <aside
-              class="jobs-section-border relative z-10 border-b border-dashed px-6 py-7 lg:border-r lg:border-b-0 lg:px-7"
-            >
+            <aside class="relative z-10 border-b border-dashed px-6 py-7 lg:border-r lg:border-b-0 lg:px-7">
               <div class="lg:sticky lg:top-6">
-                <h2
-                  class="jobs-heading text-[11px] font-bold tracking-[0.12em] uppercase"
-                >
-                  Filter roles
-                </h2>
-                <details class="filter-picker mt-4">
-                  <summary>
-                    <span id="company-label">All companies</span>
-                    <span aria-hidden="true">⌄</span>
+                <h2 class="text-xs font-bold tracking-widest uppercase">Filter roles</h2>
+                <details class="filter-picker relative mt-4">
+                  <summary class="flex w-full min-w-0 cursor-pointer list-none items-center justify-between gap-3 rounded border bg-background px-3 py-2.5 hover:border-accent [&::-webkit-details-marker]:hidden">
+                    <span id="company-label" class="min-w-0 truncate">All companies</span>
+                    <span aria-hidden="true" class="transition-transform">⌄</span>
                   </summary>
-                  <div class="filter-menu">
-                    <p>Select one or more companies</p>
-                    <label class="filter-search">
-                      <span>Search companies</span>
-                      <input
-                        type="search"
-                        id="company-search"
-                        placeholder="type a company"
-                        autocomplete="off"
-                      />
+                  <div class="absolute left-0 z-20 mt-2 w-[min(24rem,calc(100vw-3rem))] rounded border bg-muted p-2.5">
+                    <p class="px-1.5 pt-1 pb-2 text-xs opacity-60">Select one or more companies</p>
+                    <label class="grid gap-1.5 px-1.5 pb-2">
+                      <span class="text-xs font-bold tracking-wider uppercase opacity-60">Search companies</span>
+                      <input type="search" id="company-search" class="w-full rounded border bg-background px-2.5 py-2 text-sm placeholder:opacity-60" placeholder="type a company" autocomplete="off" />
                     </label>
-                    <div class="filter-options">
+                    <div class="max-h-[19rem] overflow-y-auto">
                       {
                         companies.map(([company, count]) => (
-                          <label class="filter-option">
-                            <input
-                              type="checkbox"
-                              name="company"
-                              value={company.toLowerCase()}
-                              data-label={company}
-                            />
+                          <label class="filter-option grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-2 rounded-sm px-1.5 py-1.5 opacity-75 hover:text-accent hover:opacity-100 has-[:checked]:font-bold has-[:checked]:text-accent has-[:checked]:opacity-100">
+                            <input type="checkbox" name="company" value={company.toLowerCase()} data-label={company} />
                             <span>{company}</span>
-                            <small>{count}</small>
+                            <small class="opacity-60">{count}</small>
                           </label>
                         ))
                       }
                     </div>
-                    <button
-                      type="button"
-                      class="clear-picker"
-                      id="clear-companies"
-                    >
-                      Clear companies
-                    </button>
+                    <button type="button" class="mt-2 w-full border-t border-dashed px-1.5 pt-2.5 pb-0.5 text-left text-xs text-accent hover:underline hover:underline-offset-2" id="clear-companies"> Clear companies </button>
                   </div>
                 </details>
-                <details class="filter-picker mt-3">
-                  <summary>
-                    <span id="country-label">All countries</span>
-                    <span aria-hidden="true">⌄</span>
+                <details class="filter-picker relative mt-3">
+                  <summary class="flex w-full min-w-0 cursor-pointer list-none items-center justify-between gap-3 rounded border bg-background px-3 py-2.5 hover:border-accent [&::-webkit-details-marker]:hidden">
+                    <span id="country-label" class="min-w-0 truncate">All countries</span>
+                    <span aria-hidden="true" class="transition-transform">⌄</span>
                   </summary>
-                  <div class="filter-menu">
-                    <p>Select one or more countries</p>
-                    <label class="filter-search">
-                      <span>Search countries</span>
-                      <input
-                        type="search"
-                        id="country-search"
-                        placeholder="type a country"
-                        autocomplete="off"
-                      />
+                  <div class="absolute left-0 z-20 mt-2 w-[min(24rem,calc(100vw-3rem))] rounded border bg-muted p-2.5">
+                    <p class="px-1.5 pt-1 pb-2 text-xs opacity-60">Select one or more countries</p>
+                    <label class="grid gap-1.5 px-1.5 pb-2">
+                      <span class="text-xs font-bold tracking-wider uppercase opacity-60">Search countries</span>
+                      <input type="search" id="country-search" class="w-full rounded border bg-background px-2.5 py-2 text-sm placeholder:opacity-60" placeholder="type a country" autocomplete="off" />
                     </label>
-                    <div class="filter-options">
+                    <div class="max-h-[19rem] overflow-y-auto">
                       {
                         countries.map(([country, count]) => (
-                          <label class="filter-option">
-                            <input
-                              type="checkbox"
-                              name="country"
-                              value={country}
-                            />
+                          <label class="filter-option grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-2 rounded-sm px-1.5 py-1.5 opacity-75 hover:text-accent hover:opacity-100 has-[:checked]:font-bold has-[:checked]:text-accent has-[:checked]:opacity-100">
+                            <input type="checkbox" name="country" value={country} />
                             <span>{country}</span>
-                            <small>{count}</small>
+                            <small class="opacity-60">{count}</small>
                           </label>
                         ))
                       }
                     </div>
-                    <button
-                      type="button"
-                      class="clear-picker"
-                      id="clear-countries"
-                    >
-                      Clear countries
-                    </button>
+                    <button type="button" class="mt-2 w-full border-t border-dashed px-1.5 pt-2.5 pb-0.5 text-left text-xs text-accent hover:underline hover:underline-offset-2" id="clear-countries"> Clear countries </button>
                   </div>
                 </details>
-                <label class="terms-search mt-4">
-                  <span>Search terms</span>
-                  <input
-                    type="search"
-                    id="search-terms"
-                    placeholder="ex. remote, full-time..."
-                    autocomplete="off"
-                    spellcheck="false"
-                  />
+                <label class="mt-4 grid gap-1.5">
+                  <span class="text-xs font-bold tracking-wider uppercase opacity-60">Search terms</span>
+                  <input type="search" id="search-terms" class="w-full rounded border bg-background px-2.5 py-2 text-sm placeholder:opacity-60" placeholder="ex. remote, full-time..." autocomplete="off" spellcheck="false" />
                 </label>
-                <button type="button" id="clear-filters"
-                  >Clear all filters</button
-                >
+                <button type="button" id="clear-filters" class="mt-4 text-xs text-accent underline decoration-dashed underline-offset-4">Clear all filters</button>
               </div>
             </aside>
 
             <div class="min-w-0">
               <ul class="px-5 sm:px-8">
-                {
-                  jobsWithCountries.map(({ job, countries }) => (
-                    <JobCard
-                      href={job.canonical_url}
-                      title={job.title}
-                      company={job.company_name}
-                      location={job.location}
-                      workType={job.employment_type}
-                      remoteType={job.remote_type}
-                      experience={getExperienceLabel(job)}
-                      date={job.first_seen_at}
-                      description={getJobSummary(job)}
-                      countries={countries}
-                    />
-                  ))
-                }
+                {jobsWithCountries.map(({ job, countries }) => <JobCard href={job.canonical_url} title={job.title} company={job.company_name} location={job.location} workType={job.employment_type} remoteType={job.remote_type} experience={getExperienceLabel(job)} date={job.first_seen_at} description={getJobSummary(job)} countries={countries} />)}
               </ul>
-              {
-                jobs.length === 0 && (
-                  <p class="jobs-muted px-6 py-10 text-center">
-                    No active roles are listed right now. Check back soon.
-                  </p>
-                )
-              }
-              <p
-                id="no-filter-results"
-                class="jobs-muted hidden px-6 py-12 text-center"
-              >
-                No active roles match those filters.
-              </p>
+              {jobs.length === 0 && <p class="px-6 py-10 text-center opacity-75">No active roles are listed right now. Check back soon.</p>}
+              <p id="no-filter-results" class="hidden px-6 py-12 text-center opacity-75">No active roles match those filters.</p>
             </div>
           </div>
         </div>
-        <br>
-        <BackToTopButton />
+        <div class="mt-8">
+          <BackToTopButton />
+        </div>
       </div>
     </div>
   </Main>
@@ -230,9 +135,7 @@ const pageDesc =
     const target = event.target;
     if (!(target instanceof Element)) return;
     if (target.closest(".filter-picker")) return;
-    for (const picker of document.querySelectorAll<HTMLDetailsElement>(
-      ".filter-picker"
-    )) {
+    for (const picker of document.querySelectorAll<HTMLDetailsElement>(".filter-picker")) {
       picker.open = false;
     }
   });
@@ -240,32 +143,21 @@ const pageDesc =
   // Re-run on initial load and after every View Transition navigation so the
   // filter handlers bind to the freshly-swapped DOM.
   document.addEventListener("astro:page-load", () => {
-    const countryFilters = document.querySelectorAll<HTMLInputElement>(
-      'input[name="country"]'
-    );
-    const companyFilters = document.querySelectorAll<HTMLInputElement>(
-      'input[name="company"]'
-    );
+    const countryFilters = document.querySelectorAll<HTMLInputElement>('input[name="country"]');
+    const companyFilters = document.querySelectorAll<HTMLInputElement>('input[name="company"]');
     const cards = document.querySelectorAll<HTMLElement>("[data-job-card]");
     const count = document.querySelector<HTMLElement>("#jobs-count");
     const empty = document.querySelector<HTMLElement>("#no-filter-results");
-    const pickers =
-      document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
-    const countrySearch =
-      document.querySelector<HTMLInputElement>("#country-search");
-    const companySearch =
-      document.querySelector<HTMLInputElement>("#company-search");
-    const searchTerms =
-      document.querySelector<HTMLInputElement>("#search-terms");
+    const pickers = document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
+    const countrySearch = document.querySelector<HTMLInputElement>("#country-search");
+    const companySearch = document.querySelector<HTMLInputElement>("#company-search");
+    const searchTerms = document.querySelector<HTMLInputElement>("#search-terms");
 
     const countryLabel = document.querySelector<HTMLElement>("#country-label");
     const companyLabel = document.querySelector<HTMLElement>("#company-label");
-    const clearCountries =
-      document.querySelector<HTMLButtonElement>("#clear-countries");
-    const clearCompanies =
-      document.querySelector<HTMLButtonElement>("#clear-companies");
-    const clearFilters =
-      document.querySelector<HTMLButtonElement>("#clear-filters");
+    const clearCountries = document.querySelector<HTMLButtonElement>("#clear-countries");
+    const clearCompanies = document.querySelector<HTMLButtonElement>("#clear-companies");
+    const clearFilters = document.querySelector<HTMLButtonElement>("#clear-filters");
 
     for (const picker of pickers) {
       picker.addEventListener("toggle", () => {
@@ -277,63 +169,32 @@ const pageDesc =
     }
 
     function applyFilters() {
-      const selectedCountries = [...countryFilters]
-        .filter(filter => filter.checked)
-        .map(filter => filter.value);
-      const selectedCompanyFilters = [...companyFilters].filter(
-        filter => filter.checked
-      );
-      const selectedCompanies = selectedCompanyFilters.map(
-        filter => filter.value
-      );
+      const selectedCountries = [...countryFilters].filter(filter => filter.checked).map(filter => filter.value);
+      const selectedCompanyFilters = [...companyFilters].filter(filter => filter.checked);
+      const selectedCompanies = selectedCompanyFilters.map(filter => filter.value);
       const terms = getSearchTerms();
 
       let matchCount = 0;
       for (const card of cards) {
         const countries = card.dataset.countries?.split("|") || [];
-        const matchesCountry =
-          selectedCountries.length === 0 ||
-          selectedCountries.some(country => countries.includes(country));
-        const matchesCompany =
-          selectedCompanies.length === 0 ||
-          selectedCompanies.includes(card.dataset.company || "");
-        const searchableText = (
-          card.dataset.search ||
-          card.textContent ||
-          ""
-        ).toLowerCase();
-        const matchesSearch =
-          terms.length === 0 ||
-          terms.some(term => searchableText.includes(term));
+        const matchesCountry = selectedCountries.length === 0 || selectedCountries.some(country => countries.includes(country));
+        const matchesCompany = selectedCompanies.length === 0 || selectedCompanies.includes(card.dataset.company || "");
+        const searchableText = (card.dataset.search || card.textContent || "").toLowerCase();
+        const matchesSearch = terms.length === 0 || terms.some(term => searchableText.includes(term));
         const matched = matchesCountry && matchesCompany && matchesSearch;
         card.hidden = !matched;
         if (matched) matchCount += 1;
       }
 
       if (countryLabel) {
-        countryLabel.textContent =
-          selectedCountries.length === 0
-            ? "All countries"
-            : selectedCountries.length === 1
-              ? selectedCountries[0]
-              : `${selectedCountries.length} countries`;
+        countryLabel.textContent = selectedCountries.length === 0 ? "All countries" : selectedCountries.length === 1 ? selectedCountries[0] : `${selectedCountries.length} countries`;
       }
       if (companyLabel) {
-        companyLabel.textContent =
-          selectedCompanyFilters.length === 0
-            ? "All companies"
-            : selectedCompanyFilters.length === 1
-              ? selectedCompanyFilters[0].dataset.label || "1 company"
-              : `${selectedCompanyFilters.length} companies`;
+        companyLabel.textContent = selectedCompanyFilters.length === 0 ? "All companies" : selectedCompanyFilters.length === 1 ? selectedCompanyFilters[0].dataset.label || "1 company" : `${selectedCompanyFilters.length} companies`;
       }
       if (count) {
-        const hasFilters =
-          selectedCountries.length > 0 ||
-          selectedCompanies.length > 0 ||
-          terms.length > 0;
-        count.textContent = hasFilters
-          ? `${matchCount} of ${cards.length} ${cards.length === 1 ? "role" : "roles"} match your filters.`
-          : `${cards.length} game writing ${cards.length === 1 ? "role" : "roles"} available. Filter by company or country, or search by keyword to narrow the list.`;
+        const hasFilters = selectedCountries.length > 0 || selectedCompanies.length > 0 || terms.length > 0;
+        count.textContent = hasFilters ? `${matchCount} of ${cards.length} ${cards.length === 1 ? "role" : "roles"} match your filters.` : `${cards.length} game writing ${cards.length === 1 ? "role" : "roles"} available. Filter by company or country, or search by keyword to narrow the list.`;
       }
       empty?.classList.toggle("hidden", matchCount !== 0);
     }
@@ -345,18 +206,14 @@ const pageDesc =
         .filter(Boolean);
     }
 
-    function filterPickerOptions(
-      search: HTMLInputElement | null,
-      name: string
-    ) {
+    function filterPickerOptions(search: HTMLInputElement | null, name: string) {
       const query = search?.value.trim().toLowerCase() || "";
       const filters = name === "company" ? companyFilters : countryFilters;
 
       for (const filter of filters) {
         const option = filter.closest<HTMLElement>(".filter-option");
         const label = filter.dataset.label || filter.value;
-        if (option)
-          option.hidden = query !== "" && !label.toLowerCase().includes(query);
+        if (option) option.hidden = query !== "" && !label.toLowerCase().includes(query);
       }
     }
 
@@ -364,12 +221,8 @@ const pageDesc =
       filter.addEventListener("change", () => applyFilters());
     }
 
-    companySearch?.addEventListener("input", () =>
-      filterPickerOptions(companySearch, "company")
-    );
-    countrySearch?.addEventListener("input", () =>
-      filterPickerOptions(countrySearch, "country")
-    );
+    companySearch?.addEventListener("input", () => filterPickerOptions(companySearch, "company"));
+    countrySearch?.addEventListener("input", () => filterPickerOptions(countrySearch, "country"));
     searchTerms?.addEventListener("input", () => applyFilters());
 
     clearCountries?.addEventListener("click", () => {
@@ -401,212 +254,15 @@ const pageDesc =
 </script>
 
 <style>
-  .jobs-page {
-    --jobs-muted: color-mix(in srgb, var(--foreground) 72%, var(--background));
-    --jobs-subtle: color-mix(in srgb, var(--foreground) 58%, var(--background));
-    --jobs-border: color-mix(in srgb, var(--border) 72%, var(--background));
-    --jobs-panel: color-mix(in srgb, var(--background) 88%, var(--foreground));
-    --jobs-panel-strong: color-mix(
-      in srgb,
-      var(--background) 78%,
-      var(--foreground)
-    );
-    --jobs-hover: color-mix(in srgb, var(--accent) 12%, transparent);
-    --jobs-shadow: color-mix(in srgb, var(--foreground) 18%, transparent);
-  }
-
-  .jobs-paper {
-    isolation: isolate;
-    border-color: var(--jobs-border);
-    background: var(--background);
-    box-shadow: 0 18px 50px var(--jobs-shadow);
-    color: var(--foreground);
-  }
-
-  .jobs-paper::after {
-    position: absolute;
-    z-index: -1;
-    inset: 5px;
-    border: 1px solid color-mix(in srgb, var(--jobs-border) 54%, transparent);
-    border-radius: 0.35rem;
-    content: "";
-    pointer-events: none;
-  }
-
-  .jobs-section-border {
-    border-color: var(--jobs-border);
-  }
-
-  .jobs-heading {
-    color: var(--foreground);
-  }
-
-  .jobs-muted {
-    color: var(--jobs-muted);
-  }
-
-  .filter-picker {
-    position: relative;
-  }
-
-  .filter-picker summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    min-width: 0;
-    width: 100%;
-    border: 1.5px solid var(--jobs-border);
-    border-radius: 0.45rem;
-    background: var(--jobs-panel);
-    padding: 0.65rem 0.75rem;
-    color: var(--foreground);
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .filter-picker summary span:first-child {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .filter-picker summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .filter-picker[open] summary {
-    box-shadow: 2px 3px 0 var(--jobs-shadow);
-  }
-
-  .filter-picker[open] summary span:last-child {
-    transform: rotate(180deg);
-  }
-
-  .filter-menu {
-    position: absolute;
-    z-index: 20;
-    left: 0;
-    width: min(24rem, calc(100vw - 3rem));
-    margin-top: 0.55rem;
-    border: 1.5px dashed var(--jobs-border);
-    border-radius: 0.45rem;
-    background: var(--jobs-panel-strong);
-    padding: 0.6rem;
-    box-shadow: 0 1rem 2rem var(--jobs-shadow);
-  }
-
-  @media (min-width: 1024px) {
-    .filter-menu {
-      width: 24rem;
-    }
-  }
-
-  .filter-menu > p {
-    padding: 0.2rem 0.35rem 0.55rem;
-    color: var(--jobs-subtle);
-    font-size: 0.7rem;
-  }
-
-  .filter-search,
-  .terms-search {
-    display: grid;
-    gap: 0.35rem;
-    color: var(--jobs-subtle);
-    font-size: 0.7rem;
-  }
-
-  .filter-search {
-    padding: 0 0.35rem 0.6rem;
-  }
-
-  .filter-search span,
-  .terms-search span {
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .filter-search input,
-  .terms-search input {
-    width: 100%;
-    border: 1.5px solid var(--jobs-border);
-    border-radius: 0.4rem;
-    background: var(--jobs-panel);
-    padding: 0.55rem 0.65rem;
-    color: var(--foreground);
-    font-size: 0.8rem;
-  }
-
-  .filter-search input::placeholder,
-  .terms-search input::placeholder {
-    color: var(--jobs-subtle);
-  }
-
-  .filter-options {
-    max-height: 19rem;
-    overflow-y: auto;
-  }
-
-  .filter-option {
-    display: grid;
-    grid-template-columns: 1rem minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.55rem;
-    border-radius: 0.2rem;
-    padding: 0.4rem 0.45rem;
-    color: var(--jobs-muted);
-    cursor: pointer;
-  }
-
-  .filter-option:hover,
-  .filter-option:has(input:checked) {
-    background: var(--jobs-hover);
-    color: var(--foreground);
-  }
-
+  /* Native form-control accent for the checkboxes — no Tailwind utility maps to
+     accent-color here, so this stays as a one-line structural rule. */
   .filter-option input {
     accent-color: var(--accent);
   }
 
-  .filter-option small {
-    color: var(--jobs-subtle);
-  }
-
-  .clear-picker {
-    width: 100%;
-    margin-top: 0.5rem;
-    border-top: 1px dashed var(--jobs-border);
-    padding: 0.65rem 0.35rem 0.2rem;
-    color: var(--accent);
-    font-size: 0.75rem;
-    text-align: left;
-  }
-
-  .clear-picker:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  #clear-filters {
-    margin-top: 1rem;
-    color: var(--accent);
-    font-size: 0.75rem;
-    text-decoration: underline;
-    text-decoration-style: dashed;
-    text-underline-offset: 4px;
-  }
-
-  :global(.job-card:hover) {
-    background: var(--jobs-hover);
-  }
-
-  :global(.job-row-link:focus-visible) {
-    background: var(--jobs-hover);
-  }
-
-  :global(.job-card[hidden]) {
-    display: none;
+  /* Rotate the disclosure caret when its picker is open. No Tailwind utility
+     targets an ancestor's [open] state, so this stays structural CSS. */
+  .filter-picker[open] summary span:last-child {
+    transform: rotate(180deg);
   }
 </style>

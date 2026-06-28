@@ -75,6 +75,7 @@ Conventions:
 - Theme toggle logic lives in `src/scripts/theme.ts` (loaded non-blocking)
 - A minimal inline FOUC-prevention script in `src/layouts/Layout.astro` sets the theme before paint
 - `window.theme` types are declared in `src/env.d.ts`
+- **Theme conformance (read before styling any page/component):** the theme is **color-only** (5 tokens in `src/styles/global.css`, exposed as `bg-*`/`text-*`/`border-*` utilities). Conform to AstroPaper's flat/minimal language — **borders not shadows**, **opacity not secondary-text-color tokens**, **`bg-muted` for surfaces/hover**, theme tokens via **semantic utilities** (not raw `var()` in `<style>`), and **Tailwind's default scale** (no bespoke px/rem/fractional sizes). Build novel UI in that spirit. Introducing a new token or visual language requires an explicit decision recorded in `docs/plans/` — a feature never extends the theme unilaterally. Full policy + audit rubric: [docs/theme-conformance.md](docs/theme-conformance.md).
 
 ## Branch and Deploy Flow
 
