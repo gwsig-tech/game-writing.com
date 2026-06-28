@@ -1,10 +1,11 @@
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField, svgoOptimizer } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import { unified } from "@astrojs/markdown-remark";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
+import rehypeCallouts from "rehype-callouts";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -41,6 +42,7 @@ export default defineConfig({
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
+      rehypePlugins: [rehypeCallouts],
     }),
     shikiConfig: {
       // For more themes, visit https://shiki.style/themes
@@ -78,5 +80,8 @@ export default defineConfig({
         optional: true,
       }),
     },
+  },
+  experimental: {
+    svgOptimizer: svgoOptimizer(),
   },
 });
