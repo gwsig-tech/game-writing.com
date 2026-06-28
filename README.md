@@ -38,7 +38,7 @@ pnpm preview          # Preview production build
 
 ## Environment Variables
 
-Environment variables are declared with a typed schema in [`astro.config.ts`](astro.config.ts) (Astro's `env` / `envField`). Set them in a local `.env` file (gitignored) for development, and as **Vercel Environment Variables** for preview/production builds.
+Environment variables are declared with a typed schema in [`astro.config.ts`](astro.config.ts) (Astro's `env` / `envField`). For development, copy the template and fill in what you need (`cp .env.example .env`) — `.env` is gitignored. Set them as **Vercel Environment Variables** for preview/production builds. [`.env.example`](.env.example) documents every supported variable; all are optional and the site builds with an empty `.env`.
 
 | Variable                          | Access / Context    | Required | Purpose                                                                                                                                                                                                                                                                                                                                                                      |
 | :-------------------------------- | :------------------ | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
