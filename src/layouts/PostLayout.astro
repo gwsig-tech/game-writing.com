@@ -1,0 +1,56 @@
+---
+import Layout from "./Layout.astro";
+import config from "@/config";
+
+type Props = {
+  title?: string;
+  author?: string;
+  profile?: string;
+  description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
+  pubDatetime?: Date;
+  modDatetime?: Date | null;
+  scrollSmooth?: boolean;
+};
+
+const { site } = config;
+const props = Astro.props;
+const {
+  title = site.title,
+  author = site.author,
+  profile = site.profile,
+  ogImage = `/${site.ogImage}`,
+  pubDatetime,
+  modDatetime,
+} = props;
+
+const socialImageURL = new URL(ogImage, Astro.url).href;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: `${title}`,
+  image: socialImageURL,
+  ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
+  ...(modDatetime && { dateModified: modDatetime.toISOString() }),
+  author: [
+    {
+      "@type": "Person",
+      name: `${author}`,
+      ...(profile && { url: profile }),
+    },
+  ],
+};
+---
+
+<Layout {...props}>
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData)}
+    />
+  </Fragment>
+  <slot />
+</Layout>
