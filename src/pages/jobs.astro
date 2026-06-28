@@ -5,7 +5,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import JobCard from "../components/JobCard.astro";
 import BackToTopButton from "../components/BackToTopButton.astro";
-import { SITE } from "@/config";
+import config from "@/config";
 import { getActiveJobs, getExperienceLabel, getJobCountries, getJobSummary } from "../lib/jobs";
 
 const jobs = (await getActiveJobs()).sort((a, b) => {
@@ -33,7 +33,7 @@ const title = "Jobs";
 const pageDesc = "Job opportunities for game writers and narrative designers.";
 ---
 
-<Layout title={`${title} | ${SITE.title}`} description={pageDesc}>
+<Layout title={`${title} | ${config.site.title}`} description={pageDesc}>
   <Header />
   <Main pageTitle={title} pageDesc={pageDesc} wide>
     <div>

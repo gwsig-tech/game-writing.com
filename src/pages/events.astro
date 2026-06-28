@@ -5,7 +5,7 @@ import Footer from "@/components/Footer.astro";
 import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import LinkButton from "@/components/LinkButton.astro";
-import { SITE } from "@/config";
+import config from "@/config";
 
 const CALENDAR_ID = "writing.sig@gmail.com";
 const encodedCalendarId = encodeURIComponent(CALENDAR_ID);
@@ -115,7 +115,7 @@ const title = "Events";
 const pageDesc = "Learn about events relevant to industry writers.";
 ---
 
-<Layout title={`${title} | ${SITE.title}`} description={pageDesc}>
+<Layout title={`${title} | ${config.site.title}`} description={pageDesc}>
   <Header />
   <Main pageTitle={title} pageDesc={pageDesc}>
     <section class="app-prose mb-28 max-w-app prose-img:border-0">

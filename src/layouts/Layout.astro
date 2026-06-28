@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import SpeedInsights from "@vercel/speed-insights/astro";
-import { SITE } from "@/config";
+import config from "@/config";
 import "@/styles/global.css";
 
 type Props = {
@@ -18,11 +18,10 @@ type Props = {
 };
 
 const {
-  title = SITE.title,
-  author = SITE.author,
-  profile = SITE.profile,
-  description = SITE.desc,
-  ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
+  title = config.site.title,
+  author = config.site.author,
+  description = config.site.description,
+  ogImage = `/${config.site.ogImage}`,
   canonicalURL = new URL(Astro.url.pathname, Astro.url),
   pubDatetime,
   modDatetime,
@@ -30,29 +29,14 @@ const {
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
+const ogType = pubDatetime ? "article" : "website";
 
-// Emit a valid BlogPosting only for real articles (pages that pass pubDatetime,
-// i.e. blog posts via PostDetails). Every other route gets a neutral WebSite
-// (homepage) or WebPage so crawlers never see the wrong @type or a
-// `datePublished: "undefined"` string.
+// Non-article pages emit a neutral WebSite (homepage) or WebPage. Article pages
+// get their BlogPosting from PostLayout via the head slot, so Layout stays
+// silent for them (gated on pubDatetime) to avoid a duplicate/conflicting @type.
 const isHome = Astro.url.pathname === "/";
-
 const structuredData = pubDatetime
-  ? {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: `${title}`,
-      image: `${socialImageURL}`,
-      datePublished: pubDatetime.toISOString(),
-      ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-      author: [
-        {
-          "@type": "Person",
-          name: `${author}`,
-          ...(profile && { url: profile }),
-        },
-      ],
-    }
+  ? null
   : {
       "@context": "https://schema.org",
       "@type": isHome ? "WebSite" : "WebPage",
@@ -65,8 +49,8 @@ const structuredData = pubDatetime
 
 <!doctype html>
 <html
-  dir={SITE.dir}
-  lang=`${SITE.lang ?? "en"}`
+  dir={config.site.dir}
+  lang=`${config.site.lang ?? "en"}`
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
@@ -89,6 +73,8 @@ const structuredData = pubDatetime
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={config.site.title} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -119,28 +105,28 @@ const structuredData = pubDatetime
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />
 
-    <!-- Google JSON-LD Structured data -->
-    <script
-      type="application/ld+json"
-      is:inline
-      set:html={JSON.stringify(structuredData)}
-    />
+    <!-- Google JSON-LD Structured data (non-article pages; BlogPosting via head slot) -->
+    {
+      structuredData && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(structuredData)}
+        />
+      )
+    }
 
     <!-- Enable RSS feed auto-discovery  -->
-    <!-- https://docs.astro.build/en/recipes/rss/#enabling-rss-feed-auto-discovery -->
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={SITE.title}
+      title={config.site.title}
       href={new URL("rss.xml", Astro.site)}
     />
 
     <meta name="theme-color" content="" />
 
     {
-      // If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,
-      // include google-site-verification tag in the heading
-      // Learn more: https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag
       PUBLIC_GOOGLE_SITE_VERIFICATION && (
         <meta
           name="google-site-verification"
@@ -148,6 +134,9 @@ const structuredData = pubDatetime
         />
       )
     }
+
+    <!-- Extra head content injected by child layouts (e.g. BlogPosting JSON-LD) -->
+    <slot name="head" />
 
     <ClientRouter />
 

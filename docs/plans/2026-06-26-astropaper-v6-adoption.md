@@ -3,7 +3,7 @@
 **Date:** 2026-06-26
 **Branch:** plan only (execution would be a fresh `v6-adoption` branch off clean `main`)
 **Author:** Jon (with Claude)
-**Status:** Planned — **read the Decision Point first.** This scopes a large, multi-day effort.
+**Status:** ⛔ **SUPERSEDED (2026-06-28)** by [`2026-06-28-astropaper-v6-parity-migration.md`](./2026-06-28-astropaper-v6-parity-migration.md), which reflects the post-conformance state and the resolved decisions (full v6 parity, content moved to `src/content/posts`, 7-token conform, etc.). Retained for historical context only — do not execute from this document.
 
 > **Update 2026-06-27 — per-page meta descriptions landed on `draft`.** Hub pages and `.mdx` content pages now pass a real per-page `description` into `Layout`, single-sourced with `Main`'s `pageDesc` / the frontmatter `description`. v6's stock hub pages do **not** have this, so it is a custom behavior to **re-port** in P3/P6d — exact v6 form (`description={t.pages.*Desc}`) and rationale in [2026-06-27-page-meta-descriptions.md](./2026-06-27-page-meta-descriptions.md). The same change **deleted `src/pages/og.png.ts`** (unused site-OG route — note the dead `Layout` `: "/og.png"` fallback) and removed an inherited dead `<h1 slot="title">` in the tag page.
 >
