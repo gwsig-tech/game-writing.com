@@ -9,6 +9,8 @@
 > the review date. Full feature/compatibility analysis lives in
 > [`docs/plans/2026-06-23-cms-subfolder-collections.md`](plans/2026-06-23-cms-subfolder-collections.md).
 >
+> **Config update 2026-06-28 (AstroPaper v6 migration).** Content moved `src/data/blog` → `src/content/posts`, so the three collection `folder:` paths (`posts`, `events`, `spotlights`) were repointed to match — audited clean. Media/asset paths (`src/assets/…`) are unchanged (images didn't move), and the config is otherwise structurally identical and still valid against the v0.167.3 baseline. The CMS write → Astro read loop is intact (new posts land in `src/content/posts`, where the `posts` collection globs them). _The `/admin` round-trip remains a preview-deploy check (see migration backlog)._
+>
 > **How we load it (and why we stay unpinned).** Unpinned from the CDN
 > (`https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js` in `public/admin/index.html`),
 > so `/admin` always runs the latest release. This is a **deliberate choice**: for a
