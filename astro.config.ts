@@ -19,6 +19,13 @@ export default defineConfig({
   redirects: {
     "/jams": "/events",
   },
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   integrations: [
     mdx(),
     sitemap({
