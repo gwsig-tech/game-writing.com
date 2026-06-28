@@ -2,7 +2,7 @@
 
 Website for the [IGDA Game Writing Special Interest Group](https://game-writing.com).
 
-Built with [Astro](https://astro.build/) using the [AstroPaper](https://github.com/satnaing/astro-paper) theme (v5.5.1), styled with [Tailwind CSS](https://tailwindcss.com/), and managed via [Sveltia CMS](https://github.com/sveltia/sveltia-cms).
+Built with [Astro](https://astro.build/) using the [AstroPaper](https://github.com/satnaing/astro-paper) theme (v6), styled with [Tailwind CSS](https://tailwindcss.com/), and managed via [Sveltia CMS](https://github.com/sveltia/sveltia-cms).
 
 ## Features
 
@@ -78,19 +78,21 @@ How the build uses these:
 │   │   ├── Datetime.astro     # Date/time display
 │   │   ├── Tag.astro          # Tag links
 │   │   └── ...                # Other AstroPaper components
+│   ├── content/
+│   │   └── posts/             # Blog posts (collection `posts`)
+│   │       ├── YYYY-MM-DD-slug.mdx
+│   │       ├── examples/      # AstroPaper documentation (drafts)
+│   │       ├── _releases/     # AstroPaper release notes (drafts)
+│   │       ├── _events/       # Event announcements
+│   │       └── _spotlights/   # Member spotlights
 │   ├── data/
-│   │   ├── blog/
-│   │   │   ├── YYYY-MM-DD-slug.mdx  # Blog posts
-│   │   │   ├── examples/      # AstroPaper documentation (drafts)
-│   │   │   ├── _releases/     # AstroPaper release notes (drafts)
-│   │   │   ├── _events/       # Event announcements
-│   │   │   └── _spotlights/   # Member spotlights
 │   │   └── jobs/              # [Custom] Jobs board source (job_postings.csv)
+│   ├── i18n/                  # EN-only UI strings (lang/en.ts)
 │   ├── layouts/
-│   │   ├── Layout.astro       # [Modified] Base HTML layout + Vercel analytics + theme script + JSON-LD
-│   │   ├── PostDetails.astro  # [Modified] Blog post layout + GameEmbed
-│   │   ├── DefaultLayout.astro # [Custom] Default markdown/content page layout
-│   │   └── Main.astro         # Main content wrapper (utility/hub pages)
+│   │   ├── Layout.astro       # [Modified] Base HTML/head + head slot + Vercel analytics + theme + JSON-LD
+│   │   ├── PostLayout.astro   # Post wrapper (adds BlogPosting JSON-LD via head slot)
+│   │   ├── DefaultLayout.astro # [Custom] .mdx content page layout
+│   │   └── Main.astro         # Hub/utility page shell
 │   ├── pages/
 │   │   ├── index.astro        # Homepage
 │   │   ├── about.mdx          # About page
@@ -105,14 +107,16 @@ How the build uses these:
 │   ├── scripts/
 │   │   └── theme.ts           # Light/dark theme toggle logic (loaded non-blocking)
 │   ├── styles/
-│   │   ├── global.css         # Tailwind config + CSS variables
+│   │   ├── theme.css          # 7 design tokens (light/dark palette)
+│   │   ├── global.css         # Tailwind entry + base layer + utilities
 │   │   └── typography.css     # Prose/markdown styling
-│   ├── utils/                 # Helper functions
+│   ├── utils/                 # Helper functions (getPath, etc.)
 │   ├── lib/                   # [Custom] Build-time libs (jobs.ts — CSV jobs board)
-│   ├── config.ts              # Site configuration (URL, title, etc.)
-│   ├── constants.ts           # Social links, sharing options
-│   ├── content.config.ts      # Content collection schema
+│   ├── types/config.ts        # Config types + defineAstroPaperConfig()
+│   ├── config.ts              # Resolved config (don't edit — see astro-paper.config.ts)
+│   ├── content.config.ts      # Content collection schema (posts)
 │   └── env.d.ts               # Ambient type declarations (window.theme)
+├── astro-paper.config.ts      # [EDIT HERE] site / socials / shareLinks / features
 ├── CLAUDE.md                  # Guidance for Claude Code agents
 └── astro.config.ts            # Astro configuration
 ```
@@ -219,12 +223,15 @@ git remote -v
 git remote add upstream https://github.com/satnaing/astro-paper.git
 ```
 
-**⚠️ Do NOT merge or cherry-pick from upstream anymore.** As of upstream's
-`feat!: AstroPaper v6` (`f0b644d`), the theme is a ground-up rewrite (new i18n,
-`BaseLayout`/`PostLayout` replacing `Layout.astro`, design tokens). Our fork has
-diverged past the point where `git pull upstream main` or `git cherry-pick` is
-safe — a merge would be destructive. Treat upstream as **reference only** and
-port ideas by hand.
+**We're on AstroPaper v6 parity** (migrated 2026-06-28 from v5.5.1). Our structure
+now matches upstream's v6 — three-file config, `src/i18n/`, `posts` collection at
+`src/content/posts`, 7-token `theme.css`, `Layout`/`PostLayout` head-slot split.
+
+**Still never `git pull` or `cherry-pick` from upstream** — the histories are
+unrelated and a merge would clobber our customizations. But porting is now *cheap*:
+because the structure matches, you diff the one upstream file you care about and
+re-graft it by hand, preserving our customizations (jobs board, events, GameEmbed,
+custom Header/Footer, palette, Vercel analytics, `/jams` redirect, static OG).
 
 **To review upstream for ideas to port:**
 
@@ -242,25 +249,25 @@ git show upstream/main:astro.config.ts
 **Resources:**
 
 - [AstroPaper Releases](https://github.com/satnaing/astro-paper/releases)
-- [Compare versions](https://github.com/satnaing/astro-paper/compare/v5.5.1...main) (current base: v5.5.1)
+- [Compare versions](https://github.com/satnaing/astro-paper/compare/v6.1.0...main) (current base: v6.1.0)
 - [Release Notes](src/content/posts/_releases/) (local copies)
 
 **Most heavily-customized files** (preserve these when porting any upstream idea by hand):
 
-- `src/layouts/` — `Layout` (Vercel analytics/speed-insights + conditional JSON-LD + theme script), `DefaultLayout`, `Main`, `PostDetails` (GameEmbed)
-- `src/components/Header.astro` — custom nav (About/Events/Constitution/Posts/Tags/Jobs)
-- `src/config.ts` / `src/constants.ts` — site settings, social/share links
-- `src/styles/global.css` — custom light/dark palette + utilities (styling follows [docs/theme-conformance.md](docs/theme-conformance.md))
+- `src/layouts/Layout.astro` (Vercel analytics + WebSite/WebPage JSON-LD + theme/FOUC), `DefaultLayout`, `Main`; the post route `src/pages/posts/[...slug]/index.astro` (GameEmbed)
+- `src/components/Header.astro` + `Footer.astro` — custom nav (About/Events/Constitution/Posts/Tags/Jobs) + SIG footer
+- `astro-paper.config.ts` — site settings, social/share links, feature flags
+- `src/styles/theme.css` — custom light/dark 7-token palette (styling follows [docs/theme-conformance.md](docs/theme-conformance.md))
 - `src/pages/jobs.astro` + `src/lib/jobs.ts`, `src/pages/events.astro`, `public/admin/config.yml` — the jobs board, Google Calendar, and Sveltia CMS
 
-A full adoption of upstream's AstroPaper **v6** rewrite is scoped (and deliberately deferred) in [docs/plans/2026-06-26-astropaper-v6-adoption.md](docs/plans/2026-06-26-astropaper-v6-adoption.md).
+The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md); deferred follow-ups (example-post refresh, OG-generator modernization, lightbox, etc.) are in [docs/plans/2026-06-28-astropaper-v6-backlog.md](docs/plans/2026-06-28-astropaper-v6-backlog.md).
 
 ## Tech Stack
 
 | Category   | Technology                                                                              |
 | :--------- | :-------------------------------------------------------------------------------------- |
 | Framework  | [Astro](https://astro.build/) v6.4.8                                                    |
-| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v5.5.1                            |
+| Theme      | [AstroPaper](https://github.com/satnaing/astro-paper) v6 (parity, 2026-06-28)           |
 | Styling    | [Tailwind CSS](https://tailwindcss.com/) v4                                             |
 | CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (loaded unpinned — always latest) |
 | Search     | [Pagefind](https://pagefind.app/)                                                       |
@@ -272,14 +279,14 @@ A full adoption of upstream's AstroPaper **v6** rewrite is scoped (and deliberat
 
 ### Internal (in this repo)
 
-- [Theme Conformance Guide](docs/theme-conformance.md) — the standard for consistent, easy-to-re-theme styling (borders not shadows, opacity not text-color tokens, theme tokens via utilities); includes a copy-pasteable per-page audit rubric
+- [Theme Conformance Guide](docs/theme-conformance.md) — the standard for consistent, easy-to-re-theme styling (borders not shadows, `text-muted-foreground` for secondary text, 7 color tokens via utilities); includes a copy-pasteable per-page audit rubric
 - [Adding New Posts](src/content/posts/examples/adding-new-post.md)
 - [How to Configure AstroPaper](src/content/posts/examples/how-to-configure-astropaper-theme.md)
 - [Customizing Color Schemes](src/content/posts/examples/customizing-astropaper-theme-color-schemes.md)
 - [Predefined Color Schemes](src/content/posts/examples/predefined-color-schemes.md)
 - [Dynamic OG Images](src/content/posts/examples/dynamic-og-images.md)
 - [How to Update Dependencies](src/content/posts/examples/how-to-update-dependencies.md)
-- [AstroPaper v5 Release Notes](src/content/posts/_releases/astro-paper-5.md)
+- [AstroPaper v6 Release Notes](src/content/posts/_releases/astro-paper-6.md)
 
 ### External
 

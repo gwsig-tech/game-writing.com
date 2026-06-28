@@ -29,22 +29,21 @@ pnpm sync             # Generate TypeScript types for Astro modules
 
 ### Configuration
 
-- **Site settings**: `src/config.ts` (site URL, author, title, etc.)
-- **Social links**: `src/constants.ts` (SOCIALS and SHARE_LINKS arrays)
+- **Site settings + social/share links**: edit [`astro-paper.config.ts`](astro-paper.config.ts) at the repo root — `defineAstroPaperConfig({ site, posts, features, socials, shareLinks })`. `src/config.ts` is the *resolved* config (applies defaults) imported everywhere as `config`; **don't edit it directly**. Social/share icons resolve **by name** from `src/assets/icons/socials/<name>.svg` (there is no longer a `constants.ts`).
 - **Environment variables**: declared with a typed schema in `astro.config.ts` (`env`/`envField`); set in local `.env` and as Vercel env vars. Build-time secrets use `access: "secret", context: "server"` (e.g. `GOOGLE_CALENDAR_API_KEY`, read at build by `src/pages/events.astro`) and never reach the client bundle since the site is SSG. All are `optional` and degrade gracefully. Document and reuse this pattern for new build-time integrations — see the **Environment Variables** section in `README.md`.
 
 ### Page metadata (titles & descriptions)
 
 Two independent layers, wired per page (this split is stock AstroPaper, kept in v6):
 
-- **`Layout.astro` `title` / `description`** → the `<head>`: browser-tab `<title>`, `<meta name="description">`, OG/Twitter cards, JSON-LD. Defaults to `SITE.title` / `SITE.desc`.
+- **`Layout.astro` `title` / `description`** → the `<head>`: browser-tab `<title>`, `<meta name="description">`, OG/Twitter cards, JSON-LD. Defaults to `config.site.title` / `config.site.description`.
 - **`Main.astro` `pageTitle` / `pageDesc`** → the **visible** on-page `<h1>` + italic intro. Not in `<head>`.
 
 Conventions:
 
 - `title` (tab/SEO) and `pageTitle` (visible heading) are **separate props**, set independently per page — `title` builds the `<head>`/tab string, `pageTitle` the visible `<h1>`. The theme treats them as distinct (they're free to differ; today our pages keep them aligned), so setting one does not set the other.
-- **Single-source the description** (convention added 2026-06-27): hub/custom pages declare one `const pageDesc` and pass it to **both** `<Main pageDesc={pageDesc}>` (visible) and `<Layout description={pageDesc}>` (`<head>`), so the SEO/OG/JSON-LD description is the real per-page text, not `SITE.desc`. `.mdx` content pages set a `description:` frontmatter line, forwarded by `DefaultLayout`. New hub/custom pages should follow this. See `docs/plans/2026-06-27-page-meta-descriptions.md`.
-- The `` | ${SITE.title} `` title suffix is applied **per call site** (matches stock + v6); centralizing it ("decision B") is deliberately deferred. Do not centralize it without re-reading that plan.
+- **Single-source the description** (convention added 2026-06-27): hub/custom pages declare one `const pageDesc` and pass it to **both** `<Main pageDesc={pageDesc}>` (visible) and `<Layout description={pageDesc}>` (`<head>`), so the SEO/OG/JSON-LD description is the real per-page text, not `config.site.description`. `.mdx` content pages set a `description:` frontmatter line, forwarded by `DefaultLayout`. New hub/custom pages should follow this. See `docs/plans/2026-06-27-page-meta-descriptions.md`.
+- The `` | ${config.site.title} `` title suffix is applied **per call site** (matches stock + v6); centralizing it ("decision B") is deliberately deferred. Do not centralize it without re-reading that plan.
 
 ### CMS
 
@@ -59,11 +58,12 @@ Conventions:
 ### Key Directories
 
 - `src/components/` - Astro components (Card, Header, Datetime, JobCard, etc.)
-- `src/layouts/` - Page layouts: `Layout` (base), `PostDetails` (posts), `DefaultLayout` (the default for markdown/content pages — formerly `AboutLayout`), `Main` (utility/hub pages)
-- `src/pages/` - Route pages including static `.mdx` pages (`about.mdx`, `constitution.mdx`) and custom pages (`events.astro`, `jobs.astro`)
-- `src/utils/` - Helper functions for posts, tags, OG images
+- `src/layouts/` - `Layout` (base HTML/head + `<slot name="head">` + Vercel analytics + theme/FOUC), `PostLayout` (wraps `Layout`, adds the post `BlogPosting` JSON-LD), `DefaultLayout` (`.mdx` content pages), `Main` (hub/utility page shell)
+- `src/pages/` - Route pages including static `.mdx` pages (`about.mdx`, `constitution.mdx`) and custom pages (`events.astro`, `jobs.astro`). **Posts render in `posts/[...slug]/index.astro`** with post-only components colocated in its `_components/` (ShareLinks, EditPost, BackButton, AdjacentPostNav) — there is no `PostDetails` layout
+- `src/i18n/` - EN-only UI strings (`lang/en.ts`, typed in `types.ts`) via `useTranslations()`; woven into ported v6 components
+- `src/utils/` - Helper functions for posts, tags, OG images (`getPath.ts` derives `/posts/<slug>` URLs)
 - `src/lib/` - Standalone build-time libraries (`jobs.ts` parses `src/data/jobs/job_postings.csv` for the jobs board)
-- `src/assets/` - Images and icons (also used as CMS media folder)
+- `src/assets/` - Images and icons (also used as CMS media folder); `icons/socials/<name>.svg` are resolved by name for the config's socials/shareLinks
 
 ### Build Output
 
@@ -86,13 +86,13 @@ Conventions:
 
 ## Upstream Theme
 
-- `upstream` remote points to `satnaing/astro-paper`
-- **As of upstream's `feat!: AstroPaper v6` (`f0b644d`), the theme is a ground-up rewrite** (new i18n, `BaseLayout`/`PostLayout` replacing `Layout.astro`, design tokens). Our fork has diverged past the point of merging OR cherry-picking — a `git pull upstream main` would be destructive. Treat upstream as a **reference** for "how to configure X on Astro 6+", and port ideas by hand.
-- See `docs/plans/` for maintenance history and decisions
+- `upstream` remote points to `satnaing/astro-paper`. **We are on AstroPaper v6 parity** (migrated 2026-06-28 from v5.5.1 — see [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md)): three-file config, `src/i18n/`, the `posts` collection at `src/content/posts`, the 7-token `theme.css`, and the `Layout`/`PostLayout` head-slot split all match upstream's structure now. Upstream is at **v6.1.0** (no v7 yet).
+- **Pulling from upstream:** still **port by hand** — never `git pull`/`cherry-pick` upstream (unrelated histories; it would clobber our customizations). But it's now *cheap*, because the structure matches: `git fetch upstream`, inspect the file you care about (`git show upstream/main:<path>`), and re-graft, preserving our customizations (jobs, events, GameEmbed, custom Header/Footer, palette, Vercel analytics, `/jams` redirect, static OG).
+- **Deferred v6 items** (none blocking) are tracked in [docs/plans/2026-06-28-astropaper-v6-backlog.md](docs/plans/2026-06-28-astropaper-v6-backlog.md). See `docs/plans/` for the rest of the maintenance history.
 
 ## Dependencies (do not bump without checking)
 
-- We track Astro **6** (matching the upstream theme), not Astro 7. The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis` 173 are applied. See the latest plan in `docs/plans/` for revisit triggers.
+- We track **Astro 6** and **AstroPaper v6** (both matching upstream; upstream is at v6.1.0). The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed — when upstream ships **AstroPaper v7 + Astro 7**, that's the next theme upgrade) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis` 173 are applied. See the latest plan in `docs/plans/` for revisit triggers.
 - `cpx2` was previously pinned to exact `8.0.0` to dodge an `ERR_REQUIRE_ESM` regression; `cpx2@9` migrated to ESM and resolved it, so it is now `^9.0.0` (do not re-pin).
 - Astro 6 requires **Node 22.12+** (`engines` field enforces it) — keep Vercel's build Node version at 22+.
 

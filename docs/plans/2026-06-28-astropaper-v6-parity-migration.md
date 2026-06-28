@@ -1,8 +1,32 @@
 # AstroPaper v6 — full-parity migration plan (2026-06-28)
 
-**Supersedes** [`2026-06-26-astropaper-v6-adoption.md`](./2026-06-26-astropaper-v6-adoption.md) (written before the recent conformance + meta work, now stale). **Worktree:** `.worktrees/jm-astropaper-v6` (branch `jm-astropaper-v6`, off `draft`). **Status:** in execution — see the phase checklist at the bottom for live progress.
+**Supersedes** [`2026-06-26-astropaper-v6-adoption.md`](./2026-06-26-astropaper-v6-adoption.md) (written before the recent conformance + meta work, now stale). **Worktree:** `.worktrees/jm-astropaper-v6` (branch `jm-astropaper-v6`, off `draft`). **Status: ✅ COMPLETE (P0–P7), merge-ready.** See **[Execution outcome & deviations](#execution-outcome--deviations)** below for what actually shipped vs planned, and the **[backlog](./2026-06-28-astropaper-v6-backlog.md)** for everything deferred. The phased roadmap further down is the original plan, kept as the historical record.
 
 > **Status: decisions resolved 2026-06-28** (see the Resolved Decisions section). Basis: a read-only 12-subsystem divergence audit run as a Workflow (30 agents), each finding adversarially verified against `upstream/main` (v6.1.0 @ `4c33a60`; rewrite landed in `f0b644d`), plus a content-post sync analysis and a completeness critic. Load-bearing facts (URL parity, config shape, layout head plumbing, OG wiring, fonts, directory-move safety, rename-sweep counts) were independently re-verified by hand.
+
+## Execution outcome & deviations
+
+**P0–P7 complete, committed, and pushed to `origin/jm-astropaper-v6`** (8 commits off `8f7f7ba`). Every phase ended on a green `pnpm build`, and the **built route set stayed byte-identical to the GATE-0 production baseline through all seven phases** — URL parity held across the config rewrite, i18n, the `src/data/blog`→`src/content/posts` move + `blog`→`posts` rename, the token split, the layout/PostLayout split, the component colocation, and the build-tooling. Effort came in well under the 7–11 day estimate because the work was overwhelmingly mechanical (schema and URL logic already matched v6).
+
+**Where execution deviated from the plan below (and why):**
+
+| Plan said | What shipped | Why / backlog |
+|---|---|---|
+| Move content to `src/content/posts` (Decision 9) | ✅ Done | — |
+| Split `getPath` → `getPostSlug`/`getPostUrl` (P3/P6) | **Kept `getPath`** | Not needed for URL parity (identical `/posts/<slug>`); the split only buys locale-aware URLs (we're single-locale). → backlog #4 |
+| `SeoJsonLd.astro` via head slot (P5) | **Kept WebSite/WebPage JSON-LD inside `Layout`** (gated to non-articles) | Same output, zero per-page churn, richer than v6 (no hub-page JSON-LD upstream). → backlog #7 |
+| Adopt v6 `theme.ts` + `.dark` (P4/P6) | **Kept our `theme.ts`** | Our Header has dual desktop+mobile theme buttons; v6's single-button script wouldn't wire the mobile one. Our `[data-theme=dark]` variant already matches v6. → backlog #5 |
+| Conform shared components to v6 (P6) | **Kept custom** Header/Footer/Breadcrumb/Tag/LinkButton | Heavily diverged (SIG nav/footer); v6 verbatim would erase customizations. Did adopt Datetime (muted dates), glob Socials, ResponsiveTable, and the colocated post `_components`. → backlog #6 |
+| OG generator resvg→sharp + self-hosted fonts (P5/P7, Decision 3a) | **Left dormant resvg generator** | `dynamicOgImage:false` → it never runs; zero impact. → backlog #2 |
+| Adopt `resolveDefaultOgImagePath` (P5) | **Kept inline OG default** | Avoids pulling in the deferred `withBase`. |
+| Image lightbox (P6) | **Deferred** | Non-essential. → backlog #3 |
+| Pull-update 10 examples + pull-new `astro-paper-6` (P7) | **Pulled `astro-paper-6` only** | The 10 examples need 13 v6 image assets across 4 path conventions + per-post review — a content task. → backlog #1 |
+| Adopt v6 CI as a PR gate (P7) | **Added `ci.yml` as `workflow_dispatch` (manual-only)** | Maintainer's call: Vercel already builds deploys; avoid a redundant auto-gate. |
+| Migrate `pnpm-workspace` → `allowBuilds` (P7) | **Kept `onlyBuiltDependencies`** | `allowBuilds` is pnpm-11 syntax; we're on pnpm 10. |
+
+Everything deferred lives in **[2026-06-28-astropaper-v6-backlog.md](./2026-06-28-astropaper-v6-backlog.md)**; none of it blocks the merge to `draft`. **P8 (preview cutover)** — the Sveltia `/admin` round-trip at the new paths + Vercel env scope — is deploy-gated and validated by opening a PR into `draft`.
+
+---
 
 ## Context — why do this now
 
