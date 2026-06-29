@@ -4,8 +4,12 @@ dist/
 # generated types
 .astro/
 
+# git worktrees (kept inside the repo, not tracked)
+.worktrees/
+
 # dependencies
 node_modules/
+.pnpm-store/
 
 # logs
 npm-debug.log*

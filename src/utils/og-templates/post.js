@@ -1,6 +1,6 @@
 import satori from "satori";
 // import { html } from "satori-html";
-import { SITE } from "@/config";
+import config from "@/config";
 import loadGoogleFonts from "../loadGoogleFont";
 
 // const markup = html`<div
@@ -86,7 +86,7 @@ import loadGoogleFonts from "../loadGoogleFont";
 //             </span>
 
 //             <span style={{ overflow: "hidden", fontWeight: "bold" }}>
-//               {SITE.title}
+//               {config.site.title}
 //             </span>
 //           </div>
 //         </div>
@@ -203,7 +203,7 @@ export default async post => {
                             type: "span",
                             props: {
                               style: { overflow: "hidden", fontWeight: "bold" },
-                              children: SITE.title,
+                              children: config.site.title,
                             },
                           },
                         ],
@@ -222,7 +222,7 @@ export default async post => {
       height: 630,
       embedFont: true,
       fonts: await loadGoogleFonts(
-        post.data.title + post.data.author + SITE.title + "by"
+        post.data.title + post.data.author + config.site.title + "by"
       ),
     }
   );

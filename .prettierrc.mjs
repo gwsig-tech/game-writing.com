@@ -3,7 +3,12 @@ export default {
   arrowParens: "avoid",
   semi: true,
   tabWidth: 2,
-  printWidth: 80,
+  // Effectively disable width-based line wrapping: Prettier has no true "off"
+  // switch, so a very large printWidth means it won't split lines just to fit a
+  // column. Use editor word-wrap to read long lines. proseWrap stays "preserve"
+  // so Markdown/MDX prose is never reflowed either.
+  printWidth: 9999,
+  proseWrap: "preserve",
   singleQuote: false,
   jsxSingleQuote: false,
   trailingComma: "es5",

@@ -1,0 +1,268 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Main from "../layouts/Main.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import JobCard from "../components/JobCard.astro";
+import BackToTopButton from "../components/BackToTopButton.astro";
+import config from "@/config";
+import { getActiveJobs, getExperienceLabel, getJobCountries, getJobSummary } from "../lib/jobs";
+
+const jobs = (await getActiveJobs()).sort((a, b) => {
+  const companyComparison = a.company_name.localeCompare(b.company_name);
+  return companyComparison || a.title.localeCompare(b.title);
+});
+const jobsWithCountries = jobs.map(job => ({
+  job,
+  countries: getJobCountries(job),
+}));
+const countryCounts = new Map<string, number>();
+for (const { countries } of jobsWithCountries) {
+  for (const country of countries) {
+    countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
+  }
+}
+const countries = [...countryCounts.entries()].sort(([countryA], [countryB]) => countryA.localeCompare(countryB));
+const companyCounts = new Map<string, number>();
+for (const job of jobs) {
+  companyCounts.set(job.company_name, (companyCounts.get(job.company_name) || 0) + 1);
+}
+const companies = [...companyCounts.entries()].sort(([companyA], [companyB]) => companyA.localeCompare(companyB));
+
+const title = "Jobs";
+const pageDesc = "Job opportunities for game writers and narrative designers.";
+---
+
+<Layout title={`${title} | ${config.site.title}`} description={pageDesc}>
+  <Header />
+  <Main pageTitle={title} pageDesc={pageDesc} wide>
+    <div>
+      <section class="app-prose app-layout">
+        <p>The Game Writing SIG jobs board collects open roles for game writers, narrative designers, and editors across the industry. We share these to help our community find work and connect companies with writers.</p>
+        <p>These listings are collected from the public postings found at each linked page. Listings are updated periodically, and roles may close or change without notice, so always confirm details and apply through the official link. The IGDA Game Writing SIG is not affiliated with, sponsored by, or endorsing any of the companies or positions listed here.</p>
+        <p aria-live="polite" id="jobs-count">
+          {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"}
+          available. Filter by company or country, or search by keyword to narrow the list.
+        </p>
+      </section>
+      <div class="mx-auto mt-10 mb-28 max-w-6xl px-4">
+        <div class="relative overflow-visible rounded-lg border-2 bg-background">
+          <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)]">
+            <aside class="relative z-10 border-b border-dashed px-6 py-7 lg:border-r lg:border-b-0 lg:px-7">
+              <div class="lg:sticky lg:top-6">
+                <h2 class="text-xs font-bold tracking-widest uppercase">Filter roles</h2>
+                <details class="filter-picker relative mt-4">
+                  <summary class="flex w-full min-w-0 cursor-pointer list-none items-center justify-between gap-3 rounded border bg-background px-3 py-2.5 hover:border-accent [&::-webkit-details-marker]:hidden">
+                    <span id="company-label" class="min-w-0 truncate">All companies</span>
+                    <span aria-hidden="true" class="transition-transform">⌄</span>
+                  </summary>
+                  <div class="absolute left-0 z-20 mt-2 w-[min(24rem,calc(100vw-3rem))] rounded border bg-muted p-2.5">
+                    <p class="px-1.5 pt-1 pb-2 text-xs opacity-60">Select one or more companies</p>
+                    <label class="grid gap-1.5 px-1.5 pb-2">
+                      <span class="text-xs font-bold tracking-wider uppercase opacity-60">Search companies</span>
+                      <input type="search" id="company-search" class="w-full rounded border bg-background px-2.5 py-2 text-sm placeholder:opacity-60" placeholder="type a company" autocomplete="off" />
+                    </label>
+                    <div class="max-h-[19rem] overflow-y-auto">
+                      {
+                        companies.map(([company, count]) => (
+                          <label class="filter-option grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-2 rounded-sm px-1.5 py-1.5 opacity-75 hover:text-accent hover:opacity-100 has-[:checked]:font-bold has-[:checked]:text-accent has-[:checked]:opacity-100">
+                            <input type="checkbox" name="company" value={company.toLowerCase()} data-label={company} />
+                            <span>{company}</span>
+                            <small class="opacity-60">{count}</small>
+                          </label>
+                        ))
+                      }
+                    </div>
+                    <button type="button" class="mt-2 w-full border-t border-dashed px-1.5 pt-2.5 pb-0.5 text-left text-xs text-accent hover:underline hover:underline-offset-2" id="clear-companies"> Clear companies </button>
+                  </div>
+                </details>
+                <details class="filter-picker relative mt-3">
+                  <summary class="flex w-full min-w-0 cursor-pointer list-none items-center justify-between gap-3 rounded border bg-background px-3 py-2.5 hover:border-accent [&::-webkit-details-marker]:hidden">
+                    <span id="country-label" class="min-w-0 truncate">All countries</span>
+                    <span aria-hidden="true" class="transition-transform">⌄</span>
+                  </summary>
+                  <div class="absolute left-0 z-20 mt-2 w-[min(24rem,calc(100vw-3rem))] rounded border bg-muted p-2.5">
+                    <p class="px-1.5 pt-1 pb-2 text-xs opacity-60">Select one or more countries</p>
+                    <label class="grid gap-1.5 px-1.5 pb-2">
+                      <span class="text-xs font-bold tracking-wider uppercase opacity-60">Search countries</span>
+                      <input type="search" id="country-search" class="w-full rounded border bg-background px-2.5 py-2 text-sm placeholder:opacity-60" placeholder="type a country" autocomplete="off" />
+                    </label>
+                    <div class="max-h-[19rem] overflow-y-auto">
+                      {
+                        countries.map(([country, count]) => (
+                          <label class="filter-option grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-2 rounded-sm px-1.5 py-1.5 opacity-75 hover:text-accent hover:opacity-100 has-[:checked]:font-bold has-[:checked]:text-accent has-[:checked]:opacity-100">
+                            <input type="checkbox" name="country" value={country} />
+                            <span>{country}</span>
+                            <small class="opacity-60">{count}</small>
+                          </label>
+                        ))
+                      }
+                    </div>
+                    <button type="button" class="mt-2 w-full border-t border-dashed px-1.5 pt-2.5 pb-0.5 text-left text-xs text-accent hover:underline hover:underline-offset-2" id="clear-countries"> Clear countries </button>
+                  </div>
+                </details>
+                <label class="mt-4 grid gap-1.5">
+                  <span class="text-xs font-bold tracking-wider uppercase opacity-60">Search terms</span>
+                  <input type="search" id="search-terms" class="w-full rounded border bg-background px-2.5 py-2 text-sm placeholder:opacity-60" placeholder="ex. remote, full-time..." autocomplete="off" spellcheck="false" />
+                </label>
+                <button type="button" id="clear-filters" class="mt-4 text-xs text-accent underline decoration-dashed underline-offset-4">Clear all filters</button>
+              </div>
+            </aside>
+
+            <div class="min-w-0">
+              <ul class="px-5 sm:px-8">
+                {jobsWithCountries.map(({ job, countries }) => <JobCard href={job.canonical_url} title={job.title} company={job.company_name} location={job.location} workType={job.employment_type} remoteType={job.remote_type} experience={getExperienceLabel(job)} date={job.first_seen_at} description={getJobSummary(job)} countries={countries} />)}
+              </ul>
+              {jobs.length === 0 && <p class="px-6 py-10 text-center opacity-75">No active roles are listed right now. Check back soon.</p>}
+              <p id="no-filter-results" class="hidden px-6 py-12 text-center opacity-75">No active roles match those filters.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8">
+          <BackToTopButton />
+        </div>
+      </div>
+    </div>
+  </Main>
+  <Footer />
+</Layout>
+
+<script>
+  // Close any open filter dropdown when clicking outside it. Attached once at the
+  // document level (document persists across View Transitions) and re-queries the
+  // pickers at click time, so it stays correct after astro:page-load swaps.
+  document.addEventListener("click", event => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest(".filter-picker")) return;
+    for (const picker of document.querySelectorAll<HTMLDetailsElement>(".filter-picker")) {
+      picker.open = false;
+    }
+  });
+
+  // Re-run on initial load and after every View Transition navigation so the
+  // filter handlers bind to the freshly-swapped DOM.
+  document.addEventListener("astro:page-load", () => {
+    const countryFilters = document.querySelectorAll<HTMLInputElement>('input[name="country"]');
+    const companyFilters = document.querySelectorAll<HTMLInputElement>('input[name="company"]');
+    const cards = document.querySelectorAll<HTMLElement>("[data-job-card]");
+    const count = document.querySelector<HTMLElement>("#jobs-count");
+    const empty = document.querySelector<HTMLElement>("#no-filter-results");
+    const pickers = document.querySelectorAll<HTMLDetailsElement>(".filter-picker");
+    const countrySearch = document.querySelector<HTMLInputElement>("#country-search");
+    const companySearch = document.querySelector<HTMLInputElement>("#company-search");
+    const searchTerms = document.querySelector<HTMLInputElement>("#search-terms");
+
+    const countryLabel = document.querySelector<HTMLElement>("#country-label");
+    const companyLabel = document.querySelector<HTMLElement>("#company-label");
+    const clearCountries = document.querySelector<HTMLButtonElement>("#clear-countries");
+    const clearCompanies = document.querySelector<HTMLButtonElement>("#clear-companies");
+    const clearFilters = document.querySelector<HTMLButtonElement>("#clear-filters");
+
+    for (const picker of pickers) {
+      picker.addEventListener("toggle", () => {
+        if (!picker.open) return;
+        for (const otherPicker of pickers) {
+          if (otherPicker !== picker) otherPicker.open = false;
+        }
+      });
+    }
+
+    function applyFilters() {
+      const selectedCountries = [...countryFilters].filter(filter => filter.checked).map(filter => filter.value);
+      const selectedCompanyFilters = [...companyFilters].filter(filter => filter.checked);
+      const selectedCompanies = selectedCompanyFilters.map(filter => filter.value);
+      const terms = getSearchTerms();
+
+      let matchCount = 0;
+      for (const card of cards) {
+        const countries = card.dataset.countries?.split("|") || [];
+        const matchesCountry = selectedCountries.length === 0 || selectedCountries.some(country => countries.includes(country));
+        const matchesCompany = selectedCompanies.length === 0 || selectedCompanies.includes(card.dataset.company || "");
+        const searchableText = (card.dataset.search || card.textContent || "").toLowerCase();
+        const matchesSearch = terms.length === 0 || terms.some(term => searchableText.includes(term));
+        const matched = matchesCountry && matchesCompany && matchesSearch;
+        card.hidden = !matched;
+        if (matched) matchCount += 1;
+      }
+
+      if (countryLabel) {
+        countryLabel.textContent = selectedCountries.length === 0 ? "All countries" : selectedCountries.length === 1 ? selectedCountries[0] : `${selectedCountries.length} countries`;
+      }
+      if (companyLabel) {
+        companyLabel.textContent = selectedCompanyFilters.length === 0 ? "All companies" : selectedCompanyFilters.length === 1 ? selectedCompanyFilters[0].dataset.label || "1 company" : `${selectedCompanyFilters.length} companies`;
+      }
+      if (count) {
+        const hasFilters = selectedCountries.length > 0 || selectedCompanies.length > 0 || terms.length > 0;
+        count.textContent = hasFilters ? `${matchCount} of ${cards.length} ${cards.length === 1 ? "role" : "roles"} match your filters.` : `${cards.length} game writing ${cards.length === 1 ? "role" : "roles"} available. Filter by company or country, or search by keyword to narrow the list.`;
+      }
+      empty?.classList.toggle("hidden", matchCount !== 0);
+    }
+
+    function getSearchTerms() {
+      return (searchTerms?.value || "")
+        .split(",")
+        .map(term => term.trim().toLowerCase())
+        .filter(Boolean);
+    }
+
+    function filterPickerOptions(search: HTMLInputElement | null, name: string) {
+      const query = search?.value.trim().toLowerCase() || "";
+      const filters = name === "company" ? companyFilters : countryFilters;
+
+      for (const filter of filters) {
+        const option = filter.closest<HTMLElement>(".filter-option");
+        const label = filter.dataset.label || filter.value;
+        if (option) option.hidden = query !== "" && !label.toLowerCase().includes(query);
+      }
+    }
+
+    for (const filter of [...countryFilters, ...companyFilters]) {
+      filter.addEventListener("change", () => applyFilters());
+    }
+
+    companySearch?.addEventListener("input", () => filterPickerOptions(companySearch, "company"));
+    countrySearch?.addEventListener("input", () => filterPickerOptions(countrySearch, "country"));
+    searchTerms?.addEventListener("input", () => applyFilters());
+
+    clearCountries?.addEventListener("click", () => {
+      for (const filter of countryFilters) filter.checked = false;
+      if (countrySearch) countrySearch.value = "";
+      filterPickerOptions(countrySearch, "country");
+      applyFilters();
+    });
+
+    clearCompanies?.addEventListener("click", () => {
+      for (const filter of companyFilters) filter.checked = false;
+      if (companySearch) companySearch.value = "";
+      filterPickerOptions(companySearch, "company");
+      applyFilters();
+    });
+
+    clearFilters?.addEventListener("click", () => {
+      for (const filter of [...countryFilters, ...companyFilters]) {
+        filter.checked = false;
+      }
+      if (companySearch) companySearch.value = "";
+      if (countrySearch) countrySearch.value = "";
+      if (searchTerms) searchTerms.value = "";
+      filterPickerOptions(companySearch, "company");
+      filterPickerOptions(countrySearch, "country");
+      applyFilters();
+    });
+  });
+</script>
+
+<style>
+  /* Native form-control accent for the checkboxes — no Tailwind utility maps to
+     accent-color here, so this stays as a one-line structural rule. */
+  .filter-option input {
+    accent-color: var(--accent);
+  }
+
+  /* Rotate the disclosure caret when its picker is open. No Tailwind utility
+     targets an ancestor's [open] state, so this stays structural CSS. */
+  .filter-picker[open] summary span:last-child {
+    transform: rotate(180deg);
+  }
+</style>

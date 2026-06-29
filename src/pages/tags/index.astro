@@ -6,16 +6,17 @@ import Tag from "@/components/Tag.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
-import { SITE } from "@/config";
+import config from "@/config";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("posts");
 
 let tags = getUniqueTags(posts);
+const pageDesc = "All the tags used in posts.";
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
+<Layout title={`Tags | ${config.site.title}`} description={pageDesc}>
   <Header />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
+  <Main pageTitle="Tags" pageDesc={pageDesc}>
     <ul class="flex flex-wrap gap-6">
       {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} />)}
     </ul>

@@ -1,0 +1,78 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  company: string;
+  location?: string | null;
+  workType?: string | null;
+  remoteType?: string | null;
+  experience?: string | null;
+  description: string;
+  date: Date;
+  countries: string[];
+}
+
+const { href, title, company, location, workType, remoteType, experience, description, date, countries } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+}).format(date);
+
+const employmentTerms: Record<string, RegExp> = {
+  internship: /\b(?:internship|intern)\b/gi,
+  freelance: /\bfreelance\b/gi,
+  contract: /\bcontract\b/gi,
+  temporary: /\btemporary\b/gi,
+  "full-time": /\bfull[- ]time\b/gi,
+  "part-time": /\bpart[- ]time\b/gi,
+};
+
+const employmentType = workType?.trim().toLowerCase();
+const redundantTerm = employmentType ? employmentTerms[employmentType] : null;
+const shortenedTitle = redundantTerm
+  ? title
+      .replace(redundantTerm, "")
+      .replace(/\s+([,;:)])/g, "$1")
+      .replace(/^[\s|/,:;–—-]+|[\s|/,:;–—-]+$/g, "")
+      .replace(/\s{2,}/g, " ")
+      .trim()
+  : title;
+const displayTitle = shortenedTitle || title;
+const searchableText = [company, displayTitle, title, location, remoteType, workType, experience, description, ...countries].filter(Boolean).join(" ").toLowerCase();
+---
+
+<li class="border-b border-dashed transition-colors last:border-b-0 hover:bg-muted" data-job-card data-countries={countries.join("|")} data-company={company.toLowerCase()} data-search={searchableText}>
+  <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`${displayTitle} at ${company} (opens in a new tab)`} class="block w-full px-2 py-7 sm:px-4">
+    <div class="flex w-full items-start justify-between gap-4">
+      <div class="min-w-0 space-y-2">
+        <p class="text-xl leading-tight font-bold text-accent sm:text-2xl">
+          {company}
+        </p>
+
+        <h2 class="text-base leading-snug font-bold sm:text-lg">
+          {displayTitle}
+          <span class="text-sm font-normal" aria-hidden="true">↗</span>
+        </h2>
+
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm opacity-75">
+          {location && <span class="flex items-center gap-1">📍 {location}</span>}
+          {remoteType && <span class="flex items-center gap-1">🏠 {remoteType}</span>}
+          {workType && <span class="flex items-center gap-1">💼 {workType}</span>}
+          {experience && <span class="flex items-center gap-1">⏳ {experience}</span>}
+        </div>
+      </div>
+
+      <time class="hidden text-xs font-medium whitespace-nowrap opacity-60 sm:block">
+        {formattedDate}
+      </time>
+    </div>
+
+    {description && <p class="mt-4 line-clamp-2 max-w-prose leading-relaxed opacity-75">{description}</p>}
+
+    <div class="mt-4 sm:hidden">
+      <time class="text-xs font-medium opacity-60">{formattedDate}</time>
+    </div>
+  </a>
+</li>

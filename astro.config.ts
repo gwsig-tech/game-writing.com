@@ -1,28 +1,37 @@
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField, svgoOptimizer } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import { unified } from "@astrojs/markdown-remark";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
+import rehypeCallouts from "rehype-callouts";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
-import { SITE } from "./src/config";
+import config from "./astro-paper.config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE.website,
+  site: config.site.url,
   redirects: {
     "/jams": "/events",
+  },
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: false,
+    },
   },
   integrations: [
     mdx(),
     sitemap({
-      filter: page => SITE.showArchives || !page.endsWith("/archives"),
+      filter: page =>
+        config.features?.showArchives !== false || !page.endsWith("/archives"),
     }),
   ],
   markdown: {
@@ -33,6 +42,7 @@ export default defineConfig({
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
+      rehypePlugins: [rehypeCallouts],
     }),
     shikiConfig: {
       // For more themes, visit https://shiki.style/themes
@@ -70,5 +80,8 @@ export default defineConfig({
         optional: true,
       }),
     },
+  },
+  experimental: {
+    svgOptimizer: svgoOptimizer(),
   },
 });
