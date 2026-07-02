@@ -1,0 +1,5 @@
+# Normalize line endings: store text as LF in the repo and check it out as LF
+# on every platform. This matches Prettier's `endOfLine: "lf"` so formatting no
+# longer produces phantom CRLF/LF diffs under git's autocrlf. Binary files are
+# auto-detected and left untouched.
+* text=auto eol=lf

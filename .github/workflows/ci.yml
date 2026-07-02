@@ -1,0 +1,49 @@
+name: CI
+
+# Intentionally manual-only (workflow_dispatch). This mirrors upstream AstroPaper's
+# CI for parity, but is deliberately NOT wired to run on PRs/pushes: Vercel's GitHub
+# integration already builds every deploy, so this would otherwise be a redundant
+# second build. Run it on demand from the Actions tab for an optional lint +
+# format-check + build pass. To make it an automatic PR gate later, add:
+#   on:
+#     pull_request:
+#       types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Code standards & build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "☁️ Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "📦 Install pnpm"
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.15.1"
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: "📦 Install dependencies"
+        run: pnpm install --frozen-lockfile
+
+      - name: "🔎 Lint code"
+        run: pnpm run lint
+
+      - name: "📝 Checking code format"
+        run: pnpm run format:check
+
+      - name: "🚀 Build the project"
+        run: pnpm run build

@@ -62,7 +62,10 @@ import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
         `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
       );
 
-      const isVisible = scrollTop / scrollTotal > 0.3;
+      // Reveal once the reader has scrolled past two viewport-heights. An
+      // absolute threshold (vs. a % of total height) keeps the trigger feeling
+      // consistent on both short posts and very long pages like the jobs board.
+      const isVisible = scrollTop > rootElement.clientHeight * 2;
 
       if (isVisible !== lastVisible) {
         btnContainer.classList.toggle("opacity-100", isVisible);

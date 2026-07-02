@@ -6,14 +6,14 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Card from "@/components/Card.astro";
 import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
-import { SITE } from "@/config";
+import config from "@/config";
 
 // Redirect to 404 page if `showArchives` config is false
-if (!SITE.showArchives) {
+if (!config.features.showArchives) {
   return Astro.redirect("/404");
 }
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = await getCollection("posts", ({ data }) => !data.draft);
 
 const months = [
   "January",
@@ -29,11 +29,13 @@ const months = [
   "November",
   "December",
 ];
+
+const pageDesc = "Every Game Writing SIG article, organized by date.";
 ---
 
-<Layout title={`Archives | ${SITE.title}`}>
+<Layout title={`Archives | ${config.site.title}`} description={pageDesc}>
   <Header />
-  <Main pageTitle="Archives" pageDesc="All the articles I've archived.">
+  <Main pageTitle="Archives" pageDesc={pageDesc}>
     {
       Object.entries(
         getPostsByGroupCondition(posts, post =>

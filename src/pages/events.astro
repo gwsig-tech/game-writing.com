@@ -2,10 +2,10 @@
 import { google } from "googleapis";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import LinkButton from "@/components/LinkButton.astro";
-import { SITE } from "@/config";
+import config from "@/config";
 
 const CALENDAR_ID = "writing.sig@gmail.com";
 const encodedCalendarId = encodeURIComponent(CALENDAR_ID);
@@ -111,38 +111,33 @@ function formatEventDate(event: CalendarEvent): string {
   return `${dateStr}\n${startTimeStr}`;
 }
 
-const title = "Game Writing SIG Events";
+const title = "Events";
+const pageDesc = "Learn about events relevant to industry writers.";
 ---
 
-<Layout title={`${title} | ${SITE.title}`}>
+<Layout title={`${title} | ${config.site.title}`} description={pageDesc}>
   <Header />
-  <Breadcrumb />
-  <main id="main-content">
-    <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
-      <h1 class="text-2xl tracking-wider sm:text-3xl">{title}</h1>
-
-      <p>Check in here to learn about events relevant to industry writers</p>
-
-      <hr />
-
-      <h2>Jams</h2>
-
-      <h3><a href="/jams/2025-arcjam">2025 Game Writing SIG Arcjam</a> (Nov 21-24)</h3>
-
-      <br>
-
-      <h2>Calendar</h2>
+  <Main pageTitle={title} pageDesc={pageDesc}>
+    <section class="app-prose mb-28 max-w-app prose-img:border-0">
+      
+      <h2>Calendar of Upcoming Events</h2>
 
       <p class="flex flex-wrap gap-x-6 gap-y-2">
-        <LinkButton href={calendarViewUrl} target="_blank" rel="noopener noreferrer">
+        <LinkButton
+          href={calendarViewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           View full calendar
         </LinkButton>
-        <LinkButton href={calendarSubscribeUrl} target="_blank" rel="noopener noreferrer">
+        <LinkButton
+          href={calendarSubscribeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Add to Google Calendar
         </LinkButton>
-        <LinkButton href={calendarIcalUrl}>
-          Subscribe (iCal)
-        </LinkButton>
+        <LinkButton href={calendarIcalUrl}> Subscribe (iCal) </LinkButton>
       </p>
 
       <!-- Debug: error={error}, events.length={events.length} -->
@@ -151,9 +146,10 @@ const title = "Game Writing SIG Events";
 
       {!error && events.length === 0 && <p>No upcoming events scheduled.</p>}
 
-      {!error && events.length > 0 && (
-        <div class="overflow-x-auto">
-          <table>
+      {
+        !error && events.length > 0 && (
+          <div class="overflow-x-auto">
+            <table>
               <thead>
                 <tr>
                   <th>When</th>
@@ -164,7 +160,9 @@ const title = "Game Writing SIG Events";
               <tbody>
                 {events.map(event => (
                   <tr>
-                    <td class="whitespace-pre-line">{formatEventDate(event)}</td>
+                    <td class="whitespace-pre-line">
+                      {formatEventDate(event)}
+                    </td>
                     <td>
                       {event.htmlLink ? (
                         <a href={event.htmlLink} target="_blank" rel="noopener">
@@ -180,7 +178,8 @@ const title = "Game Writing SIG Events";
               </tbody>
             </table>
           </div>
-      )}
+        )
+      }
 
       <hr />
 
@@ -222,20 +221,10 @@ const title = "Game Writing SIG Events";
               <td><a href="https://rebootdevelopblue.com/">rebootdevelopblue.com</a></td>
             </tr>
             <tr>
-              <td>April</td>
-              <td>Future Fest Connect</td>
-              <td>Raleigh, NC</td>
-              <td><a href="https://www.futurefestconnect.com/">futurefestconnect.com</a></td>
-            </tr>
-            <tr>
               <td>May</td>
               <td>Boston GameLoop</td>
               <td>Boston, MA</td>
-              <td
-                ><a href="https://www.bostonfig.com/gameloop-2025/"
-                  >bostonfig.com/gameloop-2025</a
-                ></td
-              >
+              <td><a href="https://www.bostonfig.com/gameloop-2025/">bostonfig.com/gameloop-2025</a></td>
             </tr>
             <tr>
               <td>May</td>
@@ -295,11 +284,7 @@ const title = "Game Writing SIG Events";
               <td>November</td>
               <td>Game Your Future</td>
               <td>Baltimore, MD, USA</td>
-              <td
-                ><a href="https://www.game4good.gg/game-your-future-conference/"
-                  >game4good.gg</a
-                ></td
-              >
+              <td><a href="https://www.game4good.gg/game-your-future-conference/">game4good.gg</a></td>
             </tr>
             <tr>
               <td>November</td>
@@ -328,10 +313,18 @@ const title = "Game Writing SIG Events";
           </tbody>
         </table>
       </div>
-
       <hr />
-
+      <h2>Past Events</h2>
+        <h3>
+          <a href="/posts/write-club-recap">2026 Narrascope & Write Club</a> (June 12-14)
+        </h3>
+        <h3>
+          <a href="/posts/gdc-2026-events">2026 GDC & Write Club</a> (March 8-13)
+        </h3>
+        <h3>
+          <a href="/jams/2025-arcjam">2025 Game Writing SIG Arcjam</a> (Nov 21-24)
+        </h3>
     </section>
-  </main>
+  </Main>
   <Footer />
 </Layout>

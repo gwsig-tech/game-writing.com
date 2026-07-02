@@ -58,7 +58,7 @@ collections:
   - name: posts
     label: Blog Posts
     label_singular: Blog Post
-    folder: src/data/blog
+    folder: src/content/posts
     extension: mdx
     create: true
     delete: false
@@ -135,7 +135,7 @@ collections:
   - name: events
     label: Events
     label_singular: Event
-    folder: src/data/blog/_events
+    folder: src/content/posts/_events
     extension: mdx
     create: true
     delete: false
@@ -150,7 +150,7 @@ collections:
   - name: spotlights
     label: Spotlights
     label_singular: Spotlight
-    folder: src/data/blog/_spotlights
+    folder: src/content/posts/_spotlights
     extension: mdx
     create: true
     delete: false

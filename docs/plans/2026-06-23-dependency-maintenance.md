@@ -6,16 +6,9 @@
 
 ## Summary
 
-Migrated to **Astro 6** (the headline change), took the coupled and low-risk
-major bumps that come with it, and applied the routine minor/patch bumps. Then,
-in a **second wave the same day**, cleared three more held majors after
-per-package validation: **ESLint 10**, **TypeScript 6**, and **`googleapis`
-173**. Now holding only **Astro 7** (too fresh) and **`sharp` 0.35** (native dep)
-for separate, dedicated passes.
+Migrated to **Astro 6** (the headline change), took the coupled and low-risk major bumps that come with it, and applied the routine minor/patch bumps. Then, in a **second wave the same day**, cleared three more held majors after per-package validation: **ESLint 10**, **TypeScript 6**, and **`googleapis` 173**. Now holding only **Astro 7** (too fresh) and **`sharp` 0.35** (native dep) for separate, dedicated passes.
 
-This is the green-light follow-through on the April plan's #1 watch trigger:
-the upstream AstroPaper theme shipped its Astro 6 release (`feat!: AstroPaper
-v6`, upstream `f0b644d`, now tagged at theme v6.1.0 on `astro@^6.4.x`).
+This is the green-light follow-through on the April plan's #1 watch trigger: the upstream AstroPaper theme shipped its Astro 6 release (`feat!: AstroPaper v6`, upstream `f0b644d`, now tagged at theme v6.1.0 on `astro@^6.4.x`).
 
 ## What changed
 
@@ -30,35 +23,16 @@ v6`, upstream `f0b644d`, now tagged at theme v6.1.0 on `astro@^6.4.x`).
 
 **Config changes ([astro.config.ts](../../astro.config.ts)):**
 
-1. **Markdown processor.** Astro 6 deprecates `markdown.remarkPlugins` /
-   `rehypePlugins`. Migrated to the new canonical pattern (mirrors upstream
-   v6): import `unified` from `@astrojs/markdown-remark` and pass
-   `markdown.processor: unified({ remarkPlugins: [...] })`. Our plugins
-   (`remark-toc`, `remark-collapse`) are unchanged.
-2. **Dropped `experimental.preserveScriptOrder`.** It graduated to default
-   behavior in Astro 6; leaving it under `experimental` is now a hard config
-   error ("Invalid or outdated experimental feature"). Script order is
-   preserved by default, so behavior is retained.
-3. **Removed the Vite 7 `@ts-ignore` workaround** on the `tailwindcss()` Vite
-   plugin — the type issue it guarded ([astro#14030](https://github.com/withastro/astro/issues/14030))
-   is resolved in Astro 6.
-4. **`z` now imported from `astro/zod`** in
-   [content.config.ts](../../src/content.config.ts). Astro 6 deprecates the `z`
-   re-export from `astro:content` (`ts(6385)`); the Zod-4-aligned export lives at
-   `astro/zod`. `import { defineCollection } from "astro:content"` +
-   `import { z } from "astro/zod"` (mirrors upstream v6). `astro check` is clean
-   afterward (0 errors / 0 warnings / 0 hints across 52 files).
+1. **Markdown processor.** Astro 6 deprecates `markdown.remarkPlugins` / `rehypePlugins`. Migrated to the new canonical pattern (mirrors upstream v6): import `unified` from `@astrojs/markdown-remark` and pass `markdown.processor: unified({ remarkPlugins: [...] })`. Our plugins (`remark-toc`, `remark-collapse`) are unchanged.
+2. **Dropped `experimental.preserveScriptOrder`.** It graduated to default behavior in Astro 6; leaving it under `experimental` is now a hard config error ("Invalid or outdated experimental feature"). Script order is preserved by default, so behavior is retained.
+3. **Removed the Vite 7 `@ts-ignore` workaround** on the `tailwindcss()` Vite plugin — the type issue it guarded ([astro#14030](https://github.com/withastro/astro/issues/14030)) is resolved in Astro 6.
+4. **`z` now imported from `astro/zod`** in [content.config.ts](../../src/content.config.ts). Astro 6 deprecates the `z` re-export from `astro:content` (`ts(6385)`); the Zod-4-aligned export lives at `astro/zod`. `import { defineCollection } from "astro:content"` + `import { z } from "astro/zod"` (mirrors upstream v6). `astro check` is clean afterward (0 errors / 0 warnings / 0 hints across 52 files).
 
 **Why the migration was low-friction for us (de-risked):**
 
-- ✅ Already on the **glob loader** in [content.config.ts](../../src/content.config.ts),
-  so Astro 6's mandatory Content Layer migration was already satisfied. No
-  `Astro.glob()` anywhere.
-- ✅ Local Node is v24 (clears the new 22.12+ floor). Added
-  `engines.node: ">=22.12.0"` to [package.json](../../package.json) to document
-  it. **Verify Vercel's Node version is 22+ before merging to main.**
-- ✅ Our Zod schema is Zod-4-clean (no `.email()`, no `{ message }` error
-  customization, defaults already match output types).
+- ✅ Already on the **glob loader** in [content.config.ts](../../src/content.config.ts), so Astro 6's mandatory Content Layer migration was already satisfied. No `Astro.glob()` anywhere.
+- ✅ Local Node is v24 (clears the new 22.12+ floor). Added `engines.node: ">=22.12.0"` to [package.json](../../package.json) to document it. **Verify Vercel's Node version is 22+ before merging to main.**
+- ✅ Our Zod schema is Zod-4-clean (no `.email()`, no `{ message }` error customization, defaults already match output types).
 - ✅ The config already carried a `// fixed in Astro 6` TODO for the Vite plugin.
 
 ### Low-risk majors (taken alongside Astro 6)
@@ -86,38 +60,20 @@ v6`, upstream `f0b644d`, now tagged at theme v6.1.0 on `astro@^6.4.x`).
 
 ## Verification (local)
 
-- ✅ `pnpm build` — exit 0. `astro check` clean; 43 pages built; images
-  optimized; **satori `og.png` generated** (generated, not static — proves
-  satori 0.26 + resvg work); Pagefind indexed 19 pages; `cpx2 9` copied
-  pagefind output (exit 0).
-- ✅ `pnpm dev` — **`astro v6.4.8 ready in 3.1s`** on the Vite 7 dev
-  environment. All core routes 200: `/`, `/posts/`, `/events/`, `/search/`,
-  `/tags/`, `/archives/`, `/about/`. Live events calendar returned 3 events
-  (googleapis 170 still works). MDX post page renders.
-- ⚠️ `pnpm lint` — 3 **pre-existing** `no-console` errors in
-  [src/pages/events.astro](../../src/pages/events.astro) (lines 48–49 are
-  leftover debug `console.log`s; line 51 is a legit `console.error`).
-  **Not introduced by this round** (file untouched; the same 3 errors persist
-  identically under both ESLint 9 and the ESLint 10 bump below). Clean up
-  separately.
-- Known benign warning: Pagefind reports `/jams/` has no `<html>` element —
-  expected, it's our `/jams` → `/events` redirect.
+- ✅ `pnpm build` — exit 0. `astro check` clean; 43 pages built; images optimized; **satori `og.png` generated** (generated, not static — proves satori 0.26 + resvg work); Pagefind indexed 19 pages; `cpx2 9` copied pagefind output (exit 0).
+- ✅ `pnpm dev` — **`astro v6.4.8 ready in 3.1s`** on the Vite 7 dev environment. All core routes 200: `/`, `/posts/`, `/events/`, `/search/`, `/tags/`, `/archives/`, `/about/`. Live events calendar returned 3 events (googleapis 170 still works). MDX post page renders.
+- ⚠️ `pnpm lint` — 3 **pre-existing** `no-console` errors in [src/pages/events.astro](../../src/pages/events.astro) (lines 48–49 are leftover debug `console.log`s; line 51 is a legit `console.error`). **Not introduced by this round** (file untouched; the same 3 errors persist identically under both ESLint 9 and the ESLint 10 bump below). Clean up separately.
+- Known benign warning: Pagefind reports `/jams/` has no `<html>` element — expected, it's our `/jams` → `/events` redirect.
 
 ## Decisions and rationale
 
 ### Chose Astro 6, NOT Astro 7
 
-Astro 7.0 shipped ~2026-06-22 (one day before this work). It makes the new
-**Rust compiler** the only compiler (stricter HTML parsing) and changes the
-default Markdown processor to "Satteri", requiring `@astrojs/markdown-remark`
-for remark/rehype users. Far too fresh for a content site, and upstream
-AstroPaper has not followed to 7 either (still on `astro@^6.4.x`). Astro 6 is
-the mature, upstream-tested target.
+Astro 7.0 shipped ~2026-06-22 (one day before this work). It makes the new **Rust compiler** the only compiler (stricter HTML parsing) and changes the default Markdown processor to "Satteri", requiring `@astrojs/markdown-remark` for remark/rehype users. Far too fresh for a content site, and upstream AstroPaper has not followed to 7 either (still on `astro@^6.4.x`). Astro 6 is the mature, upstream-tested target.
 
 ### Second wave — low-risk majors validated on `draft` (same day)
 
-After the Astro 6 round landed, took the three lowest-risk held majors and
-verified each independently. All green; **no code changes required**.
+After the Astro 6 round landed, took the three lowest-risk held majors and verified each independently. All green; **no code changes required**.
 
 | Package | From | To | Validation |
 |---|---|---|---|
@@ -137,13 +93,7 @@ Full `pnpm build` after all three: **exit 0**.
 
 ### Upstream cherry-picking is now effectively over
 
-Everything after `f0b644d` (`feat!: AstroPaper v6`) lives on a **ground-up
-rewrite** — new i18n system, `BaseLayout`/`PostLayout` replacing `Layout.astro`,
-design-token overhaul, `astro-paper.config.ts`. Nothing post-v6 applies cleanly
-to our diverged tree, and a `git pull upstream main` would be destructive.
-Future borrowing means **porting ideas by hand**, not `git cherry-pick`/merge.
-Upstream remains useful as a *reference* for "how to configure X on Astro 6"
-(that's exactly how the `unified()` markdown pattern here was sourced).
+Everything after `f0b644d` (`feat!: AstroPaper v6`) lives on a **ground-up rewrite** — new i18n system, `BaseLayout`/`PostLayout` replacing `Layout.astro`, design-token overhaul, `astro-paper.config.ts`. Nothing post-v6 applies cleanly to our diverged tree, and a `git pull upstream main` would be destructive. Future borrowing means **porting ideas by hand**, not `git cherry-pick`/merge. Upstream remains useful as a *reference* for "how to configure X on Astro 6" (that's exactly how the `unified()` markdown pattern here was sourced).
 
 ## Pre-merge-to-main checklist
 
@@ -166,30 +116,22 @@ Smoke-test on `preview.game-writing.com` before promoting `draft` → `main`:
 
 ### Watch for (revisit triggers)
 
-1. **Astro 7 adoption** — when upstream AstroPaper moves to `astro@^7` AND a few
-   `astro@7.x` patch releases have shipped, plan the 6 → 7 jump (Rust compiler,
-   markdown-engine). Check the [Astro v7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/).
-2. **`sharp` 0.35** — only remaining non-Astro held major. Bump + full build +
-   verify optimized images on the **Vercel Linux build** (native binary differs
-   from local). Upstream adopting 0.35 is a good green-light signal.
+1. **Astro 7 adoption** — when upstream AstroPaper moves to `astro@^7` AND a few `astro@7.x` patch releases have shipped, plan the 6 → 7 jump (Rust compiler, markdown-engine). Check the [Astro v7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/).
+2. **`sharp` 0.35** — only remaining non-Astro held major. Bump + full build + verify optimized images on the **Vercel Linux build** (native binary differs from local). Upstream adopting 0.35 is a good green-light signal.
 3. **Satori 1.0** — still 0.x; do an OG visual regression when it hits 1.0.
-4. **TypeScript 7** — the Go-native rewrite is coming after TS 6 (the last
-   JS-based release); TS 6's `ignoreDeprecations` escape hatch is removed in 7,
-   so clear any deprecation warnings before then.
+4. **TypeScript 7** — the Go-native rewrite is coming after TS 6 (the last JS-based release); TS 6's `ignoreDeprecations` escape hatch is removed in 7, so clear any deprecation warnings before then.
 
 *(Done this round: ESLint 10, TypeScript 6, googleapis 173 — see "Second wave" above.)*
 
 ### Suggested cadence (unchanged)
 
 - **Monthly:** `pnpm outdated`, take patch+minor, build, smoke-test preview.
-- **Quarterly:** review upstream with `git log <ref>..upstream/main --oneline`
-  for *ideas to port by hand* (no more merges/cherry-picks — see above).
+- **Quarterly:** review upstream with `git log <ref>..upstream/main --oneline` for *ideas to port by hand* (no more merges/cherry-picks — see above).
 - **On any major:** land on `draft`, deploy to preview, smoke-test, then merge.
 
 ### Things to avoid
 
 - Don't `pnpm update --latest` without listing packages (pulls Astro 7, etc.).
-- Don't `git pull upstream main` / merge upstream — the v6 rewrite makes it
-  destructive. Port ideas by hand.
+- Don't `git pull upstream main` / merge upstream — the v6 rewrite makes it destructive. Port ideas by hand.
 - Don't bump `googleapis` without testing `/events`.
 - Don't re-pin `cpx2` — 9.0.0 (ESM) resolved the `ERR_REQUIRE_ESM` regression.

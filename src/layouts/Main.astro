@@ -1,32 +1,41 @@
 ---
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import { SITE } from "@/config";
+import config from "@/config";
 
 type StringTitle = { pageTitle: string };
 type ArrayTitle = { pageTitle: [string, string]; titleTransition: string };
 
-type Props = (StringTitle | ArrayTitle) & { pageDesc?: string };
+// `wide` lets the body break out of the 3xl text column (e.g. the jobs board)
+// while the title + intro stay aligned with the rest of the site.
+type Props = (StringTitle | ArrayTitle) & { pageDesc?: string; wide?: boolean };
 
 const { props } = Astro;
+const { wide = false } = props;
 
-const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
+const backUrl = config.features.showBackButton ? Astro.url.pathname : "/";
 ---
 
 <Breadcrumb />
-<main data-backUrl={backUrl} id="main-content" class="app-layout pb-4">
-  {
-    "titleTransition" in props ? (
-      <h1 class="text-2xl font-semibold sm:text-3xl">
-        {props.pageTitle[0]}
-        <span transition:name={props.titleTransition}>
-          {props.pageTitle[1]}
-        </span>
-      </h1>
-    ) : (
-      <h1 class="text-2xl font-semibold sm:text-3xl">{props.pageTitle}</h1>
-    )
-  }
-  <p class="mt-2 mb-6 italic">{props.pageDesc}</p>
+<main
+  data-backUrl={backUrl}
+  id="main-content"
+  class:list={["pb-4", wide ? "w-full" : "app-layout"]}
+>
+  <div class:list={[{ "app-layout": wide }]}>
+    {
+      "titleTransition" in props ? (
+        <h1 class="text-2xl font-semibold sm:text-3xl">
+          {props.pageTitle[0]}
+          <span transition:name={props.titleTransition}>
+            {props.pageTitle[1]}
+          </span>
+        </h1>
+      ) : (
+        <h1 class="text-2xl font-semibold sm:text-3xl">{props.pageTitle}</h1>
+      )
+    }
+    <p class="mt-2 mb-6 italic">{props.pageDesc}</p>
+  </div>
   <slot />
 </main>
 
