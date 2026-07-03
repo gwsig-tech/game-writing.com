@@ -1,6 +1,6 @@
 # AstroPaper v6 — post-migration backlog (2026-06-28)
 
-**Context:** the v6 parity migration (P0–P7) is **complete** on `jm-astropaper-v6` — see [2026-06-28-astropaper-v6-parity-migration.md](./2026-06-28-astropaper-v6-parity-migration.md) for the as-built record. The items below were **intentionally deferred**; **none block merging to `draft`**. They're roughly ordered by value/effort. Pick any up independently in the `jm-astropaper-v6` worktree (or a fresh one off `draft`).
+**Context:** the v6 parity migration (P0–P7) **shipped** — merged to `draft` via PR #16, then propagated to `main`/production via PR #17 — see [2026-06-28-astropaper-v6-parity-migration.md](./2026-06-28-astropaper-v6-parity-migration.md) for the as-built record. The items below were **intentionally deferred**; **none blocked the merge, and none are production-blocking now**. They're roughly ordered by value/effort. Pick any up independently in the `jm-astropaper-v6` worktree (still present, currently at the same commit as `draft`) or a fresh one off `draft`.
 
 ---
 
@@ -11,33 +11,21 @@
 - **How:** pull each example from `upstream/main` (paths listed in the migration doc's *Content sync* section), pull its referenced images to the matching relative locations, set `draft: true`, then `pnpm build` + confirm routes unchanged. `ResponsiveTable` is already registered in the post `<Content components>`; `rehype-callouts` is already wired — so the pulled MDX will render correctly.
 - **Effort:** ~0.5–1d (content).
 
-## 2. OG image generator modernization (resvg → sharp)
+## 2. OG image generator modernization (resvg → sharp) — ✅ Done (2026-07-03)
 
-- **What:** the dynamic-OG generator (`src/utils/og-templates/*`, `loadGoogleFont.ts`, `generateOgImages.ts`, dep `@resvg/resvg-js` + its `optimizeDeps.exclude`) is still the v5 resvg pipeline.
-- **Why deferred:** it's **dormant** — `features.dynamicOgImage: false`, so `posts/[...slug]/index.png.ts` `getStaticPaths` returns `[]` and the generator never runs (no build-time Google-Fonts fetch while off). Zero functional impact; OG is static (per-post `ogImage` + the site logo fallback).
-- **How:** adopt v6's sharp generator + `getFontPathByWeight` + a self-hosted `fonts` block, drop `@resvg/resvg-js`; **or** strip the dormant generator entirely and re-add from upstream if dynamic OG is ever wanted. Keep `dynamicOgImage: false` either way unless we decide to enable it.
-- **Effort:** ~0.5d.
+- **What shipped:** kept our per-post satori templates (`og-templates/post.js`/`site.js` — upstream itself moved to a single generic site-wide `/og.png` in v6.1.0, dropping per-post rendering entirely, so a literal "adopt v6's generator" would have been a capability downgrade). Swapped the rasterizer in `generateOgImages.ts` from `@resvg/resvg-js` to `sharp` (already a dependency); replaced `loadGoogleFont.ts`'s live `fonts.googleapis.com` fetch with a new `loadFonts.ts` that reads self-hosted IBM Plex Mono 400/700 from the `@fontsource/ibm-plex-mono` package via `node:fs`, so a future build never depends on external network access. Dropped `@resvg/resvg-js` and its `optimizeDeps.exclude` entry in `astro.config.ts`. Verified end-to-end by temporarily flipping `dynamicOgImage: true` and confirming real 1200×630 PNGs render correctly. `dynamicOgImage` stays `false`; still zero functional impact today.
 
-## 3. Image lightbox (click-to-zoom on post images)
+## 3. Image lightbox (click-to-zoom on post images) — ✅ Done (2026-07-03)
 
-- **What:** v6 adds an accessible click-to-zoom (`img[role="button"]` + `cursor-zoom-in` + a dialog script in `posts/[...slug]/index.astro`, plus typography styling).
-- **Why deferred:** non-essential enhancement; unrelated to image optimization (which is unchanged and already WebP).
-- **How:** port v6's lightbox script + the `img[role="button"]` typography rules into our `posts/[...slug]/index.astro`.
-- **Effort:** ~0.25d.
+- **What shipped:** ported v6's accessible click-to-zoom script (pinch-zoom, focus trap, `Escape`/outside-click close, `astro:before-swap` cleanup) into `posts/[...slug]/index.astro`'s inline script, plus the `img[role="button"]` / `cursor-zoom-in` / focus-visible outline rules into `typography.css`.
 
-## 4. `getPath` → `getPostSlug` / `getPostUrl` split
+## 4. `getPath` → `getPostSlug` / `getPostUrl` split — ✅ Done (2026-07-03)
 
-- **What:** we kept `src/utils/getPath.ts`. v6 splits it into `getPostSlug` (route param) + `getPostUrl` (navigable, locale-aware) in `getPostPaths.ts`.
-- **Why deferred:** **not needed for URL parity** — `getPath` produces identical `/posts/<slug>`. The split's payoff is locale-aware URLs, and we're single-locale at the domain root.
-- **How:** adopt v6's `getPostPaths.ts` (adapt to `config.site.lang`); update call sites (`Card`, `index`, `tags/*`, `rss.xml.ts`, `_components/AdjacentPostNav`, the post route); verify the built route set is still identical to production.
-- **Effort:** ~0.25–0.5d.
+- **What shipped:** replaced `src/utils/getPath.ts` with `src/utils/getPostPaths.ts` (`getPostSlug` for route params, `getPostUrl` for navigable/RSS links via `getRelativeLocaleUrl`, defaulting to `config.site.lang`). Updated all 5 call sites (`Card`, `rss.xml.ts`, `AdjacentPostNav`, `index.png.ts`, the post route). Built route set unchanged.
 
-## 5. v6 `theme.ts` + `.dark` class toggle
+## 5. v6 `theme.ts` + `.dark` class toggle — ✅ Done (2026-07-03)
 
-- **What:** we kept our `src/scripts/theme.ts` (`data-theme` + `window.theme`, wires **both** `#theme-btn` and `#theme-btn-mobile`). v6 uses `window.__theme` + an additive `.dark` class + a single `#theme-btn`.
-- **Why deferred:** v6's single-button `theme.ts` doesn't wire our **mobile** theme button, and our `@custom-variant dark` already keys on `[data-theme=dark]` (identical to v6) — so there's no functional gap.
-- **How:** adopt v6's `theme.ts` + FOUC but extend it to wire both buttons (or collapse the Header to a single theme button); update `src/env.d.ts` (`window.theme` → `window.__theme`).
-- **Effort:** ~0.25d (couples to a Header re-skin if you go that way).
+- **What shipped:** adopted v6's `theme.ts` + FOUC-script structure (`window.__theme` instead of `window.theme`, additive `.dark` class alongside `data-theme`, no external `window.theme` API surface). The "wire both buttons" concern turned out to be moot: `Header.astro`'s own script already forwards `#theme-btn-mobile` clicks to `#theme-btn` via a synthetic event, independent of `theme.ts`'s internals, so no Header changes were needed. Kept our `initialColorScheme` override knob (a pre-existing addition beyond upstream). Updated `src/env.d.ts` (`Window.theme` → `Window.__theme`).
 
 ## 6. Component alignment — Header / Footer / Breadcrumb / Tag / LinkButton
 

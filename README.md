@@ -272,7 +272,7 @@ The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migr
 | CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (loaded unpinned — always latest) |
 | Search     | [Pagefind](https://pagefind.app/)                                                       |
 | Icons      | [Tabler Icons](https://tabler-icons.io/)                                                |
-| OG Images  | [Satori](https://github.com/vercel/satori) + Resvg                                      |
+| OG Images  | [Satori](https://github.com/vercel/satori) + [sharp](https://sharp.pixelplumbing.com/)  |
 | Deployment | [Vercel](https://vercel.com/)                                                           |
 
 ## Documentation

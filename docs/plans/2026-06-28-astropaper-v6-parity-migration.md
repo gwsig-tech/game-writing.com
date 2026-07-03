@@ -1,6 +1,6 @@
 # AstroPaper v6 — full-parity migration plan (2026-06-28)
 
-**Supersedes** [`2026-06-26-astropaper-v6-adoption.md`](./2026-06-26-astropaper-v6-adoption.md) (written before the recent conformance + meta work, now stale). **Worktree:** `.worktrees/jm-astropaper-v6` (branch `jm-astropaper-v6`, off `draft`). **Status: ✅ COMPLETE (P0–P7), merge-ready.** See **[Execution outcome & deviations](#execution-outcome--deviations)** below for what actually shipped vs planned, and the **[backlog](./2026-06-28-astropaper-v6-backlog.md)** for everything deferred. The phased roadmap further down is the original plan, kept as the historical record.
+**Supersedes** [`2026-06-26-astropaper-v6-adoption.md`](./2026-06-26-astropaper-v6-adoption.md) (written before the recent conformance + meta work, now stale). **Worktree:** `.worktrees/jm-astropaper-v6` (branch `jm-astropaper-v6`, off `draft`) — still present for follow-up polish, currently at the same commit as `draft`. **Status: ✅ SHIPPED.** P0–P7 complete; merged to `draft` via PR #16 (`c560114`) and propagated to `main`/production via PR #17 (`5049d18`). See **[Execution outcome & deviations](#execution-outcome--deviations)** below for what actually shipped vs planned, and the **[backlog](./2026-06-28-astropaper-v6-backlog.md)** for everything deferred (still open, none of it production-blocking). The phased roadmap further down is the original plan, kept as the historical record.
 
 > **Status: decisions resolved 2026-06-28** (see the Resolved Decisions section). Basis: a read-only 12-subsystem divergence audit run as a Workflow (30 agents), each finding adversarially verified against `upstream/main` (v6.1.0 @ `4c33a60`; rewrite landed in `f0b644d`), plus a content-post sync analysis and a completeness critic. Load-bearing facts (URL parity, config shape, layout head plumbing, OG wiring, fonts, directory-move safety, rename-sweep counts) were independently re-verified by hand.
 
@@ -24,7 +24,7 @@
 | Adopt v6 CI as a PR gate (P7) | **Added `ci.yml` as `workflow_dispatch` (manual-only)** | Maintainer's call: Vercel already builds deploys; avoid a redundant auto-gate. |
 | Migrate `pnpm-workspace` → `allowBuilds` (P7) | **Kept `onlyBuiltDependencies`** | `allowBuilds` is pnpm-11 syntax; we're on pnpm 10. |
 
-Everything deferred lives in **[2026-06-28-astropaper-v6-backlog.md](./2026-06-28-astropaper-v6-backlog.md)**; none of it blocks the merge to `draft`. **P8 (preview cutover)** — the Sveltia `/admin` round-trip at the new paths + Vercel env scope — is deploy-gated and validated by opening a PR into `draft`.
+Everything deferred lives in **[2026-06-28-astropaper-v6-backlog.md](./2026-06-28-astropaper-v6-backlog.md)**; none of it blocked the merge. **P8 (preview cutover)** — the Sveltia `/admin` round-trip at the new paths + Vercel env scope — was validated via PR #16 into `draft`; the site has since shipped to `main`/production (PR #17) with no route regressions observed.
 
 ---
 
