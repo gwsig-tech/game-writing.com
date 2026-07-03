@@ -61,7 +61,7 @@ Conventions:
 - `src/layouts/` - `Layout` (base HTML/head + `<slot name="head">` + Vercel analytics + theme/FOUC), `PostLayout` (wraps `Layout`, adds the post `BlogPosting` JSON-LD), `DefaultLayout` (`.mdx` content pages), `Main` (hub/utility page shell)
 - `src/pages/` - Route pages including static `.mdx` pages (`about.mdx`, `constitution.mdx`) and custom pages (`events.astro`, `jobs.astro`). **Posts render in `posts/[...slug]/index.astro`** with post-only components colocated in its `_components/` (ShareLinks, EditPost, BackButton, AdjacentPostNav) — there is no `PostDetails` layout
 - `src/i18n/` - EN-only UI strings (`lang/en.ts`, typed in `types.ts`) via `useTranslations()`; woven into ported v6 components
-- `src/utils/` - Helper functions for posts, tags, OG images (`getPath.ts` derives `/posts/<slug>` URLs)
+- `src/utils/` - Helper functions for posts, tags, OG images (`getPostPaths.ts` derives `/posts/<slug>` URLs via `getPostSlug`/`getPostUrl`)
 - `src/lib/` - Standalone build-time libraries (`jobs.ts` parses `src/data/jobs/job_postings.csv` for the jobs board)
 - `src/assets/` - Images and icons (also used as CMS media folder); `icons/socials/<name>.svg` are resolved by name for the config's socials/shareLinks
 
@@ -74,7 +74,7 @@ Conventions:
 
 - Theme toggle logic lives in `src/scripts/theme.ts` (loaded non-blocking)
 - A minimal inline FOUC-prevention script in `src/layouts/Layout.astro` sets the theme before paint
-- `window.theme` types are declared in `src/env.d.ts`
+- `window.__theme` types are declared in `src/env.d.ts`
 - **Theme conformance (read before styling any page/component):** the theme is **color-only** (7 tokens in `src/styles/theme.css`, exposed as `bg-*`/`text-*`/`border-*` utilities). Conform to AstroPaper's flat/minimal language — **borders not shadows**, **`text-muted-foreground` for secondary text**, **`bg-muted` for surfaces/hover**, theme tokens via **semantic utilities** (not raw `var()` in `<style>`), and **Tailwind's default scale** (no bespoke px/rem/fractional sizes). Build novel UI in that spirit. Introducing a new token or visual language requires an explicit decision recorded in `docs/plans/` — a feature never extends the theme unilaterally. Full policy + audit rubric: [docs/theme-conformance.md](docs/theme-conformance.md).
 
 ## Branch and Deploy Flow
@@ -88,7 +88,7 @@ Conventions:
 
 - `upstream` remote points to `satnaing/astro-paper`. **We are on AstroPaper v6 parity** (migrated 2026-06-28 from v5.5.1 — see [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md)): three-file config, `src/i18n/`, the `posts` collection at `src/content/posts`, the 7-token `theme.css`, and the `Layout`/`PostLayout` head-slot split all match upstream's structure now. Upstream is at **v6.1.0** (no v7 yet).
 - **Pulling from upstream:** still **port by hand** — never `git pull`/`cherry-pick` upstream (unrelated histories; it would clobber our customizations). But it's now *cheap*, because the structure matches: `git fetch upstream`, inspect the file you care about (`git show upstream/main:<path>`), and re-graft, preserving our customizations (jobs, events, GameEmbed, custom Header/Footer, palette, Vercel analytics, `/jams` redirect, static OG).
-- **Deferred v6 items** (none blocking) are tracked in [docs/plans/2026-06-28-astropaper-v6-backlog.md](docs/plans/2026-06-28-astropaper-v6-backlog.md). See `docs/plans/` for the rest of the maintenance history.
+- **Deferred v6 items** (none blocking) are tracked in [docs/plans/2026-07-03-astropaper-v6-backlog.md](docs/plans/2026-07-03-astropaper-v6-backlog.md). See `docs/plans/` for the rest of the maintenance history.
 
 ## Dependencies (do not bump without checking)
 

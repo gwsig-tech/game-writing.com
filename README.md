@@ -110,12 +110,12 @@ How the build uses these:
 │   │   ├── theme.css          # 7 design tokens (light/dark palette)
 │   │   ├── global.css         # Tailwind entry + base layer + utilities
 │   │   └── typography.css     # Prose/markdown styling
-│   ├── utils/                 # Helper functions (getPath, etc.)
+│   ├── utils/                 # Helper functions (getPostPaths, etc.)
 │   ├── lib/                   # [Custom] Build-time libs (jobs.ts — CSV jobs board)
 │   ├── types/config.ts        # Config types + defineAstroPaperConfig()
 │   ├── config.ts              # Resolved config (don't edit — see astro-paper.config.ts)
 │   ├── content.config.ts      # Content collection schema (posts)
-│   └── env.d.ts               # Ambient type declarations (window.theme)
+│   └── env.d.ts               # Ambient type declarations (window.__theme)
 ├── astro-paper.config.ts      # [EDIT HERE] site / socials / shareLinks / features
 ├── CLAUDE.md                  # Guidance for Claude Code agents
 └── astro.config.ts            # Astro configuration
@@ -260,7 +260,7 @@ git show upstream/main:astro.config.ts
 - `src/styles/theme.css` — custom light/dark 7-token palette (styling follows [docs/theme-conformance.md](docs/theme-conformance.md))
 - `src/pages/jobs.astro` + `src/lib/jobs.ts`, `src/pages/events.astro`, `public/admin/config.yml` — the jobs board, Google Calendar, and Sveltia CMS
 
-The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md); deferred follow-ups (example-post refresh, OG-generator modernization, lightbox, etc.) are in [docs/plans/2026-06-28-astropaper-v6-backlog.md](docs/plans/2026-06-28-astropaper-v6-backlog.md).
+The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md); a first follow-up polish round (getPath split, v6 `theme.ts`, image lightbox, OG-generator modernization) shipped 2026-07-03. Remaining deferred items (example-post refresh, component alignment, etc.) are in [docs/plans/2026-07-03-astropaper-v6-backlog.md](docs/plans/2026-07-03-astropaper-v6-backlog.md).
 
 ## Tech Stack
 
