@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import SpeedInsights from "@vercel/speed-insights/astro";
+import SeoJsonLd from "@/components/SeoJsonLd.astro";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -31,20 +32,10 @@ const {
 const socialImageURL = new URL(ogImage, Astro.url);
 const ogType = pubDatetime ? "article" : "website";
 
-// Non-article pages emit a neutral WebSite (homepage) or WebPage. Article pages
-// get their BlogPosting from PostLayout via the head slot, so Layout stays
-// silent for them (gated on pubDatetime) to avoid a duplicate/conflicting @type.
+// Non-article pages emit a neutral WebSite (homepage) or WebPage via <SeoJsonLd>.
+// Article pages get their BlogPosting from PostLayout via the head slot, so Layout
+// stays silent for them (gated on pubDatetime) to avoid a duplicate/conflicting @type.
 const isHome = Astro.url.pathname === "/";
-const structuredData = pubDatetime
-  ? null
-  : {
-      "@context": "https://schema.org",
-      "@type": isHome ? "WebSite" : "WebPage",
-      name: `${title}`,
-      description: `${description}`,
-      url: `${canonicalURL}`,
-      image: `${socialImageURL}`,
-    };
 ---
 
 <!doctype html>
@@ -107,11 +98,13 @@ const structuredData = pubDatetime
 
     <!-- Google JSON-LD Structured data (non-article pages; BlogPosting via head slot) -->
     {
-      structuredData && (
-        <script
-          type="application/ld+json"
-          is:inline
-          set:html={JSON.stringify(structuredData)}
+      !pubDatetime && (
+        <SeoJsonLd
+          title={title}
+          description={description}
+          canonicalURL={canonicalURL}
+          image={socialImageURL}
+          isHome={isHome}
         />
       )
     }

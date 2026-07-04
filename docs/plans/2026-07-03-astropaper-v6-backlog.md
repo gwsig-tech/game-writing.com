@@ -1,6 +1,6 @@
 # AstroPaper v6 — post-migration backlog (2026-07-03)
 
-This is the **active backlog** for the AstroPaper v6 work — the one place we look at to start tackling issues (we don't run Jira/Linear; this doc is that board for now, so items carry enough detail to start work directly from here). **Only items still to do.** History (what shipped, when, and why things were deferred) lives in [2026-06-28-astropaper-v6-parity-migration.md](./2026-06-28-astropaper-v6-parity-migration.md), not here — including the *Follow-up decisions (2026-07-03)* section explaining why items 2 and 3 below were reopened.
+This is the **active backlog** for the AstroPaper v6 work — the one place we look at to start tackling issues (we don't run Jira/Linear; this doc is that board for now, so items carry enough detail to start work directly from here). **Only items still to do.** History (what shipped, when, and why things were deferred) lives in [2026-06-28-astropaper-v6-parity-migration.md](./2026-06-28-astropaper-v6-parity-migration.md), not here — including the *Follow-up decisions (2026-07-03)* section explaining why item 3 (i18n) below (and the since-completed SeoJsonLd extraction) were reopened.
 
 Settled decisions that will **not** be revisited as work items — custom Header/Footer/Breadcrumb/Tag/LinkButton — live in the migration doc's *Per-subsystem decisions* table. That one's a closed call with documented rationale, not a backlog item.
 
@@ -12,7 +12,6 @@ None of what's below is production-blocking. Pick any item up independently in t
 
 - **#4 (CI activation) is blocked on #6 (Formatting) in practice, not in principle.** `ci.yml`'s build job runs `pnpm run format:check` against the *whole repo*. Right now that fails on 68 files (see #6). Turning on the PR-gate trigger today would make every PR's status check red regardless of what the PR actually touches — bad DX, and it'd train people to ignore the check. Resolve #6 (or rescope the CI job to skip `format:check`, or scope it to changed files) before flipping the `pull_request` trigger on.
 - **#5 (pnpm 11 / `allowBuilds`) touches the same file (`ci.yml`) as #4 but isn't blocked by it.** Whether or not the PR-gate trigger is ever added, upgrading pnpm means bumping `ci.yml`'s pinned `pnpm/action-setup@v4 version: "10.15.1"` too. Do that update whenever #5 happens, independent of #4's outcome.
-- **#2 (SeoJsonLd extraction) and #3 (i18n/locale readiness) are fully independent.** Different subsystems (structured data vs. URL/string routing), no shared code path, no ordering requirement. Do either first, or in parallel.
 - **#7 (Decision B) is independent of everything above, with one soft note:** if #3 (i18n) ever gets real engineering traction, do #7 *after* starting it rather than before — a centralized title-suffix helper is easy to design locale-aware from day one, but would likely need a revisit if it's built first and locale support lands later. Not a hard blocker; just sequencing advice if both happen to be in flight at once.
 - **#1 (example post refresh) is fully independent** — pure content task, touches only `draft:true` reference posts.
 
@@ -24,21 +23,6 @@ None of what's below is production-blocking. Pick any item up independently in t
 - **Why deferred:** each upstream example references v6 demo images — ~13 assets across **4 path conventions** (`@/assets`, `../../assets`, `assets/`, `/assets`) — and needs per-post review (several document stock v6's 7-token palette, which differs from ours). It's a content task, not a mechanical pull, and a sloppy pull breaks the build (missing-image schema errors, even for drafts).
 - **How:** pull each example from `upstream/main` (paths listed in the migration doc's *Content sync* section), pull its referenced images to the matching relative locations, set `draft: true`, then `pnpm build` + confirm routes unchanged. `ResponsiveTable` is already registered in the post `<Content components>`; `rehype-callouts` is already wired — so the pulled MDX will render correctly.
 - **Effort:** ~0.5–1d (content).
-
-## 2. Extract inline JSON-LD to `SeoJsonLd.astro`
-
-- **What:** move the ~15-line `WebSite`/`WebPage` structured-data block currently inline in [`Layout.astro`](../../src/layouts/Layout.astro) into its own `src/components/SeoJsonLd.astro`, called conditionally from `Layout.astro`.
-- **Why now, given it was previously kept inline on purpose:** it was never an upstream-parity question — upstream ships no hub-page JSON-LD at all, so there's no "v6 way" to converge toward, and extracting doesn't shrink `Layout.astro`'s upstream diff either way (see the migration doc's *Why JSON-LD stayed inline* addendum for the full reasoning). The reason to do it now is plain readability: the block has sat inline for a while, and pulling it out is a pure, low-risk refactor.
-- **Risk: low.** Output must be byte-identical before/after — this is a structural move, not a behavior change.
-- **How:**
-  1. Create `src/components/SeoJsonLd.astro` accepting `title`, `description`, `canonicalURL`, `image` (the resolved `socialImageURL`), and `isHome` (boolean) as props. It renders exactly the current object shape:
-     ```js
-     { "@context": "https://schema.org", "@type": isHome ? "WebSite" : "WebPage", name: title, description, url: canonicalURL, image }
-     ```
-     as `<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />`.
-  2. In `Layout.astro`, replace the inline `structuredData` computation + render with `{!pubDatetime && <SeoJsonLd title={title} description={description} canonicalURL={canonicalURL} image={socialImageURL} isHome={isHome} />}` — i.e., `Layout.astro` still owns the "should this render at all" gate (article pages skip it in favor of `PostLayout`'s `BlogPosting`); the component just always renders its block when invoked.
-  3. Verify: `pnpm build`, diff the built `<script type="application/ld+json">` output on a hub page (e.g. `/about/`) and the homepage before/after the refactor — must match exactly.
-- **Effort:** ~0.5–1hr.
 
 ## 3. i18n / locale readiness (`withBase` + full locale support)
 
