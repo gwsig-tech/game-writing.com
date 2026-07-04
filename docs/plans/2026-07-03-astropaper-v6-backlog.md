@@ -10,7 +10,6 @@ None of what's below is production-blocking. Pick any item up on `draft` — the
 
 ## Dependencies between items — what's stacked, what isn't
 
-- **#7 (Decision B) is independent of everything above, with one soft note:** if #3 (i18n) ever gets real engineering traction, do #7 *after* starting it rather than before — a centralized title-suffix helper is easy to design locale-aware from day one, but would likely need a revisit if it's built first and locale support lands later. Not a hard blocker; just sequencing advice if both happen to be in flight at once.
 - **#1 (example post refresh) is fully independent** — pure content task, touches only `draft:true` reference posts.
 
 ---
@@ -49,15 +48,6 @@ None of what's below is production-blocking. Pick any item up on `draft` — the
   **Tier 3 — nice-to-have, once Tier 2 exists:** a language switcher UI, locale-aware date/number formatting refinement (`src/i18n/format.ts` already exists as a landing spot for this), and per-locale OG images.
 
 - **Recommendation:** do Tier 1 opportunistically and cheaply (it's good hygiene regardless — it stops new hardcoded-path debt from accumulating, and several files already half expect it). **Do not start Tier 2** until there's an explicit decision from SIG leadership on scope (languages, translation workflow, jobs/events policy) — that decision is the actual trigger for this item, not a calendar date or an engineering itch.
-
-## 7. Decision B — centralize the `` | ${config.site.title} `` title suffix
-
-- **What / background:** every page currently hand-applies the ` | Site Title` suffix at its own call site — 10 of them today: `404.astro`, `archives/index.astro`, `events.astro`, `jobs.astro`, `posts/[...page].astro`, `posts/[...slug]/index.astro`, `search.astro`, `tags/index.astro`, `tags/[tag]/[...page].astro`, and `DefaultLayout.astro`. "Decision B" is whether to centralize that suffix into `Layout.astro` itself (e.g., pages pass a bare `title` and `Layout` appends the suffix once, in one place) instead of repeating `` `${title} | ${config.site.title}` `` at every call site.
-- **Are we still considering this?** Yes — this is specifically what the original doc said to revisit. Full context lives in [2026-06-27-page-meta-descriptions.md](./2026-06-27-page-meta-descriptions.md) (the "B / C / D" decision doc from before the v6 migration): decision **C** (per-page descriptions) shipped, decision **D** (restructuring `Main` to own the Layout/Header/Footer shell) was rejected outright, and decision **B** (this one) was explicitly **deferred with an instruction to revisit it after v6 cutover** — "so the work isn't thrown away." v6 has now shipped to production (PR #16 → `draft`, PR #17 → `main`), so per that doc's own terms, **now is the intended time to reconsider it** — it was never a "maybe never," it was "not yet."
-- **Why it was deferred originally, in case it still applies:** centralizing it would have been a net-new divergence from *both* stock v5.5.1 and v6 (both hand-apply the suffix the same way we do), for marginal benefit, and would've been thrown away by the v6 port regardless. That specific reason (v6 port risk) no longer applies now that v6 has shipped — the remaining question is purely "is the duplication itself worth centralizing," independent of any port risk.
-- **Note the original doc's own caveat, still true:** this is *not* about the `title`/`pageTitle` drift bug class (a real historical incident — a wrong page *name*, not a suffix problem) — centralizing the suffix wouldn't have prevented that. `title` (tab/SEO) and `pageTitle` (visible `<h1>`) remain intentionally independent fields the theme allows to differ; a naive "derive `title` from `pageTitle`" shortcut isn't automatically safe and isn't what this item is about.
-- **Recommendation:** low priority, low risk either way — this is “clean up 10 duplicated string interpolations” with no user-facing effect and no bug behind it. Fine to leave open indefinitely; a good pick when someone wants a small, safe, well-scoped task, not something to schedule proactively. See the sequencing note above if #3 (i18n) is in flight at the same time.
-- **Effort:** ~30 min–1hr (10 call sites + `Layout.astro`).
 
 ## 8. Make the CI check a required merge gate (GitHub branch protection)
 

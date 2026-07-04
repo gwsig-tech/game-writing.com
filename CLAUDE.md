@@ -43,7 +43,7 @@ Conventions:
 
 - `title` (tab/SEO) and `pageTitle` (visible heading) are **separate props**, set independently per page — `title` builds the `<head>`/tab string, `pageTitle` the visible `<h1>`. The theme treats them as distinct (they're free to differ; today our pages keep them aligned), so setting one does not set the other.
 - **Single-source the description** (convention added 2026-06-27): hub/custom pages declare one `const pageDesc` and pass it to **both** `<Main pageDesc={pageDesc}>` (visible) and `<Layout description={pageDesc}>` (`<head>`), so the SEO/OG/JSON-LD description is the real per-page text, not `config.site.description`. `.mdx` content pages set a `description:` frontmatter line, forwarded by `DefaultLayout`. New hub/custom pages should follow this. See `docs/plans/2026-06-27-page-meta-descriptions.md`.
-- The `` | ${config.site.title} `` title suffix is applied **per call site** (matches stock + v6); centralizing it ("decision B") is deliberately deferred. Do not centralize it without re-reading that plan.
+- The `` | ${config.site.title} `` title suffix is applied **once, in `Layout.astro`** (`docTitle` — "decision B", resolved 2026-07-03): pages pass a **bare** `title` and Layout appends the suffix; the homepage passes no `title`, so the bare site title renders unsuffixed (guarded by `title === config.site.title`). This is a deliberate small divergence from stock AstroPaper (which hand-applies the suffix per call site) — when porting upstream `Layout.astro` changes, preserve the `docTitle` wiring. Do **not** re-add the suffix at call sites.
 
 ### CMS
 
