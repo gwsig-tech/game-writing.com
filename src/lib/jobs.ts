@@ -27,7 +27,7 @@ const SPREADSHEET_ID = "1pRGDN0wj2ceuApldMNgjsp2AiJls-Z6OMI8IFESAzys";
 // A range with no tab prefix resolves to the FIRST VISIBLE tab, so the
 // date-named data tab keeps working as it gets renamed daily.
 const SHEET_RANGE = "A1:Z";
-const FALLBACK_CSV = resolve(process.cwd(), "src/data/jobs/job_postings.csv");
+const FALLBACK_CSV = resolve(process.cwd(), "src/data/jobs/job-postings.csv");
 
 export type ActiveJobsResult = {
   jobs: JobPosting[];

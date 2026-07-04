@@ -14,7 +14,7 @@ import { google } from "googleapis";
 // Keep in sync with SPREADSHEET_ID / SHEET_RANGE in src/lib/jobs.ts.
 const SPREADSHEET_ID = "1pRGDN0wj2ceuApldMNgjsp2AiJls-Z6OMI8IFESAzys";
 const SHEET_RANGE = "A1:Z"; // no tab prefix -> first visible tab
-const OUT = resolve(process.cwd(), "src/data/jobs/job_postings.csv");
+const OUT = resolve(process.cwd(), "src/data/jobs/job-postings.csv");
 
 const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
 if (!apiKey) {

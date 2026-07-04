@@ -4,7 +4,7 @@
 
 ## Decision
 
-The `/jobs` board now builds from a **human-curated public Google Sheet** (`game-writing-job-postings`, ID `1pRGDN0wj2ceuApldMNgjsp2AiJls-Z6OMI8IFESAzys`), fetched at **build time** in `src/lib/jobs.ts` via `getPublicSheetValues()` (`src/lib/sheets.ts`) with `GOOGLE_SHEETS_API_KEY` — the same architecture as `events.astro`/Google Calendar. The committed `src/data/jobs/job_postings.csv` is retained as a graceful fallback snapshot, refreshed with `pnpm jobs:snapshot`. The daily scheduled rebuild (GH Actions cron → Vercel deploy hook) picks up sheet edits with no commits.
+The `/jobs` board now builds from a **human-curated public Google Sheet** (`game-writing-job-postings`, ID `1pRGDN0wj2ceuApldMNgjsp2AiJls-Z6OMI8IFESAzys`), fetched at **build time** in `src/lib/jobs.ts` via `getPublicSheetValues()` (`src/lib/sheets.ts`) with `GOOGLE_SHEETS_API_KEY` — the same architecture as `events.astro`/Google Calendar. The committed `src/data/jobs/job-postings.csv` is retained as a graceful fallback snapshot, refreshed with `pnpm jobs:snapshot`. The daily scheduled rebuild (GH Actions cron → Vercel deploy hook) picks up sheet edits with no commits.
 
 This decouples the site from the crawler pipeline: the separate crawl/relevancy/database service no longer feeds the site directly. Its export is parsed and cleaned upstream before entering the sheet; humans review/edit in the sheet; the site renders what the sheet says. The old 15-column database export (nested-JSON `description` column, `source`/`writer_match_confidence`/`project` etc.) is gone — the previous export format is preserved in git history under `src/data/jobs/job_postings.csv` prior to this change.
 

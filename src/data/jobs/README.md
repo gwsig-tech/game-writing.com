@@ -1,6 +1,6 @@
 # Updating the jobs board
 
-The `/jobs` page is built at build time by `src/lib/jobs.ts` from a **curated public Google Sheet** — the source of truth — with the committed `job_postings.csv` in this folder as a graceful fallback. The daily scheduled rebuild (`.github/workflows/scheduled-build.yml` → Vercel deploy hook) picks up sheet changes automatically; no commits are needed for routine posting updates.
+The `/jobs` page is built at build time by `src/lib/jobs.ts` from a **curated public Google Sheet** — the source of truth — with the committed `job-postings.csv` in this folder as a graceful fallback. The daily scheduled rebuild (`.github/workflows/scheduled-build.yml` → Vercel deploy hook) picks up sheet changes automatically; no commits are needed for routine posting updates.
 
 ## The sheet
 
@@ -35,12 +35,12 @@ The vocabularies are advisory: unknown `employment_type`/`remote_type` values re
 
 Rows missing a required field (or with an unparseable `first_seen_at`) are **skipped with a build-log warning**, not fatal — the sheet is human-edited and the rebuild runs unattended, so one typo must not fail the deploy. Soft-hide a posting by setting `is_active` to anything but a truthy value; delete rows only when pruning.
 
-If the sheet yields **zero** active valid postings for any reason (missing key, fetch error, renamed headers, fumbled edit), the build logs a warning and falls back to the committed `job_postings.csv`, so a bad sheet state can never blank the live board — worst case is a stale-but-valid board.
+If the sheet yields **zero** active valid postings for any reason (missing key, fetch error, renamed headers, fumbled edit), the build logs a warning and falls back to the committed `job-postings.csv`, so a bad sheet state can never blank the live board — worst case is a stale-but-valid board.
 
 ## Refreshing the fallback CSV
 
 ```bash
-pnpm jobs:snapshot   # fetches the sheet and overwrites src/data/jobs/job_postings.csv
+pnpm jobs:snapshot   # fetches the sheet and overwrites src/data/jobs/job-postings.csv
 ```
 
 Run occasionally (or after big sheet edits), review the diff, and commit. The fallback only needs to be plausible, not fresh — the live build reads the sheet directly.
