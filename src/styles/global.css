@@ -1,4 +1,11 @@
 @import "tailwindcss";
+/* Tailwind v4 auto-detects utility classes by scanning every non-gitignored
+   text file as plain text (it can't tell a real class="" from a prose word).
+   Our large in-repo docs/ folder is pure prose that never renders to the site,
+   so scanning it only generates dead CSS and churns the bundle hash on doc
+   edits. Exclude it. Deliberate local deviation from upstream (which ships no
+   @source scoping) — justified by our atypically doc-heavy repo. */
+@source not "../../docs";
 @import "./theme.css";
 @import "./typography.css";
 @import "rehype-callouts/theme/obsidian";
