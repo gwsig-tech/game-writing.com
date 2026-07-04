@@ -34,10 +34,7 @@ function getPostSlugPath(id: string, filePath: string | undefined): string {
  * No base prefix, no locale — Astro handles those at a higher level.
  * e.g. `/examples/my-post`
  */
-export function getPostSlug(
-  id: string,
-  filePath: string | undefined
-): string {
+export function getPostSlug(id: string, filePath: string | undefined): string {
   return `/${getPostSlugPath(id, filePath)}`;
 }
 
@@ -51,8 +48,5 @@ export function getPostUrl(
   filePath: string | undefined,
   locale: string | undefined = config.site.lang
 ): string {
-  return getRelativeLocaleUrl(
-    locale,
-    `posts/${getPostSlugPath(id, filePath)}`
-  );
+  return getRelativeLocaleUrl(locale, `posts/${getPostSlugPath(id, filePath)}`);
 }
