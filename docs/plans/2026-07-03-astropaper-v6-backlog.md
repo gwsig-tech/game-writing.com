@@ -8,19 +8,6 @@ None of what's below is production-blocking. Pick any item up on `draft` — the
 
 ---
 
-## Dependencies between items — what's stacked, what isn't
-
-- **#1 (example post refresh) is fully independent** — pure content task, touches only `draft:true` reference posts.
-
----
-
-## 1. Example / reference post refresh (content task)
-
-- **What:** our `src/content/posts/examples/` posts are still the v5.5.1-era versions. v6 rewrote them (MD→MDX, `<ResponsiveTable>`, callouts, new-config docs). The v6 **release post `_releases/astro-paper-6.md` was pulled**; the 10 examples were **not**.
-- **Why deferred:** each upstream example references v6 demo images — ~13 assets across **4 path conventions** (`@/assets`, `../../assets`, `assets/`, `/assets`) — and needs per-post review (several document stock v6's 7-token palette, which differs from ours). It's a content task, not a mechanical pull, and a sloppy pull breaks the build (missing-image schema errors, even for drafts).
-- **How:** pull each example from `upstream/main` (paths listed in the migration doc's *Content sync* section), pull its referenced images to the matching relative locations, set `draft: true`, then `pnpm build` + confirm routes unchanged. `ResponsiveTable` is already registered in the post `<Content components>`; `rehype-callouts` is already wired — so the pulled MDX will render correctly.
-- **Effort:** ~0.5–1d (content).
-
 ## 3. i18n / locale readiness (`withBase` + full locale support)
 
 - **What / why this matters:** IGDA is the **International** Game Developers Association. The original 2026-06-28 audit treated `withBase`/locale routing as a pure no-op to defer (single locale, no base path) without weighing whether the SIG might actually want non-English content someday — that's a real possibility for this org, not a hypothetical one, so it's worth scoping properly now rather than leaving it as an unexamined "someday."
