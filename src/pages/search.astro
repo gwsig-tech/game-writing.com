@@ -10,7 +10,7 @@ const backUrl = config.features.showBackButton ? `${Astro.url.pathname}` : "/";
 const pageDesc = "Search articles across the Game Writing SIG site.";
 ---
 
-<Layout title={`Search | ${config.site.title}`} description={pageDesc}>
+<Layout title="Search" description={pageDesc}>
   <Header />
   <Main pageTitle="Search" pageDesc={pageDesc}>
     <div id="pagefind-search" transition:persist data-backurl={backUrl}></div>

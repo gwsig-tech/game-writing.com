@@ -29,6 +29,13 @@ const {
   scrollSmooth = false,
 } = Astro.props;
 
+// Tab/SEO title: pages pass a bare page title; the `| Site Title` suffix is
+// applied here, once (Decision B, resolved 2026-07-03 — see
+// docs/plans/2026-06-27-page-meta-descriptions.md). The homepage passes no
+// title, so the bare site title renders unsuffixed.
+const docTitle =
+  title === config.site.title ? title : `${title} | ${config.site.title}`;
+
 const socialImageURL = new URL(ogImage, Astro.url);
 const ogType = pubDatetime ? "article" : "website";
 
@@ -57,8 +64,8 @@ const isHome = Astro.url.pathname === "/";
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
+    <title>{docTitle}</title>
+    <meta name="title" content={docTitle} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -66,7 +73,7 @@ const isHome = Astro.url.pathname === "/";
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={config.site.title} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={docTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
@@ -92,7 +99,7 @@ const isHome = Astro.url.pathname === "/";
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
+    <meta property="twitter:title" content={docTitle} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />
 
@@ -100,7 +107,7 @@ const isHome = Astro.url.pathname === "/";
     {
       !pubDatetime && (
         <SeoJsonLd
-          title={title}
+          title={docTitle}
           description={description}
           canonicalURL={canonicalURL}
           image={socialImageURL}
