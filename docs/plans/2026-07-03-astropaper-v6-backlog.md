@@ -84,3 +84,15 @@ None of what's below is production-blocking. Pick any item up on `draft` — the
 - **Note the original doc's own caveat, still true:** this is *not* about the `title`/`pageTitle` drift bug class (a real historical incident — a wrong page *name*, not a suffix problem) — centralizing the suffix wouldn't have prevented that. `title` (tab/SEO) and `pageTitle` (visible `<h1>`) remain intentionally independent fields the theme allows to differ; a naive "derive `title` from `pageTitle`" shortcut isn't automatically safe and isn't what this item is about.
 - **Recommendation:** low priority, low risk either way — this is “clean up 10 duplicated string interpolations” with no user-facing effect and no bug behind it. Fine to leave open indefinitely; a good pick when someone wants a small, safe, well-scoped task, not something to schedule proactively. See the sequencing note above if #3 (i18n) is in flight at the same time.
 - **Effort:** ~30 min–1hr (10 call sites + `Layout.astro`).
+
+## 8. Make the CI check a required merge gate (GitHub branch protection)
+
+- **What:** the `ci.yml` lint + `format:check` workflow (added 2026-07-03, commit `640072a`) runs on every PR into `main`/`draft` and reports a green/red **"Code standards (lint + format)"** status — but today it's **advisory only**: a red check doesn't stop a merge. Making it an enforced gate (merge button disabled until the check is green) is a per-branch **branch-protection** setting in the GitHub web UI. It does *not* live in the repo and can't be committed here — it has to be switched on in GitHub, and only after everything's pushed.
+- **Prerequisite (why "once it's pushed"):** GitHub only lets you select a status check as *required* after it has **reported at least once** on the repo — the check name won't appear in the picker before its first run. So push `main`/`draft`, let one real PR trigger the workflow, *then* configure the rule.
+- **How (GitHub web UI):**
+  1. Repo **Settings → Branches** (under *Code and automation*) → **Add branch ruleset** (or "Add rule" under the classic *Branch protection rules*).
+  2. Target branch pattern: `main` (production). Repeat for `draft`, or use one ruleset targeting both — see the scope note.
+  3. Enable **Require status checks to pass before merging**, then search for and add the check — it appears as **"Code standards (lint + format)"** (possibly prefixed with the workflow name, e.g. `CI / Code standards (lint + format)`). Optionally also enable **Require branches to be up to date before merging**.
+  4. Save. From then on, a red lint/format check disables the merge button on PRs into that branch.
+- **Scope note — which branches to enforce:** this only gates **PRs**. Direct pushes to `draft` (Sveltia CMS content commits) bypass PR checks by design, so enforcing on `draft` only affects the feature-branch → `draft` PR path, not CMS commits. Reasonable options: enforce on `main` only (protect production, keep the `draft`/preview flow frictionless), enforce both, or leave both advisory and rely on the visible red/green signal.
+- **Effort:** ~5 min in the GitHub UI, once a PR has triggered the workflow at least once.
