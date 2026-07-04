@@ -10,7 +10,6 @@ None of what's below is production-blocking. Pick any item up on `draft` — the
 
 ## Dependencies between items — what's stacked, what isn't
 
-- **#5 (pnpm 11 / `allowBuilds`) also touches `ci.yml`.** Upgrading pnpm means bumping `ci.yml`'s pinned `pnpm/action-setup@v4 version: "10.15.1"` too — do that as part of #5 whenever it happens.
 - **#7 (Decision B) is independent of everything above, with one soft note:** if #3 (i18n) ever gets real engineering traction, do #7 *after* starting it rather than before — a centralized title-suffix helper is easy to design locale-aware from day one, but would likely need a revisit if it's built first and locale support lands later. Not a hard blocker; just sequencing advice if both happen to be in flight at once.
 - **#1 (example post refresh) is fully independent** — pure content task, touches only `draft:true` reference posts.
 
@@ -50,31 +49,6 @@ None of what's below is production-blocking. Pick any item up on `draft` — the
   **Tier 3 — nice-to-have, once Tier 2 exists:** a language switcher UI, locale-aware date/number formatting refinement (`src/i18n/format.ts` already exists as a landing spot for this), and per-locale OG images.
 
 - **Recommendation:** do Tier 1 opportunistically and cheaply (it's good hygiene regardless — it stops new hardcoded-path debt from accumulating, and several files already half expect it). **Do not start Tier 2** until there's an explicit decision from SIG leadership on scope (languages, translation workflow, jobs/events policy) — that decision is the actual trigger for this item, not a calendar date or an engineering itch.
-
-## 5. `pnpm-workspace.yaml` → pnpm 11 (`onlyBuiltDependencies` → `allowBuilds`)
-
-- **What's changed since this was last looked at:** the original backlog framing was "migrate `onlyBuiltDependencies` → `allowBuilds` only when/if the repo moves to pnpm 11" — as if pnpm 11 wasn't real yet. It is: **pnpm 11.9.0 is out now**, and it requires **Node.js 22+**, which we already require (`engines.node: ">=22.12.0"` in `package.json`, driven by Astro 6's own floor) — so the Node-version gate that would've blocked this is already satisfied. The remaining work is genuinely just "do the mechanical config migration," not "wait for a prerequisite."
-- **What the migration actually involves** (checked against pnpm's own [v10→v11 migration guide](https://pnpm.io/migration) and [11.0 release notes](https://pnpm.io/blog/releases/11.0)):
-  - `onlyBuiltDependencies`, `neverBuiltDependencies`, `ignoredBuiltDependencies`, and `onlyBuiltDependenciesFile` are all removed and merged into one `allowBuilds` map (`{ name: true | false }`). Our current `pnpm-workspace.yaml` only uses `onlyBuiltDependencies` for 3 packages (`@tailwindcss/oxide`, `esbuild`, `sharp`), so the concrete change is:
-    ```yaml
-    # before
-    onlyBuiltDependencies:
-      - '@tailwindcss/oxide'
-      - esbuild
-      - sharp
-    # after
-    allowBuilds:
-      '@tailwindcss/oxide': true
-      esbuild: true
-      sharp: true
-    ```
-  - pnpm ships an official codemod for the bulk of this: `pnpx codemod run pnpm-v10-to-v11`.
-  - We have no `.npmrc` (confirmed) and no `packageManager` field pinning a pnpm version in `package.json`, so the "settings move out of `.npmrc`/`package.json#pnpm` into `pnpm-workspace.yaml`" restructuring that trips up other repos doesn't apply to us — smaller surface than a typical migration.
-  - `ci.yml`'s `pnpm/action-setup@v4` step is pinned to `version: "10.15.1"` — bump this alongside the workspace-file change (see the note in the *Dependencies* section above).
-  - New pnpm 11 defaults worth knowing about, not necessarily blockers: a 1-day minimum release-age supply-chain check on newly published packages (could matter if we ever `pnpm add` something within a day of its release), and the store format changing to a SQLite-backed v11 store (one-time re-resolve cost on first install after upgrading, not an ongoing one).
-  - Confirm how Vercel resolves the pnpm version for the production build (we don't pin one via `packageManager`) — worth a quick check in the Vercel project settings as part of this work, so the deployed build actually uses pnpm 11 too rather than silently staying on whatever Vercel defaults to.
-- **Risk:** low-to-moderate — mechanical config change with an official codemod, but touches the dependency-install pipeline, so verify with a full `pnpm install` (fresh, no cache) + `pnpm build` locally and via the manual CI trigger before relying on it.
-- **Effort:** ~0.5d (run the codemod, verify the 3-package mapping, update `ci.yml`'s pinned version, confirm Vercel's pnpm resolution, full clean install + build check).
 
 ## 7. Decision B — centralize the `` | ${config.site.title} `` title suffix
 

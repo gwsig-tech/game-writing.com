@@ -92,7 +92,7 @@ Conventions:
 
 ## Dependencies (do not bump without checking)
 
-- We track **Astro 6** and **AstroPaper v6** (both matching upstream; upstream is at v6.1.0). The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed — when upstream ships **AstroPaper v7 + Astro 7**, that's the next theme upgrade) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis` 173 are applied. See the latest plan in `docs/plans/` for revisit triggers.
+- We track **Astro 6** and **AstroPaper v6** (both matching upstream; upstream is at v6.1.0). The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed — when upstream ships **AstroPaper v7 + Astro 7**, that's the next theme upgrade) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, `googleapis` 173, and **pnpm 11** are applied (pnpm is pinned via `package.json#packageManager` — the single source of truth read by local pnpm's auto-switch, CI's `pnpm/action-setup`, and Vercel; bump it there, nowhere else). See the latest plan in `docs/plans/` for revisit triggers.
 - `cpx2` was previously pinned to exact `8.0.0` to dodge an `ERR_REQUIRE_ESM` regression; `cpx2@9` migrated to ESM and resolved it, so it is now `^9.0.0` (do not re-pin).
 - Astro 6 requires **Node 22.12+** (`engines` field enforces it) — keep Vercel's build Node version at 22+.
 
