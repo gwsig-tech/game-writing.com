@@ -12,10 +12,21 @@ import {
   getJobSummary,
 } from "../lib/jobs";
 
-const jobs = (await getActiveJobs()).sort((a, b) => {
+const { jobs: activeJobs, updatedAt } = await getActiveJobs();
+const jobs = activeJobs.sort((a, b) => {
   const companyComparison = a.company_name.localeCompare(b.company_name);
   return companyComparison || a.title.localeCompare(b.title);
 });
+// UTC so the rendered date matches the sheet's UTC timestamps regardless of
+// where the build runs (Vercel builds in UTC; local machines may not).
+const listingsUpdated = updatedAt
+  ? new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(updatedAt)
+  : null;
 const jobsWithCountries = jobs.map(job => ({
   job,
   countries: getJobCountries(job),
@@ -62,10 +73,15 @@ const pageDesc = "Job opportunities for game writers and narrative designers.";
           sponsored by, or endorsing any of the companies or positions listed
           here.
         </p>
-        <p aria-live="polite" id="jobs-count">
-          {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"}
-          available. Filter by company or country, or search by keyword to narrow
-          the list.
+        <!-- The filter script rewrites only #jobs-count, so the updated-date
+             sentence lives beside it and survives filtering. -->
+        <p aria-live="polite">
+          <span id="jobs-count">
+            {jobs.length} game writing {jobs.length === 1 ? "role" : "roles"}
+            available. Filter by company or country, or search by keyword to narrow
+            the list.
+          </span>
+          {listingsUpdated && `Listings updated ${listingsUpdated}.`}
         </p>
       </section>
       <div class="mx-auto mt-10 mb-28 max-w-6xl px-4">

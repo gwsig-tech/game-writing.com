@@ -62,7 +62,7 @@ Conventions:
 - `src/pages/` - Route pages including static `.mdx` pages (`about.mdx`, `constitution.mdx`) and custom pages (`events.astro`, `jobs.astro`). **Posts render in `posts/[...slug]/index.astro`** with post-only components colocated in its `_components/` (ShareLinks, EditPost, BackButton, AdjacentPostNav) — there is no `PostDetails` layout
 - `src/i18n/` - EN-only UI strings (`lang/en.ts`, typed in `types.ts`) via `useTranslations()`; woven into ported v6 components
 - `src/utils/` - Helper functions for posts, tags, OG images (`getPostPaths.ts` derives `/posts/<slug>` URLs via `getPostSlug`/`getPostUrl`)
-- `src/lib/` - Standalone build-time libraries (`jobs.ts` parses `src/data/jobs/job_postings.csv` for the jobs board)
+- `src/lib/` - Standalone build-time libraries (`jobs.ts` fetches the curated public job-postings Google Sheet at build for the jobs board, falling back to the committed `src/data/jobs/job_postings.csv` snapshot — schema contract in `src/data/jobs/README.md`; `sheets.ts` is the generic public-sheet reader used for that fetch)
 - `src/assets/` - Images and icons (also used as CMS media folder); `icons/socials/<name>.svg` are resolved by name for the config's socials/shareLinks
 
 ### Build Output

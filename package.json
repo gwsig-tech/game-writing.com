@@ -14,7 +14,8 @@
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "jobs:snapshot": "node --env-file=.env scripts/export-jobs-snapshot.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",
