@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import SpeedInsights from "@vercel/speed-insights/astro";
+import SeoJsonLd from "@/components/SeoJsonLd.astro";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -28,23 +29,20 @@ const {
   scrollSmooth = false,
 } = Astro.props;
 
+// Tab/SEO title: pages pass a bare page title; the `| Site Title` suffix is
+// applied here, once (Decision B, resolved 2026-07-03 — see
+// docs/plans/2026-06-27-page-meta-descriptions.md). The homepage passes no
+// title, so the bare site title renders unsuffixed.
+const docTitle =
+  title === config.site.title ? title : `${title} | ${config.site.title}`;
+
 const socialImageURL = new URL(ogImage, Astro.url);
 const ogType = pubDatetime ? "article" : "website";
 
-// Non-article pages emit a neutral WebSite (homepage) or WebPage. Article pages
-// get their BlogPosting from PostLayout via the head slot, so Layout stays
-// silent for them (gated on pubDatetime) to avoid a duplicate/conflicting @type.
+// Non-article pages emit a neutral WebSite (homepage) or WebPage via <SeoJsonLd>.
+// Article pages get their BlogPosting from PostLayout via the head slot, so Layout
+// stays silent for them (gated on pubDatetime) to avoid a duplicate/conflicting @type.
 const isHome = Astro.url.pathname === "/";
-const structuredData = pubDatetime
-  ? null
-  : {
-      "@context": "https://schema.org",
-      "@type": isHome ? "WebSite" : "WebPage",
-      name: `${title}`,
-      description: `${description}`,
-      url: `${canonicalURL}`,
-      image: `${socialImageURL}`,
-    };
 ---
 
 <!doctype html>
@@ -66,8 +64,8 @@ const structuredData = pubDatetime
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
+    <title>{docTitle}</title>
+    <meta name="title" content={docTitle} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -75,7 +73,7 @@ const structuredData = pubDatetime
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={config.site.title} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={docTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
@@ -101,17 +99,19 @@ const structuredData = pubDatetime
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
+    <meta property="twitter:title" content={docTitle} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />
 
     <!-- Google JSON-LD Structured data (non-article pages; BlogPosting via head slot) -->
     {
-      structuredData && (
-        <script
-          type="application/ld+json"
-          is:inline
-          set:html={JSON.stringify(structuredData)}
+      !pubDatetime && (
+        <SeoJsonLd
+          title={docTitle}
+          description={description}
+          canonicalURL={canonicalURL}
+          image={socialImageURL}
+          isHome={isHome}
         />
       )
     }
@@ -144,29 +144,20 @@ const structuredData = pubDatetime
     <script is:inline>
       (function () {
         const initialColorScheme = ""; // "light" | "dark"
-        const currentTheme = localStorage.getItem("theme");
-
-        function getPreferTheme() {
-          if (currentTheme) return currentTheme;
-          if (initialColorScheme) return initialColorScheme;
-          return window.matchMedia("(prefers-color-scheme: dark)").matches
+        const stored = localStorage.getItem("theme");
+        const theme =
+          stored ||
+          initialColorScheme ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
-            : "light";
-        }
+            : "light");
 
-        const themeValue = getPreferTheme();
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
 
-        // Set theme immediately to prevent flash
-        document.firstElementChild?.setAttribute("data-theme", themeValue);
-
-        // Export minimal API for external script
-        window.theme = {
-          themeValue: themeValue,
-          getTheme: () => window.theme.themeValue,
-          setTheme: val => {
-            window.theme.themeValue = val;
-          },
-        };
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
       })();
     </script>
   </head>

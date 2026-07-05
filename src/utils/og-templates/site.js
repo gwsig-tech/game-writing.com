@@ -1,6 +1,6 @@
 import satori from "satori";
 import config from "@/config";
-import loadGoogleFonts from "../loadGoogleFont";
+import loadFonts from "../loadFonts";
 
 export default async () => {
   return satori(
@@ -122,7 +122,7 @@ export default async () => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: await loadGoogleFonts(config.site.title + config.site.description + config.site.url),
+      fonts: await loadFonts(),
     }
   );
 };

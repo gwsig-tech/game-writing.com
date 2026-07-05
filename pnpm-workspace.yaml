@@ -1,4 +1,11 @@
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-  - sharp
+# pnpm 11: build-script approval consolidated into allowBuilds (was
+# onlyBuiltDependencies pre-11). Only these packages may run install scripts.
+#
+# Note: pnpm 11 also defaults minimumReleaseAge to 1440 (new releases aren't
+# resolved until 1 day old — supply-chain guard). We deliberately keep that
+# default; if a just-published version ever needs to be installed same-day,
+# override per-invocation rather than lowering the default here.
+allowBuilds:
+  "@tailwindcss/oxide": true
+  esbuild: true
+  sharp: true

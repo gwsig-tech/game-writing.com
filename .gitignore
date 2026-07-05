@@ -32,3 +32,6 @@ public/pagefind
 
 # Claude Code per-user local settings (shared settings.json is committed)
 .claude/settings.local.json
+
+# tmp or scratch folders
+tmp/

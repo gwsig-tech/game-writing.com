@@ -59,9 +59,6 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
   },
   image: {
     responsiveStyles: true,
@@ -75,6 +72,11 @@ export default defineConfig({
         optional: true,
       }),
       GOOGLE_CALENDAR_API_KEY: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      GOOGLE_SHEETS_API_KEY: envField.string({
         access: "secret",
         context: "server",
         optional: true,

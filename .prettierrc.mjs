@@ -3,11 +3,12 @@ export default {
   arrowParens: "avoid",
   semi: true,
   tabWidth: 2,
-  // Effectively disable width-based line wrapping: Prettier has no true "off"
-  // switch, so a very large printWidth means it won't split lines just to fit a
-  // column. Use editor word-wrap to read long lines. proseWrap stays "preserve"
-  // so Markdown/MDX prose is never reflowed either.
-  printWidth: 9999,
+  // Match upstream AstroPaper (printWidth 80) so hand-ported files diff cleanly
+  // and code wraps predictably — that keeps edit diffs small and readable.
+  // The "never reflow Markdown" rule is handled entirely by proseWrap: "preserve"
+  // below (independent of printWidth); do NOT raise printWidth to fight prose
+  // wrapping — that only collapses code onto unreadable single lines.
+  printWidth: 80,
   proseWrap: "preserve",
   singleQuote: false,
   jsxSingleQuote: false,

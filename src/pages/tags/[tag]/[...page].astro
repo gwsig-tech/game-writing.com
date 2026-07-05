@@ -32,7 +32,7 @@ const { page, tagName } = Astro.props;
 const pageDesc = `All the articles with the tag "${tagName}".`;
 ---
 
-<Layout title={`Tag: ${tagName} | ${config.site.title}`} description={pageDesc}>
+<Layout title={`Tag: ${tagName}`} description={pageDesc}>
   <Header />
   <Main
     pageTitle={[`Tag:`, `${tagName}`]}

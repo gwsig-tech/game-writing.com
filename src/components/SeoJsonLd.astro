@@ -1,0 +1,26 @@
+---
+type Props = {
+  title: string;
+  description: string;
+  canonicalURL: string | URL;
+  image: string | URL;
+  isHome: boolean;
+};
+
+const { title, description, canonicalURL, image, isHome } = Astro.props;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": isHome ? "WebSite" : "WebPage",
+  name: `${title}`,
+  description: `${description}`,
+  url: `${canonicalURL}`,
+  image: `${image}`,
+};
+---
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify(structuredData)}
+/>

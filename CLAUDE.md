@@ -43,7 +43,7 @@ Conventions:
 
 - `title` (tab/SEO) and `pageTitle` (visible heading) are **separate props**, set independently per page — `title` builds the `<head>`/tab string, `pageTitle` the visible `<h1>`. The theme treats them as distinct (they're free to differ; today our pages keep them aligned), so setting one does not set the other.
 - **Single-source the description** (convention added 2026-06-27): hub/custom pages declare one `const pageDesc` and pass it to **both** `<Main pageDesc={pageDesc}>` (visible) and `<Layout description={pageDesc}>` (`<head>`), so the SEO/OG/JSON-LD description is the real per-page text, not `config.site.description`. `.mdx` content pages set a `description:` frontmatter line, forwarded by `DefaultLayout`. New hub/custom pages should follow this. See `docs/plans/2026-06-27-page-meta-descriptions.md`.
-- The `` | ${config.site.title} `` title suffix is applied **per call site** (matches stock + v6); centralizing it ("decision B") is deliberately deferred. Do not centralize it without re-reading that plan.
+- The `` | ${config.site.title} `` title suffix is applied **once, in `Layout.astro`** (`docTitle` — "decision B", resolved 2026-07-03): pages pass a **bare** `title` and Layout appends the suffix; the homepage passes no `title`, so the bare site title renders unsuffixed (guarded by `title === config.site.title`). This is a deliberate small divergence from stock AstroPaper (which hand-applies the suffix per call site) — when porting upstream `Layout.astro` changes, preserve the `docTitle` wiring. Do **not** re-add the suffix at call sites.
 
 ### CMS
 
@@ -61,8 +61,8 @@ Conventions:
 - `src/layouts/` - `Layout` (base HTML/head + `<slot name="head">` + Vercel analytics + theme/FOUC), `PostLayout` (wraps `Layout`, adds the post `BlogPosting` JSON-LD), `DefaultLayout` (`.mdx` content pages), `Main` (hub/utility page shell)
 - `src/pages/` - Route pages including static `.mdx` pages (`about.mdx`, `constitution.mdx`) and custom pages (`events.astro`, `jobs.astro`). **Posts render in `posts/[...slug]/index.astro`** with post-only components colocated in its `_components/` (ShareLinks, EditPost, BackButton, AdjacentPostNav) — there is no `PostDetails` layout
 - `src/i18n/` - EN-only UI strings (`lang/en.ts`, typed in `types.ts`) via `useTranslations()`; woven into ported v6 components
-- `src/utils/` - Helper functions for posts, tags, OG images (`getPath.ts` derives `/posts/<slug>` URLs)
-- `src/lib/` - Standalone build-time libraries (`jobs.ts` parses `src/data/jobs/job_postings.csv` for the jobs board)
+- `src/utils/` - Helper functions for posts, tags, OG images (`getPostPaths.ts` derives `/posts/<slug>` URLs via `getPostSlug`/`getPostUrl`)
+- `src/lib/` - Standalone build-time libraries (`jobs.ts` fetches the curated public job-postings Google Sheet at build for the jobs board, falling back to the committed `src/data/jobs/job-postings.csv` snapshot — schema contract in `src/data/jobs/README.md`; `sheets.ts` is the generic public-sheet reader used for that fetch; `calendar.ts` is the public Google Calendar reader + event date formatter used by `events.astro`)
 - `src/assets/` - Images and icons (also used as CMS media folder); `icons/socials/<name>.svg` are resolved by name for the config's socials/shareLinks
 
 ### Build Output
@@ -74,7 +74,7 @@ Conventions:
 
 - Theme toggle logic lives in `src/scripts/theme.ts` (loaded non-blocking)
 - A minimal inline FOUC-prevention script in `src/layouts/Layout.astro` sets the theme before paint
-- `window.theme` types are declared in `src/env.d.ts`
+- `window.__theme` types are declared in `src/env.d.ts`
 - **Theme conformance (read before styling any page/component):** the theme is **color-only** (7 tokens in `src/styles/theme.css`, exposed as `bg-*`/`text-*`/`border-*` utilities). Conform to AstroPaper's flat/minimal language — **borders not shadows**, **`text-muted-foreground` for secondary text**, **`bg-muted` for surfaces/hover**, theme tokens via **semantic utilities** (not raw `var()` in `<style>`), and **Tailwind's default scale** (no bespoke px/rem/fractional sizes). Build novel UI in that spirit. Introducing a new token or visual language requires an explicit decision recorded in `docs/plans/` — a feature never extends the theme unilaterally. Full policy + audit rubric: [docs/theme-conformance.md](docs/theme-conformance.md).
 
 ## Branch and Deploy Flow
@@ -88,11 +88,11 @@ Conventions:
 
 - `upstream` remote points to `satnaing/astro-paper`. **We are on AstroPaper v6 parity** (migrated 2026-06-28 from v5.5.1 — see [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md)): three-file config, `src/i18n/`, the `posts` collection at `src/content/posts`, the 7-token `theme.css`, and the `Layout`/`PostLayout` head-slot split all match upstream's structure now. Upstream is at **v6.1.0** (no v7 yet).
 - **Pulling from upstream:** still **port by hand** — never `git pull`/`cherry-pick` upstream (unrelated histories; it would clobber our customizations). But it's now *cheap*, because the structure matches: `git fetch upstream`, inspect the file you care about (`git show upstream/main:<path>`), and re-graft, preserving our customizations (jobs, events, GameEmbed, custom Header/Footer, palette, Vercel analytics, `/jams` redirect, static OG).
-- **Deferred v6 items** (none blocking) are tracked in [docs/plans/2026-06-28-astropaper-v6-backlog.md](docs/plans/2026-06-28-astropaper-v6-backlog.md). See `docs/plans/` for the rest of the maintenance history.
+- **Deferred v6 items** (none blocking) are tracked in [docs/plans/2026-07-03-astropaper-v6-backlog.md](docs/plans/2026-07-03-astropaper-v6-backlog.md). See `docs/plans/` for the rest of the maintenance history.
 
 ## Dependencies (do not bump without checking)
 
-- We track **Astro 6** and **AstroPaper v6** (both matching upstream; upstream is at v6.1.0). The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed — when upstream ships **AstroPaper v7 + Astro 7**, that's the next theme upgrade) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, and `googleapis` 173 are applied. See the latest plan in `docs/plans/` for revisit triggers.
+- We track **Astro 6** and **AstroPaper v6** (both matching upstream; upstream is at v6.1.0). The only majors still held are **Astro 7** (Rust compiler + markdown-engine swap; too fresh, upstream hasn't followed — when upstream ships **AstroPaper v7 + Astro 7**, that's the next theme upgrade) and **`sharp` 0.35** (native image backend; validate on the Vercel Linux build). ESLint 10, TypeScript 6, `googleapis` 173, and **pnpm 11** are applied (pnpm is pinned via `package.json#packageManager` — the single source of truth read by local pnpm's auto-switch, CI's `pnpm/action-setup`, and Vercel; bump it there, nowhere else). See the latest plan in `docs/plans/` for revisit triggers.
 - `cpx2` was previously pinned to exact `8.0.0` to dodge an `ERR_REQUIRE_ESM` regression; `cpx2@9` migrated to ESM and resolved it, so it is now `^9.0.0` (do not re-pin).
 - Astro 6 requires **Node 22.12+** (`engines` field enforces it) — keep Vercel's build Node version at 22+.
 

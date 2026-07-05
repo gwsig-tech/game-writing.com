@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import { getPath } from "@/utils/getPath";
+import { getPostSlug } from "@/utils/getPostPaths";
 import { generateOgImageForPost } from "@/utils/generateOgImages";
 import config from "@/config";
 
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
   );
 
   return posts.map(post => ({
-    params: { slug: getPath(post.id, post.filePath, false) },
+    params: { slug: getPostSlug(post.id, post.filePath) },
     props: post,
   }));
 }
@@ -27,7 +27,9 @@ export const GET: APIRoute = async ({ props }) => {
     });
   }
 
-  const buffer = await generateOgImageForPost(props as CollectionEntry<"posts">);
+  const buffer = await generateOgImageForPost(
+    props as CollectionEntry<"posts">
+  );
   return new Response(new Uint8Array(buffer), {
     headers: { "Content-Type": "image/png" },
   });

@@ -21,8 +21,8 @@ function getPreferTheme(): string {
     : LIGHT;
 }
 
-// Use existing theme value from inline script if available, otherwise detect
-let themeValue = window.theme?.themeValue ?? getPreferTheme();
+// Reuse the value already set by the inline FOUC-prevention script if available.
+let themeValue = window.__theme?.value ?? getPreferTheme();
 
 function setPreference(): void {
   localStorage.setItem(THEME, themeValue);
@@ -30,7 +30,9 @@ function setPreference(): void {
 }
 
 function reflectPreference(): void {
-  document.firstElementChild?.setAttribute("data-theme", themeValue);
+  const root = document.firstElementChild;
+  root?.setAttribute("data-theme", themeValue);
+  root?.classList.toggle("dark", themeValue === DARK);
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
@@ -52,25 +54,6 @@ function reflectPreference(): void {
   }
 }
 
-// Update the global theme API
-if (window.theme) {
-  window.theme.setPreference = setPreference;
-  window.theme.reflectPreference = reflectPreference;
-} else {
-  window.theme = {
-    themeValue,
-    setPreference,
-    reflectPreference,
-    getTheme: () => themeValue,
-    setTheme: (val: string) => {
-      themeValue = val;
-    },
-  };
-}
-
-// Ensure theme is reflected (in case body wasn't ready when inline script ran)
-reflectPreference();
-
 function setThemeFeature(): void {
   // set on load so screen readers can get the latest value on the button
   reflectPreference();
@@ -78,7 +61,6 @@ function setThemeFeature(): void {
   // now this script can find and listen for clicks on the control
   document.querySelector("#theme-btn")?.addEventListener("click", () => {
     themeValue = themeValue === LIGHT ? DARK : LIGHT;
-    window.theme?.setTheme(themeValue);
     setPreference();
   });
 }
@@ -109,6 +91,5 @@ window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", ({ matches: isDark }) => {
     themeValue = isDark ? DARK : LIGHT;
-    window.theme?.setTheme(themeValue);
     setPreference();
   });

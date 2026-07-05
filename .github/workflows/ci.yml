@@ -1,23 +1,27 @@
 name: CI
 
-# Intentionally manual-only (workflow_dispatch). This mirrors upstream AstroPaper's
-# CI for parity, but is deliberately NOT wired to run on PRs/pushes: Vercel's GitHub
-# integration already builds every deploy, so this would otherwise be a redundant
-# second build. Run it on demand from the Actions tab for an optional lint +
-# format-check + build pass. To make it an automatic PR gate later, add:
-#   on:
-#     pull_request:
-#       types: [opened, edited, synchronize, reopened]
+# Scope: the checks Vercel does NOT run. Vercel's GitHub integration already
+# builds every PR (its build runs `pnpm build` = `astro check` + `astro build`),
+# so typecheck + build are already gated there. We deliberately do NOT re-run the
+# build here — that would be redundant compute. ESLint and Prettier, however, are
+# not part of the build, so this workflow's whole job is to surface `pnpm lint` +
+# `pnpm format:check` as a pre-merge status check on PRs into main/draft.
+#
+# Note: this makes the check *visible* (green/red) on PRs. To make it *block*
+# merging, mark "Code standards (lint + format)" as a required check in the
+# branch protection settings for main/draft (GitHub UI, not this file).
 
 permissions:
   contents: read
 
 on:
+  pull_request:
+    branches: [main, draft]
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Code standards & build
+  standards:
+    name: Code standards (lint + format)
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -25,10 +29,11 @@ jobs:
       - name: "☁️ Checkout repository"
         uses: actions/checkout@v4
 
+      # No pinned version: pnpm/action-setup reads the `packageManager` field in
+      # package.json, so local, CI, and Vercel all resolve the same pnpm version
+      # from that single source of truth.
       - name: "📦 Install pnpm"
         uses: pnpm/action-setup@v4
-        with:
-          version: "10.15.1"
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -44,6 +49,3 @@ jobs:
 
       - name: "📝 Checking code format"
         run: pnpm run format:check
-
-      - name: "🚀 Build the project"
-        run: pnpm run build

@@ -43,6 +43,7 @@ Environment variables are declared with a typed schema in [`astro.config.ts`](as
 | Variable                          | Access / Context    | Required | Purpose                                                                                                                                                                                                                                                                                                                                                                      |
 | :-------------------------------- | :------------------ | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GOOGLE_CALENDAR_API_KEY`         | `secret` / `server` | optional | Server-side Google Calendar API key. Read at **build time** in [`src/pages/events.astro`](src/pages/events.astro) to fetch upcoming events via `googleapis`.                                                                                                                                                                                                                 |
+| `GOOGLE_SHEETS_API_KEY`           | `secret` / `server` | optional | Server-side Google Sheets API key powering `/jobs`. Read at **build time** in [`src/lib/jobs.ts`](src/lib/jobs.ts) (via [`src/lib/sheets.ts`](src/lib/sheets.ts)) to fetch the curated **public** job-postings sheet — the board's source of truth. When unset or the fetch fails, the build falls back to the committed CSV snapshot ([`src/data/jobs/job-postings.csv`](src/data/jobs/job-postings.csv)); refresh it with `pnpm jobs:snapshot`. Schema contract: [`src/data/jobs/README.md`](src/data/jobs/README.md). |
 | `PUBLIC_GOOGLE_SITE_VERIFICATION` | `public` / `client` | optional | Search Console verification token, emitted as a `<meta>` tag in [`src/layouts/Layout.astro`](src/layouts/Layout.astro) **only when set**. Not needed in the current setup — the domain is verified with Google Search Console via a **DNS TXT record** (a one-time, domain-level method), so this meta-tag alternative is redundant and the variable is normally left unset. |
 
 How the build uses these:
@@ -86,7 +87,7 @@ How the build uses these:
 │   │       ├── _events/       # Event announcements
 │   │       └── _spotlights/   # Member spotlights
 │   ├── data/
-│   │   └── jobs/              # [Custom] Jobs board source (job_postings.csv)
+│   │   └── jobs/              # [Custom] Jobs board source (job-postings.csv)
 │   ├── i18n/                  # EN-only UI strings (lang/en.ts)
 │   ├── layouts/
 │   │   ├── Layout.astro       # [Modified] Base HTML/head + head slot + Vercel analytics + theme + JSON-LD
@@ -110,12 +111,12 @@ How the build uses these:
 │   │   ├── theme.css          # 7 design tokens (light/dark palette)
 │   │   ├── global.css         # Tailwind entry + base layer + utilities
 │   │   └── typography.css     # Prose/markdown styling
-│   ├── utils/                 # Helper functions (getPath, etc.)
+│   ├── utils/                 # Helper functions (getPostPaths, etc.)
 │   ├── lib/                   # [Custom] Build-time libs (jobs.ts — CSV jobs board)
 │   ├── types/config.ts        # Config types + defineAstroPaperConfig()
 │   ├── config.ts              # Resolved config (don't edit — see astro-paper.config.ts)
 │   ├── content.config.ts      # Content collection schema (posts)
-│   └── env.d.ts               # Ambient type declarations (window.theme)
+│   └── env.d.ts               # Ambient type declarations (window.__theme)
 ├── astro-paper.config.ts      # [EDIT HERE] site / socials / shareLinks / features
 ├── CLAUDE.md                  # Guidance for Claude Code agents
 └── astro.config.ts            # Astro configuration
@@ -260,7 +261,7 @@ git show upstream/main:astro.config.ts
 - `src/styles/theme.css` — custom light/dark 7-token palette (styling follows [docs/theme-conformance.md](docs/theme-conformance.md))
 - `src/pages/jobs.astro` + `src/lib/jobs.ts`, `src/pages/events.astro`, `public/admin/config.yml` — the jobs board, Google Calendar, and Sveltia CMS
 
-The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md); deferred follow-ups (example-post refresh, OG-generator modernization, lightbox, etc.) are in [docs/plans/2026-06-28-astropaper-v6-backlog.md](docs/plans/2026-06-28-astropaper-v6-backlog.md).
+The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migration.md](docs/plans/2026-06-28-astropaper-v6-parity-migration.md) (including settled divergences like keeping the custom Header/Footer, e.g. component alignment). The active backlog of what's still open — example-post refresh, `SeoJsonLd` extraction, i18n/locale readiness, CI activation, pnpm 11 migration, formatting, and the title-suffix centralization ("Decision B") — is [docs/plans/2026-07-03-astropaper-v6-backlog.md](docs/plans/2026-07-03-astropaper-v6-backlog.md), including a dependency/sequencing note on which items are stacked.
 
 ## Tech Stack
 
@@ -272,7 +273,7 @@ The v6 migration is recorded in [docs/plans/2026-06-28-astropaper-v6-parity-migr
 | CMS        | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (loaded unpinned — always latest) |
 | Search     | [Pagefind](https://pagefind.app/)                                                       |
 | Icons      | [Tabler Icons](https://tabler-icons.io/)                                                |
-| OG Images  | [Satori](https://github.com/vercel/satori) + Resvg                                      |
+| OG Images  | [Satori](https://github.com/vercel/satori) + [sharp](https://sharp.pixelplumbing.com/)  |
 | Deployment | [Vercel](https://vercel.com/)                                                           |
 
 ## Documentation
