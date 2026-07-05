@@ -91,11 +91,14 @@ export function formatEventDate(event: CalendarEvent): string {
   // Use the event's timezone, or fall back to America/New_York
   const eventTimeZone = event.start?.timeZone || "America/New_York";
 
+  // All-day events are bare YYYY-MM-DD dates, which new Date() parses as UTC
+  // midnight — format them in UTC too, or they render one day early in any
+  // zone behind UTC. Timed events carry real instants and use the event zone.
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
     year: "numeric",
-    timeZone: eventTimeZone,
+    timeZone: isAllDay ? "UTC" : eventTimeZone,
   };
 
   const timeOnlyOptions: Intl.DateTimeFormatOptions = {
@@ -107,9 +110,10 @@ export function formatEventDate(event: CalendarEvent): string {
 
   // For all-day events, check if it spans multiple days
   if (isAllDay && end) {
-    // All-day event end dates are exclusive (next day), so subtract 1 day
+    // All-day event end dates are exclusive (next day), so subtract 1 day —
+    // in UTC, matching how the bare date was parsed.
     const endDate = new Date(end);
-    endDate.setDate(endDate.getDate() - 1);
+    endDate.setUTCDate(endDate.getUTCDate() - 1);
 
     // Check if start and end are different days
     const startStr = startDate.toLocaleDateString("en-US", dateOptions);

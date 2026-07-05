@@ -25,10 +25,13 @@ const {
   countries,
 } = Astro.props;
 
+// UTC because first_seen_at is a bare date parsed as UTC midnight — same
+// reasoning as the "Listings updated" date in jobs.astro.
 const formattedDate = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
   year: "numeric",
+  timeZone: "UTC",
 }).format(date);
 
 const employmentTerms: Record<string, RegExp> = {

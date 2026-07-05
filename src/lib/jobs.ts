@@ -75,16 +75,13 @@ function withUpdatedAt(jobs: JobPosting[]): ActiveJobsResult {
   };
 }
 
+// Row order is preserved as-is; ordering is the consuming page's concern
+// (jobs.astro sorts by company/title).
 function toActiveJobs(rows: CsvRow[]): JobPosting[] {
   return rows
     .filter(row => parseBoolean(row.is_active))
     .map(toJobPosting)
-    .filter((job): job is JobPosting => job !== null)
-    .sort((a, b) => {
-      const dateDifference =
-        b.first_seen_at.valueOf() - a.first_seen_at.valueOf();
-      return dateDifference || a.company_name.localeCompare(b.company_name);
-    });
+    .filter((job): job is JobPosting => job !== null);
 }
 
 /** Maps a header row + data rows to records, padding short rows with "". */
