@@ -220,30 +220,57 @@ export function getExperienceLabel(job: JobPosting): string | null {
   return job.minimum_years ? `${job.minimum_years}+ years` : null;
 }
 
-// ASCII-only markers; locations are diacritics-stripped before matching, so
-// "MONTRÉAL" and "Malmö" match regardless of casing/accents. (Letters that
-// don't NFD-decompose to ASCII, like Polish "ł", still rely on the row's
-// country token — e.g. "Wrocław, … Poland" matches via "poland".)
+// Location → country classification for the /jobs country filter.
+//
+// `location` is free text aggregated from many job boards, so rows arrive as
+// "City", "City, Country", country-first ("Cyprus, Limassol"), region-only
+// ("Europe", "Worldwide"), and multi-location lists with assorted separators
+// ("Warsaw, Poland | Malmö, Sweden", "Barcelona; Helsinki", "USA / Canada").
+// Classification is whole-word marker matching over a normalized form of the
+// ENTIRE string — every marker the row mentions contributes its country, so
+// multi-location rows land under each of their countries with no
+// delimiter-specific handling. The full contract (and the cleanup we want the
+// upstream data services to take over) is docs/jobs-location-parsing.md.
+//
+// Markers must be written pre-normalized: lowercase ASCII words separated by
+// single spaces (the form normalizeLocation produces). City markers exist
+// only for cities that appear upstream WITHOUT a country token; don't add
+// city names that are ambiguous across countries (London, Cambridge,
+// Ontario…). Letters that don't NFD-decompose to ASCII (e.g. Polish "ł")
+// normalize to a word break, so "Wrocław" itself is unmatchable and relies on
+// the row's "Poland" token.
 const COUNTRY_MARKERS: Array<[string, string[]]> = [
+  ["Armenia", ["armenia", "yerevan"]],
+  ["Belarus", ["belarus", "minsk"]],
   ["Belgium", ["belgium", "gent"]],
-  ["Canada", ["canada", "montreal", "quebec"]],
+  ["Canada", ["canada", "montreal", "quebec", "toronto", "vancouver"]],
   ["China", ["china", "beijing", "guangzhou"]],
+  ["Cyprus", ["cyprus", "limassol"]],
+  ["Denmark", ["denmark", "copenhagen"]],
   ["Finland", ["finland", "helsinki"]],
-  ["France", ["france", "paris"]],
+  ["France", ["france", "paris", "bordeaux"]],
   // "georgia" itself is omitted — it collides with the US state.
   ["Georgia", ["tbilisi", "tblisi"]],
   ["Germany", ["germany", "munich", "berlin", "giebelstadt"]],
+  ["India", ["india"]],
+  ["Indonesia", ["indonesia", "jakarta"]],
   ["Japan", ["japan", "tokyo"]],
+  // Safe as a whole word only because normalizeLocation rewrites the US
+  // state "new mexico" before matching.
+  ["Mexico", ["mexico"]],
   ["Poland", ["poland", "warsaw", "warszawa", "bielsko"]],
+  ["Romania", ["romania", "bucharest"]],
+  ["Serbia", ["serbia", "belgrade"]],
   ["South Korea", ["south korea", "seoul"]],
   ["Spain", ["spain", "barcelona"]],
   ["Sweden", ["sweden", "stockholm", "malmo"]],
+  ["Ukraine", ["ukraine", "kyiv", "kiev"]],
   [
     "United Kingdom",
     [
       "united kingdom",
-      " uk",
-      "uk ",
+      "uk",
+      "england",
       "brighton",
       "guildford",
       "manchester",
@@ -257,15 +284,25 @@ const COUNTRY_MARKERS: Array<[string, string[]]> = [
     [
       "united states",
       "usa",
-      "boston, ma",
+      "boston ma",
       "california",
       "cincinnati",
-      "irvine, ca",
+      "irvine ca",
+      "los angeles",
       "new york city",
       "ohio",
       "san carlos",
+      "santa monica",
     ],
   ],
+  ["Vietnam", ["vietnam", "ho chi minh"]],
+  // Regions, for rows broader than one country ("Europe", "Remote (Europe)",
+  // "North America / Canada / Europe", "Worldwide", "Any"). Whole-word
+  // matching keeps "any" from firing inside e.g. "Germany".
+  ["Europe", ["europe"]],
+  ["North America", ["north america"]],
+  ["South America", ["south america"]],
+  ["Worldwide", ["worldwide", "any"]],
 ];
 
 /** Strips diacritics so accented locations match the ASCII markers. */
@@ -274,16 +311,30 @@ function stripDiacritics(value: string): string {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+/**
+ * Canonicalizes a location for marker matching: strips diacritics,
+ * lowercases, and reduces every punctuation/separator run (commas, pipes,
+ * semicolons, slashes, parens, hyphens…) to a single space, then pads with
+ * spaces so ` marker ` comparisons match whole words only ("india" can never
+ * fire inside "Indiana", nor "uk" inside "Ukraine").
+ */
+function normalizeLocation(value: string): string {
+  const words = stripDiacritics(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+  // "New Mexico" is a US state — rewrite it so the "mexico" marker can't
+  // claim it for Mexico.
+  return ` ${words.replace(/\bnew mexico\b/g, "united states")} `;
+}
+
 export function getJobCountries(job: JobPosting): string[] {
   const location = job.location?.trim();
   if (!location) return ["Unspecified"];
 
-  const normalized = ` ${stripDiacritics(location).toLowerCase().replace(/\s+/g, " ")} `;
-  if (normalized.includes("remote (europe)")) return ["Europe"];
-  if (normalized.trim() === "any") return ["Worldwide"];
-
+  const normalized = normalizeLocation(location);
   const countries = COUNTRY_MARKERS.filter(([, markers]) =>
-    markers.some(marker => normalized.includes(marker))
+    markers.some(marker => normalized.includes(` ${marker} `))
   ).map(([country]) => country);
 
   return countries.length > 0 ? countries : ["Unspecified"];
