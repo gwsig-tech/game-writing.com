@@ -24,5 +24,27 @@ export default {
         parser: "astro",
       },
     },
+    // Sveltia CMS writes frontmatter with its own YAML serializer, which
+    // single-quotes the values YAML requires to be quoted (e.g. a title
+    // containing a colon). The repo default above would rewrite those to double
+    // quotes, so every CMS-authored post with such a title failed
+    // `pnpm format:check` until someone reformatted it by hand. We match Sveltia
+    // here rather than forcing Sveltia to match Prettier: its only quote setting
+    // is document-wide, so making it emit double quotes would also quote
+    // `pubDatetime` and break the `z.date()` content schema.
+    //
+    // Scoped to the three CMS collections in public/admin/config.yml. The
+    // upstream reference posts (examples/, _releases/, _color-schemes/) are
+    // excluded on purpose so they keep diffing cleanly against AstroPaper.
+    {
+      files: [
+        "src/content/posts/*.{md,mdx}",
+        "src/content/posts/_events/*.{md,mdx}",
+        "src/content/posts/_spotlights/*.{md,mdx}",
+      ],
+      options: {
+        singleQuote: true,
+      },
+    },
   ],
 };
